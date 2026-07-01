@@ -12,9 +12,13 @@
 			"/app/ledgix-dashboard",
 			"/app/ledgix-pos",
 			"/app/ledgix_operations",
+			"/app/ledgix-operations",
 			"/app/business-intelligence-center",
+			"/app/business_intelligence_center",
 			"/app/ledgix-tax-center",
-			"/app/ledgix-reports"
+			"/app/ledgix_tax_center",
+			"/app/ledgix-reports",
+			"/app/quick-item-scan"
 		],
 
 		routes: {

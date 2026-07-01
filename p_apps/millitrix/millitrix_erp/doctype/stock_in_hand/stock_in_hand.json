@@ -1,0 +1,162 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "stock_key",
+  "storeid",
+  "itemcode",
+  "bagitemcode",
+  "partyid",
+  "opening_stock",
+  "bags_are",
+  "stock_in_hand",
+  "bagweight",
+  "movingrate",
+  "ltdate",
+  "minimum_stock",
+  "maximum_stock"
+ ],
+ "fields": [
+  {
+   "fieldname": "stock_key",
+   "fieldtype": "Data",
+   "label": "Stock Key",
+   "read_only": 1,
+   "unique": 1,
+   "no_copy": 1,
+   "index_web_pages_for_search": 0,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "storeid",
+   "fieldtype": "Link",
+   "label": "Store",
+   "options": "Store Setup",
+   "reqd": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "itemcode",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item Setup",
+   "reqd": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "bagitemcode",
+   "fieldtype": "Link",
+   "label": "Bardana Bag Item",
+   "options": "Item Setup"
+  },
+  {
+   "fieldname": "partyid",
+   "fieldtype": "Link",
+   "label": "Party",
+   "options": "Party"
+  },
+  {
+   "fieldname": "opening_stock",
+   "fieldtype": "Float",
+   "label": "Opening Stock",
+   "precision": "2"
+  },
+  {
+   "fieldname": "bags_are",
+   "fieldtype": "Select",
+   "label": "Bags Are",
+   "options": "Our\nParty\nPurchase Bardana\nSales Bardana",
+   "default": "Our"
+  },
+  {
+   "fieldname": "stock_in_hand",
+   "fieldtype": "Float",
+   "label": "Stock In Hand",
+   "reqd": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "bagweight",
+   "fieldtype": "Float",
+   "label": "Bag Weight",
+   "precision": "2"
+  },
+  {
+   "fieldname": "movingrate",
+   "fieldtype": "Currency",
+   "label": "Moving Rate"
+  },
+  {
+   "fieldname": "ltdate",
+   "fieldtype": "Date",
+   "label": "LT Date"
+  },
+  {
+   "fieldname": "minimum_stock",
+   "fieldtype": "Float",
+   "label": "Minimum Stock",
+   "precision": "2"
+  },
+  {
+   "fieldname": "maximum_stock",
+   "fieldtype": "Float",
+   "label": "Maximum Stock",
+   "precision": "2"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-30 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Stock In Hand",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 0,
+   "create": 0,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 0
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

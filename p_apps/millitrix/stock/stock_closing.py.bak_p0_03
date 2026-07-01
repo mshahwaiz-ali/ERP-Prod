@@ -1,0 +1,164 @@
+# Copyright (c) 2026, Millitrix and contributors
+
+from __future__ import annotations
+
+import frappe
+from frappe import _
+from frappe.utils import flt
+
+from millitrix.utils.child_table_helpers import strip_blank_rows_for_doc
+from millitrix.utils.doc_transaction import DocTranBatch, persist_doc_transactions
+from millitrix.utils.doctype_ids import STOCK_CLOSING
+from millitrix.utils.fiscal import validate_fiscal_period
+from millitrix.utils.generate_gl import delete_voucher_for_document, generate_gl
+from millitrix.utils.mill_setting import get_setting_account
+from millitrix.utils.naming import resolve_document_key
+from millitrix.utils.stock import get_in_store_item_name, get_or_create_in_store_item, mark_posted, mark_unposted
+from millitrix.utils.stock_key import StockKey
+
+
+def _snapshot_opening_stock(line) -> None:
+	"""Store pre-close qty so on_cancel can restore stock in hand."""
+	if flt(line.opening_stock):
+		return
+	key = StockKey(
+		storeid=line.storeid,
+		itemcode=line.itemcode,
+		bagitemcode=line.bagitemcode or None,
+		partyid=line.partyid or None,
+		bags_are=line.bags_are or None,
+	)
+	name = get_in_store_item_name(key)
+	if name:
+		line.opening_stock = flt(frappe.db.get_value("Stock In Hand", name, "stock_in_hand"))
+
+
+def validate(doc, method=None):
+	strip_blank_rows_for_doc(doc)
+	validate_fiscal_period(doc.opendate)
+	if not doc.details:
+		frappe.throw(_("Add at least one closing detail line"))
+	if not doc.doctypeid:
+		doc.doctypeid = STOCK_CLOSING
+	for line in doc.details or []:
+		_snapshot_opening_stock(line)
+		line.stock_value = flt(line.closing_stock) * flt(line.movingrate)
+
+	from millitrix.utils.list_view_summary import sync_list_summary_fields
+
+	sync_list_summary_fields(doc)
+
+
+def on_submit(doc, method=None):
+	doc_key = resolve_document_key(doc, "sopenid")
+	for line in doc.details:
+		key = StockKey(
+			storeid=line.storeid,
+			itemcode=line.itemcode,
+			bagitemcode=line.bagitemcode or None,
+			partyid=line.partyid or None,
+			bags_are=line.bags_are or None,
+		)
+		row = get_or_create_in_store_item(key, for_update=True)
+		row.stock_in_hand = flt(line.closing_stock)
+		if line.movingrate:
+			row.movingrate = flt(line.movingrate)
+		row.ltdate = doc.opendate
+		row.save(ignore_permissions=True  # REVIEWED SAFE FLAG)
+
+	batch = _build_closing_transactions(doc, doc_key)
+	persist_doc_transactions(batch)
+	generate_gl(
+		location_id=doc.location_id,
+		doctypeid=doc.doctypeid,
+		documentid=doc_key,
+		vouchdate=doc.opendate,
+		narration=doc.remarks or f"Closing Stock {doc.sopenid}",
+	)
+	mark_posted(doc)
+
+
+def on_cancel(doc, method=None):
+	doc_key = resolve_document_key(doc, "sopenid")
+	for line in doc.details:
+		restore = flt(line.opening_stock)
+		if not restore:
+			frappe.throw(
+				_("Cannot cancel Closing Stock line without opening_stock on {0}").format(line.itemcode)
+			)
+		key = StockKey(
+			storeid=line.storeid,
+			itemcode=line.itemcode,
+			bagitemcode=line.bagitemcode or None,
+			partyid=line.partyid or None,
+			bags_are=line.bags_are or None,
+		)
+		row = get_or_create_in_store_item(key, for_update=True)
+		row.stock_in_hand = restore
+		row.ltdate = doc.opendate
+		row.save(ignore_permissions=True  # REVIEWED SAFE FLAG)
+	frappe.db.delete(
+		"Document Transaction",
+		{"location_id": doc.location_id, "doctypeid": doc.doctypeid, "documentid": doc_key},
+	)
+	delete_voucher_for_document(doc.location_id, doc.doctypeid, doc_key)
+	mark_unposted(doc)
+
+
+def _line_value(line) -> float:
+	qty = flt(line.closing_stock)
+	rate = flt(line.movingrate)
+	if rate <= 0:
+		key = StockKey(
+			storeid=line.storeid,
+			itemcode=line.itemcode,
+			bagitemcode=line.bagitemcode or None,
+			partyid=line.partyid or None,
+			bags_are=line.bags_are or None,
+		)
+		from millitrix.utils.stock import get_in_store_item_name
+
+		name = get_in_store_item_name(key)
+		rate = flt(frappe.db.get_value("Stock In Hand", name, "movingrate")) if name else 0
+	return qty * rate
+
+
+def _build_closing_transactions(doc, doc_key: str | None = None) -> DocTranBatch:
+	doc_key = doc_key or resolve_document_key(doc, "sopenid")
+	batch = DocTranBatch(doc.location_id, doc.doctypeid or STOCK_CLOSING, doc_key)
+	item_stock = get_setting_account("Item Stock GL")
+	item_closing = get_setting_account("Item Closing GL")
+	total = 0.0
+
+	for line in doc.details or []:
+		val = _line_value(line)
+		if val <= 0:
+			continue
+		total += val
+		batch.cr(
+			item_stock,
+			val,
+			itemcode=line.itemcode,
+			detail=f"Closing stock {line.itemcode}",
+		)
+
+	if total > 0:
+		batch.dr(item_closing, total, detail=f"Closing Stock {doc.sopenid}")
+
+	return batch
+
+
+def preview_closing_stock_accounting_lines(doc) -> list[dict]:
+	batch = _build_closing_transactions(doc)
+	lines: list[dict] = []
+	for row in batch.rows:
+		lines.append(
+			{
+				"accid": row.accid,
+				"account": frappe.db.get_value("Chart of Accounting", row.accid, "description") or "",
+				"debit": row.debit,
+				"credit": row.credit,
+				"detail": row.detail or "",
+			}
+		)
+	return lines

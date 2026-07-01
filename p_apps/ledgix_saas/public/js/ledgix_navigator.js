@@ -652,12 +652,15 @@
 
 	function findDeskMountContent() {
 		const ledgixRoots = [
+			".ledgix-operations-page",
 			".lx-ops-shell",
 			".lx-reports-page",
 			".ledgix-pos-app",
 			".lx-bi-page",
 			".lx-tax-shell",
-			".ledgix-dashboard-v2"
+			".ledgix-dashboard-v2",
+			".quick-item-scan-page",
+			".quick-item-scan"
 		];
 
 		for (let i = 0; i < ledgixRoots.length; i += 1) {
@@ -691,7 +694,7 @@
 		}
 
 		if (isLedgixDeskRoute()) {
-			const ledgixOnly = $content.is(".lx-ops-shell, .lx-reports-page, .ledgix-pos-app, .lx-bi-page, .lx-tax-shell, .ledgix-dashboard-v2");
+			const ledgixOnly = $content.is(".ledgix-operations-page, .lx-ops-shell, .lx-reports-page, .ledgix-pos-app, .lx-bi-page, .lx-tax-shell, .ledgix-dashboard-v2, .quick-item-scan-page, .quick-item-scan");
 			if (!ledgixOnly) {
 				syncLedgixAppChrome();
 				return;
@@ -831,6 +834,7 @@
 		if (name === "ledgix-pos") return "pos";
 		if (["business-intelligence-center", "ledgix-business-intelligence", "business-intelligence"].includes(name)) return "business_intelligence";
 		if (["ledgix-tax-center", "tax-center", "tax-compliance-center"].includes(name)) return "tax_center";
+		if (name === "quick-item-scan") return "products";
 
 		if (name === "ledgix-operations") {
 			const module = params.get("module");

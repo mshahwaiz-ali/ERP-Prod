@@ -956,15 +956,21 @@
 
 .lx-fbr-sale-selector {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) minmax(220px, 300px) auto;
+	grid-template-columns: minmax(260px, 1fr) minmax(220px, 320px);
 	gap: 10px;
 	align-items: end;
 	margin-bottom: 12px;
 }
 
+.lx-fbr-sale-selector > div:first-child,
+.lx-fbr-sale-control {
+	min-width: 0;
+}
+
 .lx-fbr-action-stack {
 	display: flex;
 	flex-wrap: wrap;
+	grid-column: 1 / -1;
 	gap: 8px;
 	justify-content: flex-end;
 	align-items: center;
