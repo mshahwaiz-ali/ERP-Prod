@@ -20,7 +20,10 @@ from millitrix.utils.mund import kg_to_mund
 
 def _round_money(amount, doc=None) -> float:
 	currency = (getattr(doc, "currency", None) if doc else None) or "PKR"
-	return round_based_on_smallest_currency_fraction(amount, currency)
+	try:
+		return round_based_on_smallest_currency_fraction(amount, currency)
+	except RuntimeError:
+		return round(flt(amount), 2)
 
 
 def _line_total_weight_kg(line) -> float:
@@ -107,7 +110,7 @@ def populate_brokery_mund(line, mundtype: str, *, is_purchase: bool, netweight: 
 		return
 	net = flt(netweight)
 	mund_kg = net + flt(getattr(line, "dust", 0)) + flt(getattr(line, "lessweight", 0))
-	line.brokery_mund = flt(kg_to_mund(mund_kg, mundtype), 2)
+	line.brokery_mund = round(flt(kg_to_mund(mund_kg, mundtype)), 2)
 
 
 def line_weight_qty(
@@ -169,9 +172,9 @@ def calc_line_totals(line, header, *, is_purchase: bool = False) -> dict:
 	if hasattr(line, "bardana"):
 		line.bardana = round(flt(bagamnt), 2)
 	return {
-		"total_weight": flt(total_weight, 2),
+		"total_weight": round(flt(total_weight), 2),
 		"netweight": net,
-		"mund": flt(mund, 2),
+		"mund": round(flt(mund), 2),
 		"bagamnt": round(flt(bagamnt), 2),
 		"totalamnt": round(flt(total), 2),
 	}
@@ -187,7 +190,7 @@ def recalc_invoice_lines(doc, *, is_purchase: bool = False) -> None:
 		line.bagamnt = calc["bagamnt"]
 		line.totalamnt = calc["totalamnt"]
 		total_header += calc["totalamnt"]
-	doc.amount = flt(total_header, 2)
+	doc.amount = round(flt(total_header), 2)
 	from millitrix.utils.brokery import apply_brokery_auto, apply_sales_return_brokery
 
 	doctype = getattr(doc, "doctype", "")
@@ -250,9 +253,9 @@ def recalc_invoice_header(doc, *, is_purchase: bool = False) -> None:
 	total_labour = sum(flt(line.labouramnt) for line in doc.details or [])
 
 	if hasattr(doc, "brokeramnt"):
-		doc.brokeramnt = flt(total_broker, 2)
+		doc.brokeramnt = round(flt(total_broker), 2)
 	if hasattr(doc, "brokerypayable"):
-		doc.brokerypayable = 0 if is_brokery_paid(doc.brokery) else flt(total_broker, 2)
+		doc.brokerypayable = 0 if is_brokery_paid(doc.brokery) else round(flt(total_broker), 2)
 
 	amount = flt(doc.amount)
 	header_total = _header_total(doc, amount, total_labour, total_cartage, total_truck_adv)
@@ -301,5 +304,5 @@ def grain_moving_rate(line, header, *, is_purchase: bool = True) -> float:
 	qty = line_weight_qty(line, header.kantatype, is_purchase=is_purchase, header=header)
 	grain_value = flt(line.totalamnt) - flt(line.bagamnt)
 	if qty > 0 and grain_value > 0:
-		return flt(grain_value / qty, 2)
+		return round(flt(grain_value / qty), 2)
 	return flt(line.rate)

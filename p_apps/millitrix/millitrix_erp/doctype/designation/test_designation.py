@@ -1,4 +1,4 @@
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 
-class TestMillitrixDesignation(IntegrationTestCase):
+class TestMillitrixDesignation(FrappeTestCase):
 	pass

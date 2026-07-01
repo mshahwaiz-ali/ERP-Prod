@@ -41,7 +41,7 @@ def calc_moving_rate(old_stock: float, old_rate: float, in_qty: float, in_rate: 
         total_qty = old_stock + in_qty
         if total_qty <= 0:
                 return in_rate
-        return flt(((old_stock * old_rate) + (in_qty * in_rate)) / total_qty, 2)
+        return round(flt(((old_stock * old_rate) + (in_qty * in_rate)) / total_qty), 2)
 
 
 def _filters_for_key(key: StockKey) -> dict:

@@ -136,10 +136,10 @@ def get_outstanding_advance_pnr(
 				"pnrmode": row.get("pnrmode") or "",
 				"referno": row.get("referno") or "",
 				"accid": row.get("bankaccid") or party_accid,
-				"docbalamnt": flt(docbal, 2),
-				"amount": flt(docbal, 2),
+				"docbalamnt": round(flt(docbal), 2),
+				"amount": round(flt(docbal), 2),
 				"applied": flt(row.amount) - docbal,
-				"invoice_amount": flt(row.amount, 2),
+				"invoice_amount": round(flt(row.amount), 2),
 				"narration": row.narration,
 				"doctypeid": source,
 			}

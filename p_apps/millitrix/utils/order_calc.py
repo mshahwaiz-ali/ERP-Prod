@@ -32,4 +32,4 @@ def calc_order_amount(doc) -> float:
 
 def calc_stock_adjustment_amount(delta_kg: float, rate: float, itemcode: str | None = None) -> float:
 	"""Oracle STKADJDETL.AMOUNT = -(Inc_Stock − Dec_Stock) × Rate (kg × rate)."""
-	return flt(-flt(delta_kg) * flt(rate), 2)
+	return round(flt(-flt(delta_kg) * flt(rate)), 2)

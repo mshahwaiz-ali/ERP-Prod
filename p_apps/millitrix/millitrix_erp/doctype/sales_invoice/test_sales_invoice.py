@@ -1,11 +1,11 @@
 # Copyright (c) 2026, Millitrix and contributors
 
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 from frappe.utils import flt
 
 
-class TestMillitrixSalesInvoice(IntegrationTestCase):
+class TestMillitrixSalesInvoice(FrappeTestCase):
 	def test_submitted_si_has_balanced_gl(self):
 		if not frappe.db.exists("Sales Invoice", {"salesinvno": 10001, "docstatus": 1}):
 			self.skipTest("Demo SI 10001 not seeded")

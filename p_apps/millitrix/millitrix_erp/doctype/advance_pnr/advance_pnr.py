@@ -24,6 +24,6 @@ class AdvancePNR(Document):
 		submit_advance_doc(self, flow=advance_flow_key(self.advance_flow))
 
 	def on_cancel(self):
-    # DISABLED: routed to finance/unsubmit engine
-    from millitrix.finance.unsubmit import on_cancel as unified_cancel
-    return unified_cancel(doc, method)
+		from millitrix.finance.unsubmit import on_cancel as unified_cancel
+
+		return unified_cancel(self)

@@ -1,11 +1,11 @@
 # Copyright (c) 2026, Millitrix and contributors
 
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 from frappe.utils import flt
 
 
-class TestSalesOtherBill(IntegrationTestCase):
+class TestSalesOtherBill(FrappeTestCase):
 	def test_sob_10001_balanced_gl(self):
 		if not frappe.db.exists("Sales Other Bill", {"sbillno": 10001, "docstatus": 1}):
 			self.skipTest("SOB 10001 not seeded — run seed_v4_demo")

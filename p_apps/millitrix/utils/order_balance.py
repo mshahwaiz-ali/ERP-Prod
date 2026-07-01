@@ -169,7 +169,7 @@ def validate_split_child_order(doc, side: str) -> None:
 		if parent.docstatus != 1:
 			frappe.throw(_("Parent order must be submitted before creating a Sub Order"))
 		doc.rate = parent.rate
-		doc.amount = flt(flt(doc.truckqty) * flt(doc.rate), 2)
+		doc.amount = round(flt(flt(doc.truckqty) * flt(doc.rate)), 2)
 		setattr(doc, cfg["amount_field"], doc.amount)
 		open_parent = open_truck_qty_for_order(parent, side, exclude_split_order=doc.name)
 		if flt(doc.truckqty) > open_parent + 1e-9:

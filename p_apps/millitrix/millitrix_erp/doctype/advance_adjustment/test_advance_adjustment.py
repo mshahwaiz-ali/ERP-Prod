@@ -1,11 +1,11 @@
 # Copyright (c) 2026, Millitrix and contributors
 
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 from frappe.utils import flt
 
 
-class TestMillitrixAdvanceAdjustment(IntegrationTestCase):
+class TestMillitrixAdvanceAdjustment(FrappeTestCase):
 	def test_advance_adjustment_10001_balanced(self):
 		if not frappe.db.exists("Advance Adjustment", {"adjid": 10001, "docstatus": 1}):
 			self.skipTest("Advance Adjustment 10001 not seeded — run seed_v4_demo")

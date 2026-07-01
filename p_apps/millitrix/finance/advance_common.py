@@ -124,8 +124,8 @@ def preview_advance_accounting_lines(doc, *, flow: str) -> list[dict]:
 				"accid": row.accid,
 				"account": frappe.db.get_value("Chart of Accounting", row.accid, "description")
 				or row.accid,
-				"debit": flt(row.debit, 2),
-				"credit": flt(row.credit, 2),
+				"debit": round(flt(row.debit), 2),
+				"credit": round(flt(row.credit), 2),
 				"detail": row.detail or "",
 				"partyid": row.partyid,
 			}
@@ -164,8 +164,8 @@ def get_posted_advance_accounting_lines(doc) -> list[dict]:
 		{
 			"accid": row.accid,
 			"account": row.account,
-			"debit": flt(row.debit, 2),
-			"credit": flt(row.credit, 2),
+			"debit": round(flt(row.debit), 2),
+			"credit": round(flt(row.credit), 2),
 			"detail": row.detail or "",
 			"partyid": row.partyid,
 		}

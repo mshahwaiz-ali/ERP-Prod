@@ -44,9 +44,9 @@ def validate(doc, method=None):
                         movement_date=doc.billdate
                 )
 
-        line.amount = flt(flt(line.quantity) * flt(line.rate), 2)
+        line.amount = round(flt(flt(line.quantity) * flt(line.rate)), 2)
         total += flt(line.amount)
-    doc.amount = flt(total, 2)
+    doc.amount = round(flt(total), 2)
 
 
 def on_submit(doc, method=None):
@@ -89,6 +89,6 @@ def on_submit(doc, method=None):
 
 
 def on_cancel(doc, method=None):
-    # DISABLED: routed to finance/unsubmit engine
+    # Delegate shared posting cleanup to the unsubmit engine
     from millitrix.finance.unsubmit import on_cancel as unified_cancel
     return unified_cancel(doc, method)

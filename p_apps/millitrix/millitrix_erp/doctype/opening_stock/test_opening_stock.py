@@ -1,11 +1,11 @@
 # Copyright (c) 2026, Millitrix and contributors
 
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 from frappe.utils import flt
 
 
-class TestOpeningStock(IntegrationTestCase):
+class TestOpeningStock(FrappeTestCase):
 	def test_opening_10001_gl_balanced(self):
 		if not frappe.db.exists("Opening Stock", {"sopenid": 10001, "docstatus": 1}):
 			self.skipTest("Opening Stock 10001 not seeded — run complete_setup")

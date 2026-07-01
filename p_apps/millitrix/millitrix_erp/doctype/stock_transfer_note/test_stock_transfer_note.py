@@ -1,11 +1,11 @@
 # Copyright (c) 2026, Millitrix and contributors
 
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 from frappe.utils import flt
 
 
-class TestMillitrixStockTransferNote(IntegrationTestCase):
+class TestMillitrixStockTransferNote(FrappeTestCase):
 	def test_transfer_cartage_gl_balanced(self):
 		if not frappe.db.exists("Stock Transfer Note", {"transferno": 10002, "docstatus": 1}):
 			self.skipTest("Demo transfer 10002 not seeded — run seed_v4_demo")

@@ -1,11 +1,11 @@
 # Copyright (c) 2026, Millitrix and contributors
 
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 from frappe.utils import flt
 
 
-class TestMillitrixAccountsOpening(IntegrationTestCase):
+class TestMillitrixAccountsOpening(FrappeTestCase):
 	def test_gl_opening_submitted_balanced(self):
 		submitted = frappe.db.get_all(
 			"Accounts Opening",

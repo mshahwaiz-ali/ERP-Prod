@@ -57,7 +57,7 @@ def validate_adjustment_doc(
 	inv_total = sum(flt(line.amount) for line in doc.invoice_lines or [])
 	if abs(pnr_total - inv_total) > 0.01:
 		frappe.throw(_("PNR total {0} must equal invoice total {1}").format(pnr_total, inv_total))
-	doc.amount = flt(pnr_total, 2)
+	doc.amount = round(flt(pnr_total), 2)
 
 	_validate_invoice_lines(doc, flow=flow)
 	_validate_advance_pnr_lines(doc, advance_doctype=advance_doctype, flow=flow)
@@ -175,8 +175,8 @@ def preview_adjustment_accounting_lines(doc, *, flow: str) -> list[dict]:
 				"accid": row.accid,
 				"account": frappe.db.get_value("Chart of Accounting", row.accid, "description")
 				or row.accid,
-				"debit": flt(row.debit, 2),
-				"credit": flt(row.credit, 2),
+				"debit": round(flt(row.debit), 2),
+				"credit": round(flt(row.credit), 2),
 				"detail": row.detail or "",
 				"partyid": row.partyid,
 			}
@@ -214,8 +214,8 @@ def get_posted_adjustment_accounting_lines(doc) -> list[dict]:
 		{
 			"accid": row.accid,
 			"account": row.account,
-			"debit": flt(row.debit, 2),
-			"credit": flt(row.credit, 2),
+			"debit": round(flt(row.debit), 2),
+			"credit": round(flt(row.credit), 2),
 			"detail": row.detail or "",
 			"partyid": row.partyid,
 		}

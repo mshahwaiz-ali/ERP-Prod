@@ -14,9 +14,9 @@ def recalc_transfer_line(line, header) -> None:
 	total_weight = display_total_weight(line, kantatype, header=header)
 	net = max(flt(calc_net_weight(line, kantatype, is_purchase=False, header=header)), 0)
 	bag_amnt = flt(line.bagqty) * flt(line.bagrate)
-	line.total_weight = flt(total_weight, 2)
-	line.netweight = flt(net, 2)
-	line.totalamnt = flt(net * flt(line.rate) + bag_amnt, 2)
+	line.total_weight = round(flt(total_weight), 2)
+	line.netweight = round(flt(net), 2)
+	line.totalamnt = round(flt(net * flt(line.rate) + bag_amnt), 2)
 
 
 def recalc_transfer_document(doc) -> None:

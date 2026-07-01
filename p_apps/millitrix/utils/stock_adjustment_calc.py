@@ -27,8 +27,8 @@ def recalc_adjustment_line(line) -> None:
 	key = _line_stock_key(line)
 	name = get_in_store_item_name(key)
 	current = flt(frappe.db.get_value("Stock In Hand", name, "stock_in_hand")) if name else 0
-	line.current_stock = flt(current, 2)
-	line.adjusted_stock = flt(current + inc - dec, 2)
+	line.current_stock = round(flt(current), 2)
+	line.adjusted_stock = round(flt(current + inc - dec), 2)
 	delta = inc - dec
 	if hasattr(line, "amount"):
 		line.amount = calc_stock_adjustment_amount(delta, flt(line.rate), line.itemcode)

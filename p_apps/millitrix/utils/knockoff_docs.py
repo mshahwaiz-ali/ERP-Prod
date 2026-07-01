@@ -192,16 +192,16 @@ def get_outstanding_documents(
 				{
 					"doctypeid": row["doctypeid"],
 					"documentid": str(row["documentid"]),
-					"docbalamnt": flt(docbal, 2),
-					"amount": flt(docbal, 2),
+					"docbalamnt": round(flt(docbal), 2),
+					"amount": round(flt(docbal), 2),
 					"balance": 0,
 					"invdate": row["invdate"],
 					"partyid": row["partyid"],
 					"itemcode": row.get("itemcode"),
 					"location_id": row["location_id"],
 					"accid": party_accid,
-					"invoice_amount": flt(row["invoice_amount"], 2),
-					"applied": flt(row["invoice_amount"] - docbal, 2),
+					"invoice_amount": round(flt(row["invoice_amount"]), 2),
+					"applied": round(flt(row["invoice_amount"] - docbal), 2),
 				}
 			)
 		)
@@ -272,16 +272,16 @@ def get_outstanding_broker_documents(
 				{
 					"doctypeid": row["doctypeid"],
 					"documentid": str(row["documentid"]),
-					"docbalamnt": flt(docbal, 2),
-					"amount": flt(docbal, 2),
+					"docbalamnt": round(flt(docbal), 2),
+					"amount": round(flt(docbal), 2),
 					"balance": 0,
 					"invdate": row["invdate"],
 					"partyid": row["partyid"],
 					"itemcode": row.get("itemcode"),
 					"location_id": row["location_id"],
 					"accid": party_accid,
-					"invoice_amount": flt(row["invoice_amount"], 2),
-					"applied": flt(row["invoice_amount"] - docbal, 2),
+					"invoice_amount": round(flt(row["invoice_amount"]), 2),
+					"applied": round(flt(row["invoice_amount"] - docbal), 2),
 				}
 			)
 		)
@@ -333,9 +333,9 @@ def _outstanding_report_rows(filters: dict | None, *, flow: str) -> list[dict]:
 				"documentid": str(inv["documentid"]),
 				"party_name": party_name or inv.get("partyid") or "",
 				"item_name": item_name or inv.get("itemcode") or "",
-				"invoice_amount": flt(inv["invoice_amount"], 2),
-				"applied": flt(applied, 2),
-				"docbalamnt": flt(docbal, 2),
+				"invoice_amount": round(flt(inv["invoice_amount"]), 2),
+				"applied": round(flt(applied), 2),
+				"docbalamnt": round(flt(docbal), 2),
 			}
 		)
 	return rows

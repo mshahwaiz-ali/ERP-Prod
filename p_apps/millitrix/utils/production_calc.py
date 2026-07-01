@@ -78,9 +78,9 @@ def output_product_value(line) -> float:
 
 
 def recalc_input_line(line) -> None:
-	line.total_weight = flt(input_total_weight(line), 2)
-	line.ref_weight = flt(ref_weight_qty(line), 2)
-	line.ref_bags = flt(ref_bags_qty(line), 2)
+	line.total_weight = round(flt(input_total_weight(line)), 2)
+	line.ref_weight = round(flt(ref_weight_qty(line)), 2)
+	line.ref_bags = round(flt(ref_bags_qty(line)), 2)
 	if flt(getattr(line, "dip", 0)):
 		line.prod_1 = flt(prod_1_qty(line))
 		line.prod_2 = flt(prod_2_qty(line))

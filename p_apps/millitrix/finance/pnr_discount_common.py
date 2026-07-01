@@ -48,7 +48,7 @@ def validate_pnr_discount_doc(
 	doc_total = sum(flt(line.amount) for line in doc.documents or [])
 	if doc_total <= 0:
 		frappe.throw(_("Add at least one discount amount"))
-	doc.amount = flt(doc_total, 2)
+	doc.amount = round(flt(doc_total), 2)
 
 	for line in doc.documents or []:
 		if flow == "receipt" and line.doctypeid not in _RECEIPT_DOCTYPES:
@@ -122,8 +122,8 @@ def preview_pnr_discount_accounting_lines(doc, *, flow: str) -> list[dict]:
 				"accid": row.accid,
 				"account": frappe.db.get_value("Chart of Accounting", row.accid, "description")
 				or row.accid,
-				"debit": flt(row.debit, 2),
-				"credit": flt(row.credit, 2),
+				"debit": round(flt(row.debit), 2),
+				"credit": round(flt(row.credit), 2),
 				"detail": row.detail or "",
 				"partyid": row.partyid,
 			}
@@ -162,8 +162,8 @@ def get_posted_pnr_discount_accounting_lines(doc) -> list[dict]:
 		{
 			"accid": row.accid,
 			"account": row.account,
-			"debit": flt(row.debit, 2),
-			"credit": flt(row.credit, 2),
+			"debit": round(flt(row.debit), 2),
+			"credit": round(flt(row.credit), 2),
 			"detail": row.detail or "",
 			"partyid": row.partyid,
 		}

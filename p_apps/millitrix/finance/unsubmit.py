@@ -114,7 +114,45 @@ def on_submit(doc, method=None):
 	mark_posted(doc)
 
 
+def reverse_posted_document(doctype: str, name: str) -> None:
+	"""Reverse a posted document and return it to draft for Oracle-style edit."""
+	if doctype not in _REVERSE_HANDLERS:
+		frappe.throw(_("Unsubmit not supported for {0}").format(doctype))
+
+	source = frappe.get_doc(doctype, name)
+	if source.docstatus != 1:
+		frappe.throw(_("Only submitted documents can be unsubmitted"))
+	if not is_yes(source.get("posted")):
+		frappe.throw(_("Source document is not posted"))
+
+	handler = frappe.get_attr(_REVERSE_HANDLERS[doctype])
+	handler(source)
+	source.db_set("docstatus", 0)
+
+
+def _source_document_key(doc) -> str | None:
+	from millitrix.utils.document_display import id_field_for
+
+	id_field = id_field_for(doc.doctype)
+	if id_field and doc.get(id_field):
+		return str(doc.get(id_field)).strip()
+	if doc.get("documentid"):
+		return str(doc.get("documentid")).strip()
+	return None
+
+
 def on_cancel(doc, method=None):
-    # DISABLED: routed to finance/unsubmit engine
-    from millitrix.finance.unsubmit import on_cancel as unified_cancel
-    return unified_cancel(doc, method)
+	"""Cleanup generic GL staging for controllers that delegate cancellation here."""
+	doc_key = _source_document_key(doc)
+	location_id = doc.get("location_id")
+	doctypeid = doc.get("doctypeid") or doc.doctype
+
+	if location_id and doctypeid and doc_key:
+		from millitrix.utils.doc_transaction import clear_doc_transactions
+		from millitrix.utils.generate_gl import delete_voucher_for_document
+
+		if doc.doctype != "Voucher Transaction":
+			delete_voucher_for_document(location_id, doctypeid, doc_key)
+		clear_doc_transactions(location_id, doctypeid, doc_key)
+
+	mark_unposted(doc)

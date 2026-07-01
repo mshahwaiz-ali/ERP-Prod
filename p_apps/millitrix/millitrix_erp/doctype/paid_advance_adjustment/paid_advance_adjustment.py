@@ -27,6 +27,6 @@ class PaidAdvanceAdjustment(Document):
 		submit_adjustment_doc(self, flow="payment")
 
 	def on_cancel(self):
-    # DISABLED: routed to finance/unsubmit engine
-    from millitrix.finance.unsubmit import on_cancel as unified_cancel
-    return unified_cancel(doc, method)
+		from millitrix.finance.unsubmit import on_cancel as unified_cancel
+
+		return unified_cancel(self)

@@ -57,7 +57,7 @@ def validate_pnr_invoice_doc(
 				doc_total, suspense_total, inst_total
 			)
 		)
-	doc.amount = flt(doc_total, 2)
+	doc.amount = round(flt(doc_total), 2)
 	doc.balance = 0
 
 	for line in doc.documents or []:
@@ -81,7 +81,7 @@ def _sync_document_line_balances(doc) -> None:
 	"""Oracle PNRDETAIL.DEFER = DocBalAmnt - (Amount + Suspense)."""
 	for idx, line in enumerate(doc.documents or [], start=1):
 		defer = flt(line.docbalamnt) - flt(line.amount) - flt(line.suspense)
-		line.balance = flt(defer, 2)
+		line.balance = round(flt(defer), 2)
 		if defer < -0.01:
 			frappe.throw(
 				_("Row {0}: paid amount plus suspense exceeds document balance {1}").format(
@@ -203,8 +203,8 @@ def preview_pnr_invoice_accounting_lines(doc, *, flow: str) -> list[dict]:
 				"accid": row.accid,
 				"account": frappe.db.get_value("Chart of Accounting", row.accid, "description")
 				or row.accid,
-				"debit": flt(row.debit, 2),
-				"credit": flt(row.credit, 2),
+				"debit": round(flt(row.debit), 2),
+				"credit": round(flt(row.credit), 2),
 				"detail": row.detail or "",
 				"partyid": row.partyid,
 			}
@@ -243,8 +243,8 @@ def get_posted_pnr_accounting_lines(doc) -> list[dict]:
 		{
 			"accid": row.accid,
 			"account": row.account,
-			"debit": flt(row.debit, 2),
-			"credit": flt(row.credit, 2),
+			"debit": round(flt(row.debit), 2),
+			"credit": round(flt(row.credit), 2),
 			"detail": row.detail or "",
 			"partyid": row.partyid,
 		}

@@ -1,4 +1,4 @@
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 
-class TestMillitrixVoucherType(IntegrationTestCase):
+class TestMillitrixVoucherType(FrappeTestCase):
 	pass

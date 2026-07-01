@@ -15,8 +15,8 @@ def recalc_gate_pass_line(line, header) -> None:
 	is_purchase = is_in_gptype(getattr(header, "gptype", None))
 	total_weight = display_total_weight(line, kantatype, header=header)
 	net = max(flt(calc_net_weight(line, kantatype, is_purchase=is_purchase, header=header)), 0)
-	line.total_weight = flt(total_weight, 2)
-	line.netweight = flt(net, 2)
+	line.total_weight = round(flt(total_weight), 2)
+	line.netweight = round(flt(net), 2)
 
 
 def recalc_gate_pass_document(doc) -> None:

@@ -33,12 +33,9 @@ Options:
 EOF
 }
 
-confirm() { local a d="${2:-n}" s; [[ "$d" == "y" ]] && s="Y/n" || s="y/N"; read -r -p "$1 [$s]: " a; a="${a:-$d}"; [[ "$a" =~ ^[Yy] ]]; }
-prompt_default() { local a; read -r -p "$1 [$2]: " a; printf '%s\n' "${a:-$2}"; }
 require_cmd() { command -v "$1" >/dev/null 2>&1 || die "Missing required command: $1"; }
 make_log_dir() { mkdir -p "$LOG_DIR"; }
 run() { info "Running: $*"; "$@"; }
-sudo_run() { run sudo "$@"; }
 
 parse_args() {
   while [[ $# -gt 0 ]]; do
@@ -71,42 +68,42 @@ print_sites() {
   for i in "${!SITES[@]}"; do printf '  %s) %s\n' "$((i+1))" "${SITES[$i]}"; done
 }
 
-parse_selection() {
-  local input="$1" part start end i
-  SELECTED_SITES=()
-  if [[ "$input" == "all" ]]; then SELECTED_SITES=("${SITES[@]}"); return; fi
-  IFS=',' read -ra parts <<<"$input"
-  for part in "${parts[@]}"; do
-    part="${part// /}"
-    if [[ "$part" =~ ^([0-9]+)-([0-9]+)$ ]]; then
-      start="${BASH_REMATCH[1]}"; end="${BASH_REMATCH[2]}"
-      [[ "$start" -le "$end" ]] || die "Invalid range: $part"
-      for ((i=start; i<=end; i++)); do
-        [[ "$i" -ge 1 && "$i" -le "${#SITES[@]}" ]] || die "Site index out of range: $i"
-        SELECTED_SITES+=("${SITES[$((i-1))]}")
-      done
-    elif [[ "$part" =~ ^[0-9]+$ ]]; then
-      [[ "$part" -ge 1 && "$part" -le "${#SITES[@]}" ]] || die "Site index out of range: $part"
-      SELECTED_SITES+=("${SITES[$((part-1))]}")
-    else
-      die "Invalid site selection: $part"
-    fi
-  done
-}
-
-choose_sites() {
+select_all_sites() {
+  SELECTED_SITES=("${SITES[@]}")
+  info "Detected sites:"
   print_sites
-  parse_selection "$(prompt_default "Select sites to use/open (1, 1,2, 1-3, all)" "1")"
 }
 
 ensure_hosts_entry() {
   local site="$1" line="127.0.0.1 $site # managed-by-frappe-custom-installer"
   grep -Eq "^[[:space:]]*127[.]0[.]0[.]1[[:space:]]+$site([[:space:]]|$)" /etc/hosts && return 0
-  confirm "Add $site to /etc/hosts using sudo?" "y" || {
-    warn "Skipping /etc/hosts entry for $site. The URL may not resolve until you add it manually."
-    return 0
-  }
-  printf '%s\n' "$line" | sudo tee -a /etc/hosts >/dev/null
+  warn "$site is not in /etc/hosts. Add this once if the browser cannot resolve it:"
+  warn "  echo '$line' | sudo tee -a /etc/hosts"
+  return 0
+}
+
+print_urls() {
+  local site
+  printf 'URLs:\n'
+  for site in "${SELECTED_SITES[@]}"; do
+    printf '  http://%s:8000\n' "$site"
+  done
+}
+
+print_http_status() {
+  local site code
+  command -v curl >/dev/null 2>&1 || return 0
+  printf 'HTTP status:\n'
+  for site in "${SITES[@]}"; do
+    code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 3 "http://$site:8000" 2>/dev/null || true)"
+    if [[ "$code" =~ ^[23] ]]; then
+      printf '  %s: reachable (%s)\n' "$site" "$code"
+    elif [[ -n "$code" && "$code" != "000" ]]; then
+      printf '  %s: responded (%s)\n' "$site" "$code"
+    else
+      printf '  %s: not reachable or blocked\n' "$site"
+    fi
+  done
 }
 
 is_process_in_bench() {
@@ -127,7 +124,7 @@ kill_pid_safely() {
 }
 
 stop_bench() {
-  local pidfile="$BENCH_DIR/.runner/bench_start.pid" pid pfile
+  local pidfile="$BENCH_DIR/.runner/bench_start.pid" pid pfile proc
   if [[ -f "$pidfile" ]]; then
     pid="$(<"$pidfile")"
     kill_pid_safely "$pid"
@@ -137,19 +134,33 @@ stop_bench() {
     while IFS= read -r -d '' pfile; do
       pid="$(<"$pfile" 2>/dev/null || true)"
       kill_pid_safely "$pid"
-    done < <(find "$BENCH_DIR/config/pids" -type f -print0)
+    done < <(find "$BENCH_DIR/config/pids" -type f -name '*.pid' -print0)
   fi
+  while IFS= read -r -d '' proc; do
+    pid="$(basename "$proc")"
+    kill_pid_safely "$pid"
+  done < <(find /proc -maxdepth 1 -type d -regex '/proc/[0-9]+' -print0 2>/dev/null)
   sleep 2
   info "Stopped tracked dev processes for $BENCH_DIR where found."
 }
 
 show_status() {
   local pidfile="$BENCH_DIR/.runner/bench_start.pid" pid running="no" site
-  [[ -f "$pidfile" ]] && pid="$(<"$pidfile")" && is_process_in_bench "$pid" && running="yes (PID $pid)"
+  if [[ -f "$pidfile" ]]; then
+    pid="$(<"$pidfile")"
+    if is_process_in_bench "$pid"; then
+      running="yes (PID $pid)"
+    else
+      running="no (cleaned stale PID file: $pid)"
+      rm -f "$pidfile"
+    fi
+  fi
   printf 'Bench dir: %s\n' "$BENCH_DIR"
   printf 'Detected sites:\n'; printf '  %s\n' "${SITES[@]}"
   printf 'Tracked bench start running: %s\n' "$running"
-  printf 'URLs:\n'; for site in "${SITES[@]}"; do printf '  http://%s:8000\n' "$site"; done
+  SELECTED_SITES=("${SITES[@]}")
+  print_urls
+  print_http_status
   if command -v ss >/dev/null 2>&1; then ss -ltnp 2>/dev/null || true; fi
 }
 
@@ -161,7 +172,7 @@ start_foreground() {
   info "bench start runs one bench-level dev process. Selected sites are the URLs to use; code is shared at bench level, while site folders/databases are separate."
   info "Leaving bench default_site untouched so host-header routing can serve multiple sites."
   cd "$BENCH_DIR"
-  printf 'URLs:\n'; for site in "${SELECTED_SITES[@]}"; do printf '  http://%s:8000\n' "$site"; done
+  print_urls
   exec bench start
 }
 
@@ -176,9 +187,15 @@ start_background() {
   info "Leaving bench default_site untouched so host-header routing can serve multiple sites."
   setsid bench start >"$log_file" 2>&1 &
   printf '%s\n' "$!" >"$pidfile"
-  info "PID: $(<"$pidfile")"
+  sleep 1
+  if ! is_process_in_bench "$(<"$pidfile")"; then
+    warn "bench start process exited quickly. Check log: $log_file"
+    rm -f "$pidfile"
+  else
+    info "PID: $(<"$pidfile")"
+  fi
   info "Log: $log_file"
-  printf 'URLs:\n'; for site in "${SELECTED_SITES[@]}"; do printf '  http://%s:8000\n' "$site"; done
+  print_urls
   info "Stop command: ./start.sh --stop"
 }
 
@@ -189,7 +206,7 @@ main() {
   list_sites
   if [[ "$STOP" -eq 1 ]]; then stop_bench; exit 0; fi
   if [[ "$STATUS" -eq 1 ]]; then show_status; exit 0; fi
-  choose_sites
+  select_all_sites
   if [[ "$BACKGROUND" -eq 1 ]]; then start_background; else start_foreground; fi
 }
 

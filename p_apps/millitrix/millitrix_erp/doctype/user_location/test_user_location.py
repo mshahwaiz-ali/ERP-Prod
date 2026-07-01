@@ -1,7 +1,7 @@
 # Copyright (c) 2026, Millitrix and contributors
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 
 
-class TestMillitrixUserLocation(IntegrationTestCase):
+class TestMillitrixUserLocation(FrappeTestCase):
 	pass

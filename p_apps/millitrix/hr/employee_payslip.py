@@ -70,7 +70,7 @@ def on_submit(doc, method=None):
 
 
 def on_cancel(doc, method=None):
-    # DISABLED: routed to finance/unsubmit engine
+    # Delegate shared posting cleanup to the unsubmit engine
     from millitrix.finance.unsubmit import on_cancel as unified_cancel
     return unified_cancel(doc, method)
 def _build_payslip_transactions(doc, doc_key: str | None = None) -> DocTranBatch:
@@ -117,8 +117,8 @@ def preview_payslip_accounting_lines(doc) -> list[dict]:
 				"accid": row.accid,
 				"account": frappe.db.get_value("Chart of Accounting", row.accid, "description")
 				or row.accid,
-				"debit": flt(row.debit, 2),
-				"credit": flt(row.credit, 2),
+				"debit": round(flt(row.debit), 2),
+				"credit": round(flt(row.credit), 2),
 				"detail": row.detail or "",
 			}
 		)
@@ -178,13 +178,13 @@ def fetch_salary_employee_lines(location_id: str) -> list[dict]:
 
 	out: list[dict] = []
 	for row in rows:
-		salary = flt(row.amount, 2)
+		salary = round(flt(row.amount), 2)
 		advance = get_employee_advance_balance(row.empno, location_id=location_id)
 		out.append(
 			{
 				"empno": str(row.empno),
 				"amount": salary,
-				"balance": flt(min(advance, salary), 2),
+				"balance": round(flt(min(advance, salary)), 2),
 			}
 		)
 	return out

@@ -26,7 +26,7 @@ def validate(doc, method=None):
 		doc.doctypeid = STOCK_OPENING
 	for line in doc.details or []:
 		if hasattr(line, "stock_value"):
-			line.stock_value = flt(flt(line.opening_stock) * flt(line.movingrate), 2)
+			line.stock_value = round(flt(flt(line.opening_stock) * flt(line.movingrate)), 2)
 
 	from millitrix.utils.list_view_summary import sync_list_summary_fields
 
@@ -66,7 +66,7 @@ def on_submit(doc, method=None):
 
 
 def on_cancel(doc, method=None):
-    # DISABLED: routed to finance/unsubmit engine
+    # Delegate shared posting cleanup to the unsubmit engine
     from millitrix.finance.unsubmit import on_cancel as unified_cancel
     return unified_cancel(doc, method)
 def _build_opening_transactions(doc) -> DocTranBatch:

@@ -25,6 +25,6 @@ class ReceivableDiscountNote(Document):
 		submit_pnr_discount_doc(self, flow="receipt")
 
 	def on_cancel(self):
-    # DISABLED: routed to finance/unsubmit engine
-    from millitrix.finance.unsubmit import on_cancel as unified_cancel
-    return unified_cancel(doc, method)
+		from millitrix.finance.unsubmit import on_cancel as unified_cancel
+
+		return unified_cancel(self)

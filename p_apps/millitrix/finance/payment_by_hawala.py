@@ -107,7 +107,7 @@ def on_submit(doc, method=None):
 
 
 def on_cancel(doc, method=None):
-    # DISABLED: routed to finance/unsubmit engine
+    # Delegate shared posting cleanup to the unsubmit engine
     from millitrix.finance.unsubmit import on_cancel as unified_cancel
     return unified_cancel(doc, method)
 def _is_debit_mode(mode: str | None) -> bool:
@@ -184,8 +184,8 @@ def preview_hawala_accounting_lines(doc) -> list[dict]:
 				"accid": row.accid,
 				"account": frappe.db.get_value("Chart of Accounting", row.accid, "description")
 				or row.accid,
-				"debit": flt(row.debit, 2),
-				"credit": flt(row.credit, 2),
+				"debit": round(flt(row.debit), 2),
+				"credit": round(flt(row.credit), 2),
 				"detail": row.detail or "",
 				"partyid": row.partyid,
 			}
@@ -224,8 +224,8 @@ def get_posted_hawala_accounting_lines(doc) -> list[dict]:
 		{
 			"accid": row.accid,
 			"account": row.account,
-			"debit": flt(row.debit, 2),
-			"credit": flt(row.credit, 2),
+			"debit": round(flt(row.debit), 2),
+			"credit": round(flt(row.credit), 2),
 			"detail": row.detail or "",
 			"partyid": row.partyid,
 		}

@@ -1,4 +1,4 @@
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 
-class TestTransactionList(IntegrationTestCase):
+class TestTransactionList(FrappeTestCase):
 	pass

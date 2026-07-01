@@ -75,11 +75,11 @@ def validate(doc, method=None):
 		if not doc.instruments:
 			frappe.throw(_("Add at least one payment instrument"))
 		inst_total = sum(flt(line.amount) for line in doc.instruments or [])
-		doc.amount = flt(inst_total, 2)
+		doc.amount = round(flt(inst_total), 2)
 	elif discount:
 		if doc_total <= 0:
 			frappe.throw(_("Add at least one discount amount"))
-		doc.amount = flt(doc_total, 2)
+		doc.amount = round(flt(doc_total), 2)
 	else:
 		if not doc.instruments:
 			frappe.throw(_("Add at least one payment instrument"))
@@ -91,7 +91,7 @@ def validate(doc, method=None):
 					doc_total, suspense_total, inst_total
 				)
 			)
-		doc.amount = flt(doc_total, 2)
+		doc.amount = round(flt(doc_total), 2)
 
 	doc.balance = 0
 	_sync_document_line_balances(doc)
@@ -132,7 +132,7 @@ def on_submit(doc, method=None):
 
 
 def on_cancel(doc, method=None):
-    # DISABLED: routed to finance/unsubmit engine
+    # Delegate shared posting cleanup to the unsubmit engine
     from millitrix.finance.unsubmit import on_cancel as unified_cancel
     return unified_cancel(doc, method)
 def _resolve_bank_acc(doc, instrument) -> str:

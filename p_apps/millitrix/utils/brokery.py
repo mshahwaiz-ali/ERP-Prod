@@ -98,7 +98,7 @@ def _brokery_from_basis(
 		return flt(net_weight) * rate
 	if basis == "Percent":
 		base = flt(line_total) + flt(discount) - flt(bardana)
-		return flt(base * rate / 100, 2)
+		return round(flt(base * rate / 100), 2)
 	return rate
 
 
@@ -249,7 +249,7 @@ def apply_brokery_auto(doc, *, is_purchase: bool = False) -> None:
 		total_brokery += line_brokery
 
 	if hasattr(doc, "brokeramnt"):
-		doc.brokeramnt = flt(total_brokery, 2) if is_purchase else round(flt(total_brokery))
+		doc.brokeramnt = round(flt(total_brokery), 2) if is_purchase else round(flt(total_brokery))
 
 
 def apply_sales_return_brokery(doc) -> None:
@@ -293,6 +293,6 @@ def apply_sales_return_brokery(doc) -> None:
 		total_brokery += line_brokery
 
 	if hasattr(doc, "brokeramnt"):
-		doc.brokeramnt = flt(total_brokery, 2)
+		doc.brokeramnt = round(flt(total_brokery), 2)
 	if hasattr(doc, "brokerypayable"):
-		doc.brokerypayable = 0 if is_brokery_paid(getattr(doc, "brokery", None)) else flt(total_brokery, 2)
+		doc.brokerypayable = 0 if is_brokery_paid(getattr(doc, "brokery", None)) else round(flt(total_brokery), 2)

@@ -124,7 +124,7 @@ def on_submit(doc, method=None):
 
 
 def on_cancel(doc, method=None):
-    # DISABLED: routed to finance/unsubmit engine
+    # Delegate shared posting cleanup to the unsubmit engine
     from millitrix.finance.unsubmit import on_cancel as unified_cancel
     return unified_cancel(doc, method)
 def _calc_return_amount(doc, orig) -> float:
@@ -135,4 +135,4 @@ def _calc_return_amount(doc, orig) -> float:
 		orig_line = orig_lines.get(key)
 		if orig_line:
 			total += flt(line.quantity) * flt(orig_line.rate)
-	return flt(total, 2)
+	return round(flt(total), 2)

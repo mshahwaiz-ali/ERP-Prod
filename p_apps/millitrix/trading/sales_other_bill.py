@@ -30,9 +30,9 @@ def validate(doc, method=None):
         frappe.throw(_("Add bill lines"))
     total = 0.0
     for line in doc.details or []:
-        line.amount = flt(flt(line.quantity) * flt(line.rate), 2)
+        line.amount = round(flt(flt(line.quantity) * flt(line.rate)), 2)
         total += flt(line.amount)
-    doc.amount = flt(total, 2)
+    doc.amount = round(flt(total), 2)
 
 
 
@@ -81,7 +81,7 @@ def on_submit(doc, method=None):
                 detail=f"Sales Other Bill {doc.sbillno}"
             )
 
-        doc.amount = flt(total, 2)
+        doc.amount = round(flt(total), 2)
         doc.db_set("amount", total)
 
         persist_doc_transactions(batch)
@@ -98,6 +98,6 @@ def on_submit(doc, method=None):
 
 
 def on_cancel(doc, method=None):
-    # DISABLED: routed to finance/unsubmit engine
+    # Delegate shared posting cleanup to the unsubmit engine
     from millitrix.finance.unsubmit import on_cancel as unified_cancel
     return unified_cancel(doc, method)

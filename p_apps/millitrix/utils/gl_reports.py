@@ -279,7 +279,7 @@ def get_voucher_register_rows(filters: dict | None = None) -> list[dict]:
 			day_balance = 0.0
 			current_date = vdate
 		day_balance += flt(row.get("debit")) - flt(row.get("credit"))
-		row["day_balance"] = flt(day_balance, 2)
+		row["day_balance"] = round(flt(day_balance), 2)
 	return rows
 
 

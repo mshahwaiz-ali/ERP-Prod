@@ -1,7 +1,7 @@
 # Copyright (c) 2026, Millitrix and contributors
 import frappe
-from frappe.tests import IntegrationTestCase
+from frappe.tests.utils import FrappeTestCase
 
 
-class TestMillitrixPaymentandReceiptDocument(IntegrationTestCase):
+class TestMillitrixPaymentandReceiptDocument(FrappeTestCase):
 	pass
