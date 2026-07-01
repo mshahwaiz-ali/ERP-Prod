@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "pnrmode",
+  "bankaccid",
+  "referno",
+  "referdate",
+  "amount"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "pnrmode",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Payment Mode",
+   "options": "Cash\nCheque\nBank\nTravellers Cheque",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "bankaccid",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Bank Id",
+   "options": "Bank Account"
+  },
+  {
+   "columns": 1,
+   "fieldname": "referno",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Refer No"
+  },
+  {
+   "columns": 1,
+   "fieldname": "referdate",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date"
+  },
+  {
+   "columns": 1,
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-19 00:01:30.153432",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Payment and Receipt Instrument",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

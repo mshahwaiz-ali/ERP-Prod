@@ -1,0 +1,138 @@
+{
+ "actions": [],
+ "autoname": "field:bankid",
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "bankname",
+  "shortname",
+  "branch_count",
+  "account_count",
+  "sec_branches",
+  "branches",
+  "sec_accounts",
+  "accounts",
+  "bankid"
+ ],
+ "fields": [
+  {
+   "fieldname": "bankname",
+   "fieldtype": "Data",
+   "label": "Bank Name",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "shortname",
+   "fieldtype": "Data",
+   "label": "Short Name",
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "branch_count",
+   "fieldtype": "Int",
+   "label": "Branches",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "account_count",
+   "fieldtype": "Int",
+   "label": "Accounts",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "sec_branches",
+   "fieldtype": "Section Break",
+   "label": "Branch Information"
+  },
+  {
+   "fieldname": "branches",
+   "fieldtype": "Table",
+   "label": "Branches",
+   "options": "Bank Branch"
+  },
+  {
+   "fieldname": "sec_accounts",
+   "fieldtype": "Section Break",
+   "label": "Account Information"
+  },
+  {
+   "fieldname": "accounts",
+   "fieldtype": "Table",
+   "label": "Accounts",
+   "options": "Bank Account"
+  },
+  {
+   "fieldname": "bankid",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "read_only": 1,
+   "reqd": 0,
+   "unique": 1,
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-06-19 14:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Bank",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP User",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "bankname,shortname,bankid",
+ "show_title_field_in_link": 1,
+ "sort_field": "bankname",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "bankname",
+ "track_changes": 1
+}

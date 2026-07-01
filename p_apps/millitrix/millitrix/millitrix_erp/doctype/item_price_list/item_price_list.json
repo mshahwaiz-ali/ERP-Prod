@@ -1,0 +1,148 @@
+{
+ "actions": [],
+ "autoname": "format:{location_id}-{itemcode}-{ipdate}",
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "ipdate",
+  "location_id",
+  "itemcode",
+  "item_name",
+  "iclassid",
+  "purchrate",
+  "westage",
+  "salesrate",
+  "bagweight"
+ ],
+ "fields": [
+  {
+   "fieldname": "ipdate",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today",
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "itemcode",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item Setup",
+   "reqd": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name",
+   "fetch_from": "itemcode.itemname",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "itemcode.iclassid",
+   "fieldname": "iclassid",
+   "fieldtype": "Link",
+   "label": "Class",
+   "options": "Item Class",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "purchrate",
+   "fieldtype": "Currency",
+   "label": "Purchase Rate",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "westage",
+   "fieldtype": "Float",
+   "label": "Westage",
+   "precision": "2",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "salesrate",
+   "fieldtype": "Currency",
+   "label": "Sales Rate",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "bagweight",
+   "fieldtype": "Float",
+   "label": "Bag Weight",
+   "precision": "2"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-06-19 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Item Price List",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP User",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "itemcode,location_id,ipdate",
+ "show_title_field_in_link": 1,
+ "sort_field": "ipdate",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "itemcode",
+ "track_changes": 1
+}

@@ -1,0 +1,28 @@
+[project]
+name = "ledgix_saas"
+authors = [
+    { name = "Ali", email = "alishahwaiz96@gmail.com" }
+]
+description = "POS and inventory platform for retail shops"
+requires-python = ">=3.10"
+dynamic = ["version"]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+package-dir = { "ledgix_saas" = ".", "ledgix" = "ledgix", "api" = "api" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ledgix*", "api*"]
+
+[tool.setuptools.package-data]
+"ledgix_saas" = ["*.json", "*.md", "*.txt", "*.html", "*.css", "*.js", "*.py", "*.xml", "public/**/*", "templates/**/*", "fixtures/**/*", "patches/**/*", "config/**/*", "www/**/*"]
+"ledgix" = ["**/*"]
+"api" = ["**/*"]
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0"

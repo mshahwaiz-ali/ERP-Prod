@@ -1,0 +1,182 @@
+{
+ "actions": [],
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "storeid",
+  "critem",
+  "crbagid",
+  "bagqty",
+  "bagweight",
+  "total_weight",
+  "bagdust",
+  "ref_bags",
+  "ref_weight",
+  "dip",
+  "prod_1",
+  "prod_2",
+  "rate",
+  "mundtype",
+  "bagrate",
+  "dustitemid",
+  "dust_rate"
+ ],
+ "fields": [
+  {
+   "fieldname": "storeid",
+   "fieldtype": "Link",
+   "label": "Store",
+   "options": "Store Setup",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "critem",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item Setup",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "crbagid",
+   "fieldtype": "Link",
+   "label": "Bag",
+   "options": "Item Setup",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "bagqty",
+   "fieldtype": "Float",
+   "label": "Bags/Wgt",
+   "in_list_view": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "bagweight",
+   "fieldtype": "Float",
+   "label": "Per Bag",
+   "in_list_view": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "total_weight",
+   "fieldtype": "Float",
+   "label": "Weight",
+   "read_only": 1,
+   "in_list_view": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "bagdust",
+   "fieldtype": "Float",
+   "label": "Westage",
+   "in_list_view": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "ref_bags",
+   "fieldtype": "Float",
+   "label": "Ref. Bags",
+   "read_only": 1,
+   "in_list_view": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "ref_weight",
+   "fieldtype": "Float",
+   "label": "Ref. Weight",
+   "read_only": 1,
+   "in_list_view": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "dip",
+   "fieldtype": "Float",
+   "label": "Dip",
+   "description": "Required for Prod. 1 / Prod. 2 output weight calculation.",
+   "in_list_view": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "prod_1",
+   "fieldtype": "Float",
+   "label": "Prod. 1",
+   "precision": "2",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "prod_2",
+   "fieldtype": "Float",
+   "label": "Prod. 2",
+   "precision": "2",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "label": "Rate",
+   "hidden": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "mundtype",
+   "fieldtype": "Float",
+   "label": "Mund Type",
+   "hidden": 1,
+   "in_list_view": 0,
+   "precision": "2"
+  },
+  {
+   "fieldname": "bagrate",
+   "fieldtype": "Currency",
+   "label": "Bag Rate",
+   "hidden": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "dustitemid",
+   "fieldtype": "Link",
+   "label": "Dust Item",
+   "options": "Item Setup",
+   "hidden": 1,
+   "in_list_view": 0
+  },
+  {
+   "fieldname": "dust_rate",
+   "fieldtype": "Currency",
+   "label": "Dust Rate",
+   "hidden": 1,
+   "in_list_view": 0
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-15 22:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Crash Refine Input",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

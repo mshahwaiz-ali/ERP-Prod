@@ -1,0 +1,167 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:statementid",
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "statement",
+  "description",
+  "active",
+  "operation",
+  "line_count",
+  "account_count",
+  "note",
+  "txtfortotal",
+  "sub_statements",
+  "gl_accounts",
+  "statementid",
+  "parentid"
+ ],
+ "fields": [
+  {
+   "fieldname": "statement",
+   "fieldtype": "Select",
+   "label": "Statement",
+   "options": "Cash Flow\nIncome Statement\nBalance Sheet",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "active",
+   "fieldtype": "Select",
+   "label": "Active",
+   "options": "No\nYes",
+   "default": "No",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "operation",
+   "fieldtype": "Select",
+   "label": "Operation",
+   "options": "Add\nSubtract",
+   "default": "Add",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "line_count",
+   "fieldtype": "Int",
+   "label": "Lines",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "account_count",
+   "fieldtype": "Int",
+   "label": "Accounts",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Small Text",
+   "label": "Note"
+  },
+  {
+   "fieldname": "txtfortotal",
+   "fieldtype": "Data",
+   "label": "Text For Total"
+  },
+  {
+   "fieldname": "sub_statements",
+   "fieldtype": "Table",
+   "label": "Statement Lines",
+   "options": "GL Sub Statement"
+  },
+  {
+   "fieldname": "gl_accounts",
+   "fieldtype": "Table",
+   "label": "GL Codes",
+   "options": "GL Statement Account"
+  },
+  {
+   "fieldname": "statementid",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "reqd": 0,
+   "unique": 1,
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "parentid",
+   "fieldtype": "Data",
+   "label": "Parent Order Number",
+   "hidden": 1,
+   "read_only": 1
+  }
+ ],
+ "is_submittable": 0,
+ "module": "Millitrix ERP",
+ "name": "GL Statements",
+ "naming_rule": "By fieldname",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1,
+ "title_field": "description",
+ "show_title_field_in_link": 1,
+ "search_fields": "description,statement,statementid"
+}

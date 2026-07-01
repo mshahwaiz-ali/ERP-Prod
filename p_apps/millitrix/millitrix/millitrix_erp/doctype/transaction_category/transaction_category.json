@@ -1,0 +1,108 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "description",
+  "accid",
+  "account_description",
+  "tcat_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Description",
+   "reqd": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "accid",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "A/c Id",
+   "options": "Chart of Accounting",
+   "reqd": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "account_description",
+   "fieldtype": "Data",
+   "fetch_from": "accid.description",
+   "in_list_view": 1,
+   "label": "A/c Description",
+   "read_only": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "tcat_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Category No.",
+   "read_only": 1,
+   "unique": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-19 22:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Transaction Category",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 0
+  }
+ ],
+ "search_fields": "description,tcat_id,accid",
+ "show_title_field_in_link": 1,
+ "sort_field": "description",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:tcat_id",
+ "naming_rule": "By fieldname",
+ "title_field": "description"
+}

@@ -1,0 +1,234 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-14 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "pgdate",
+  "partyid",
+  "itemcode",
+  "amount",
+  "line_count",
+  "pgmode",
+  "accid",
+  "trans_id",
+  "instrument",
+  "referno",
+  "referdate",
+  "narration",
+  "party_b_lines",
+  "invoices",
+  "pgmid",
+  "location_id",
+  "doctypeid",
+  "posted"
+ ],
+ "fields": [
+  {
+   "fieldname": "pgdate",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today",
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "partyid",
+   "fieldtype": "Link",
+   "label": "Party",
+   "options": "Party",
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "itemcode",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item Setup",
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "line_count",
+   "fieldtype": "Int",
+   "label": "Lines",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "pgmode",
+   "fieldtype": "Select",
+   "label": "Mode",
+   "reqd": 1,
+   "options": "Cash\nCheque\nBank\nTravellers Cheque",
+   "in_list_view": 1,
+   "in_standard_filter": 0,
+   "columns": 1
+  },
+  {
+   "fieldname": "accid",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Chart of Accounting",
+   "reqd": 1
+  },
+  {
+   "fieldname": "trans_id",
+   "fieldtype": "Int",
+   "label": "Transaction"
+  },
+  {
+   "fieldname": "instrument",
+   "fieldtype": "Data",
+   "label": "Instrument"
+  },
+  {
+   "fieldname": "referno",
+   "fieldtype": "Data",
+   "label": "Refer No"
+  },
+  {
+   "fieldname": "referdate",
+   "fieldtype": "Date",
+   "label": "Refer Date"
+  },
+  {
+   "fieldname": "narration",
+   "fieldtype": "Small Text",
+   "label": "Narration",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "party_b_lines",
+   "fieldtype": "Table",
+   "label": "Party B Lines",
+   "options": "Party Gross Margin Party B"
+  },
+  {
+   "fieldname": "invoices",
+   "fieldtype": "Table",
+   "label": "Invoices",
+   "options": "Party Gross Margin Invoice"
+  },
+  {
+   "fieldname": "pgmid",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "unique": 1,
+   "reqd": 0,
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "doctypeid",
+   "fieldtype": "Data",
+   "label": "Doc Type ID",
+   "reqd": 0,
+   "hidden": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "posted",
+   "fieldtype": "Select",
+   "label": "Submitted",
+   "options": "Draft\nSubmitted",
+   "reqd": 0,
+   "default": "Draft",
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-19 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Party Gross Margin",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 0,
+   "submit": 1,
+   "cancel": 1
+  }
+ ],
+ "search_fields": "pgmid,partyid,itemcode",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "is_submittable": 1,
+ "autoname": "field:pgmid",
+ "naming_rule": "By fieldname",
+ "title_field": "partyid"
+}

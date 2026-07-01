@@ -1,0 +1,238 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "vouchdate",
+  "narration",
+  "reference",
+  "primary_acc",
+  "line_count",
+  "total_debit",
+  "total_credit",
+  "instrument",
+  "referdate",
+  "submitvoucherno",
+  "submitvouchdate",
+  "details",
+  "voucherno",
+  "location_id",
+  "vouchertype_id",
+  "documentid",
+  "doctypeid",
+  "posted"
+ ],
+ "fields": [
+  {
+   "fieldname": "vouchdate",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today",
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "narration",
+   "fieldtype": "Small Text",
+   "label": "Narration",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "reference",
+   "fieldtype": "Data",
+   "label": "Reference",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "primary_acc",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Chart of Accounting",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "line_count",
+   "fieldtype": "Int",
+   "label": "Lines",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "total_debit",
+   "fieldtype": "Currency",
+   "label": "Total Debit",
+   "read_only": 1,
+   "default": "0",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "total_credit",
+   "fieldtype": "Currency",
+   "label": "Total Credit",
+   "read_only": 1,
+   "default": "0",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "instrument",
+   "fieldtype": "Data",
+   "label": "Instrument"
+  },
+  {
+   "fieldname": "referdate",
+   "fieldtype": "Date",
+   "label": "Refer Date"
+  },
+  {
+   "fieldname": "submitvoucherno",
+   "fieldtype": "Data",
+   "label": "Submit Voucher No"
+  },
+  {
+   "fieldname": "submitvouchdate",
+   "fieldtype": "Date",
+   "label": "Submit Date"
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Table",
+   "label": "Details",
+   "options": "Voucher Transaction Detail"
+  },
+  {
+   "fieldname": "voucherno",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "unique": 1,
+   "reqd": 0,
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "vouchertype_id",
+   "fieldtype": "Link",
+   "label": "Voucher Type",
+   "options": "Voucher Type",
+   "reqd": 0,
+   "hidden": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "documentid",
+   "fieldtype": "Data",
+   "label": "Document Number",
+   "hidden": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "doctypeid",
+   "fieldtype": "Data",
+   "label": "Doc Type ID",
+   "reqd": 0,
+   "hidden": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "posted",
+   "fieldtype": "Select",
+   "label": "Submitted",
+   "options": "Draft\nSubmitted",
+   "reqd": 0,
+   "default": "Draft",
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-19 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Voucher Transaction",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 0,
+   "submit": 1,
+   "cancel": 1
+  }
+ ],
+ "search_fields": "voucherno,narration,reference",
+ "show_title_field_in_link": 1,
+ "sort_field": "vouchdate",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "is_submittable": 1,
+ "autoname": "field:voucherno",
+ "naming_rule": "By fieldname",
+ "title_field": "narration"
+}

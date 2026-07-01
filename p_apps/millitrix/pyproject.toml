@@ -1,0 +1,11 @@
+[project]
+name = "millitrix"
+authors = [{ name = "Millitrix", email = "dev@millitrix.local" }]
+description = "Millitrix — custom Frappe app for mill trading"
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"

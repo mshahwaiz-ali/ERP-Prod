@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sonumber",
+  "itemcode",
+  "truckqty",
+  "cancelqty",
+  "rate"
+ ],
+ "fields": [
+  {
+   "fieldname": "sonumber",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "SO",
+   "options": "Sales Order",
+   "reqd": 1,
+   "columns": 1
+  },
+  {
+   "fetch_from": "sonumber.itemcode",
+   "fieldname": "itemcode",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item Setup",
+   "read_only": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "truckqty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Balance Qty",
+   "read_only": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "cancelqty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Cancel Qty",
+   "reqd": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fetch_from": "sonumber.rate",
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Rate",
+   "read_only": 1,
+   "columns": 1
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-19 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "SO Cancellation Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

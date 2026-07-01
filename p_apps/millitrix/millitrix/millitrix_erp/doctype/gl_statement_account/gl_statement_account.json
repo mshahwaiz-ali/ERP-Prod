@@ -1,0 +1,72 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "sub_statement_ref",
+  "accid",
+  "account_description",
+  "show_side"
+ ],
+ "fields": [
+  {
+   "fieldname": "sub_statement_ref",
+   "fieldtype": "Data",
+   "label": "Sub Statement Ref",
+   "hidden": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "accid",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Chart of Accounting",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "account_description",
+   "fieldtype": "Data",
+   "label": "Account Name",
+   "fetch_from": "accid.description",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "show_side",
+   "fieldtype": "Select",
+   "label": "Show Side",
+   "options": "Net\nDebit\nCredit",
+   "default": "Net",
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "istable": 1,
+ "module": "Millitrix ERP",
+ "name": "GL Statement Account",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

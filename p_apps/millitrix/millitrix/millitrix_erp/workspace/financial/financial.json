@@ -1,0 +1,889 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr_cards\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Modules</b></span>\", \"col\": 12}}, {\"id\": \"card_0\", \"type\": \"card\", \"data\": {\"card_name\": \"Financial Master Setups\", \"col\": 4}}, {\"id\": \"card_1\", \"type\": \"card\", \"data\": {\"card_name\": \"Receivable\", \"col\": 4}}, {\"id\": \"card_2\", \"type\": \"card\", \"data\": {\"card_name\": \"Payable\", \"col\": 4}}, {\"id\": \"card_3\", \"type\": \"card\", \"data\": {\"card_name\": \"GL\", \"col\": 4}}, {\"id\": \"card_4\", \"type\": \"card\", \"data\": {\"card_name\": \"Quick Reports\", \"col\": 4}}, {\"id\": \"card_5\", \"type\": \"card\", \"data\": {\"card_name\": \"General Ledger\", \"col\": 4}}, {\"id\": \"card_6\", \"type\": \"card\", \"data\": {\"card_name\": \"Party and Registers\", \"col\": 4}}]",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "accounting",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Financial",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Financial Master Setups",
+   "link_count": 5,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Chart Of Accounting",
+   "link_count": 0,
+   "link_to": "chart-of-accounting-setup",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Bank & Account",
+   "link_count": 0,
+   "link_to": "Bank",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Transaction Category",
+   "link_count": 0,
+   "link_to": "Transaction Category",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Transaction Setup",
+   "link_count": 0,
+   "link_to": "Transaction List",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "GL Statement",
+   "link_count": 0,
+   "link_to": "GL Statements",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Receivable",
+   "link_count": 8,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Report Parameter",
+   "link_count": 0,
+   "link_to": "receivable-parameter-form",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Invoice Receipt",
+   "link_count": 0,
+   "link_to": "Sales Invoice Receipt",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Register \u00b7 Sales Invoice Receipt",
+   "link_count": 0,
+   "link_to": "Sales_Inv_Receipt",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Advance Adjustment",
+   "link_count": 0,
+   "link_to": "Received Advance Adjustment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Discount Note",
+   "link_count": 0,
+   "link_to": "Receivable Discount Note",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Advance Receipt",
+   "link_count": 0,
+   "link_to": "Advance Receipt",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Party Receipt",
+   "link_count": 0,
+   "link_to": "Party Receipt Voucher",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Register \u00b7 Receipt Register",
+   "link_count": 0,
+   "link_to": "Receipt_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payable",
+   "link_count": 10,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Report Parameter",
+   "link_count": 0,
+   "link_to": "payable-parameter-form",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Purchase Invoice Payment",
+   "link_count": 0,
+   "link_to": "Purchase Invoice Payment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Register \u00b7 Purchase Invoice Payment",
+   "link_count": 0,
+   "link_to": "Purch_Inv_Payment",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Advance Adjustment",
+   "link_count": 0,
+   "link_to": "Paid Advance Adjustment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Broker Payment",
+   "link_count": 0,
+   "link_to": "Broker Invoice Payment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Discount Note",
+   "link_count": 0,
+   "link_to": "Payable Discount Note",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Advance Payment",
+   "link_count": 0,
+   "link_to": "Advance Payment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Party Payment",
+   "link_count": 0,
+   "link_to": "Party Payment Voucher",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Register \u00b7 Payment Register",
+   "link_count": 0,
+   "link_to": "Payment_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payment By Hawala",
+   "link_count": 0,
+   "link_to": "Payment By Hawala",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "GL",
+   "link_count": 12,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Report Parameter",
+   "link_count": 0,
+   "link_to": "gl-parameter-form",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "GL Opening",
+   "link_count": 0,
+   "link_to": "Accounts Opening",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Receipt Voucher",
+   "link_count": 0,
+   "link_to": "Receipt Voucher",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Register \u00b7 Receipt Register",
+   "link_count": 0,
+   "link_to": "Receipt_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payment Voucher",
+   "link_count": 0,
+   "link_to": "Payment Voucher",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Register \u00b7 Payment Register",
+   "link_count": 0,
+   "link_to": "Payment_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Expense Voucher",
+   "link_count": 0,
+   "link_to": "Expense Voucher",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Voucher",
+   "link_count": 0,
+   "link_to": "Voucher Transaction",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Party Gross Margin",
+   "link_count": 0,
+   "link_to": "Party Gross Margin",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Closing Voucher",
+   "link_count": 0,
+   "link_to": "Closing and Adjustment Entries",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Year End Closing",
+   "link_count": 0,
+   "link_to": "year-end-closing",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Trial Balance",
+   "link_count": 0,
+   "link_to": "Trial_Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Quick Reports",
+   "link_count": 8,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Trial Balance",
+   "link_count": 0,
+   "link_to": "Trial_Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Account Ledger",
+   "link_count": 0,
+   "link_to": "Acc_Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Purchase Invoice Register",
+   "link_count": 0,
+   "link_to": "P_Inv_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Register",
+   "link_count": 0,
+   "link_to": "S_Inv_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "PO Pending",
+   "link_count": 0,
+   "link_to": "Po_Pending",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "SO Pending",
+   "link_count": 0,
+   "link_to": "So_Pending",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Balance",
+   "link_count": 0,
+   "link_to": "Party_Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Payment Register",
+   "link_count": 0,
+   "link_to": "Payment_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "General Ledger",
+   "link_count": 17,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Trial Balance",
+   "link_count": 0,
+   "link_to": "Trial_Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Trial Balance (Location)",
+   "link_count": 0,
+   "link_to": "Trial_Balance_1",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Account Ledger",
+   "link_count": 0,
+   "link_to": "Acc_Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "GL Voucher",
+   "link_count": 0,
+   "link_to": "Gl_Voucher",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Income Statement",
+   "link_count": 0,
+   "link_to": "Income_Statement",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Balance Sheet",
+   "link_count": 0,
+   "link_to": "Balance_Sheet",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Cash Book",
+   "link_count": 0,
+   "link_to": "Cash_Book",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Bank Book",
+   "link_count": 0,
+   "link_to": "Bank_Book",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Bank Ledger",
+   "link_count": 0,
+   "link_to": "Bank_Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Voucher Register",
+   "link_count": 0,
+   "link_to": "Voucher_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Account Balance",
+   "link_count": 0,
+   "link_to": "Account_Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Chart of Accounts",
+   "link_count": 0,
+   "link_to": "Coa",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "General Journal",
+   "link_count": 0,
+   "link_to": "Gj",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Profit and Loss",
+   "link_count": 0,
+   "link_to": "Pnl",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Expense Register",
+   "link_count": 0,
+   "link_to": "Expanse_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Cash Flow",
+   "link_count": 0,
+   "link_to": "Cash_Flow",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Cash Flow Detail",
+   "link_count": 0,
+   "link_to": "Cash_Flow_Detail",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Party and Registers",
+   "link_count": 17,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Ledger",
+   "link_count": 0,
+   "link_to": "Party_Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Ledger Summary",
+   "link_count": 0,
+   "link_to": "Party_Ledger_Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Balance",
+   "link_count": 0,
+   "link_to": "Party_Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Information",
+   "link_count": 0,
+   "link_to": "Party_Info",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Balance Paid",
+   "link_count": 0,
+   "link_to": "Party_Bal_Paid",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Payment Register",
+   "link_count": 0,
+   "link_to": "Party_P_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Receipt Register",
+   "link_count": 0,
+   "link_to": "Party_R_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Payment Register",
+   "link_count": 0,
+   "link_to": "Payment_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Receipt Register",
+   "link_count": 0,
+   "link_to": "Receipt_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Advance Payment Adjustment Register",
+   "link_count": 0,
+   "link_to": "Adv_P_Adjust_Reg",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Advance Receipt Adjustment Register",
+   "link_count": 0,
+   "link_to": "Adv_R_Adjust_Reg",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Advance Payment Register",
+   "link_count": 0,
+   "link_to": "Advance_P_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Advance Receipt Register",
+   "link_count": 0,
+   "link_to": "Advance_R_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Payable Discount Register",
+   "link_count": 0,
+   "link_to": "Payable_D_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Receivable Discount Register",
+   "link_count": 0,
+   "link_to": "Receivable_D_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Bank Status",
+   "link_count": 0,
+   "link_to": "Bank_Status",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Bank Finance Status",
+   "link_count": 0,
+   "link_to": "Bank_Finance_Status",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-06-14 22:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Financial",
+ "owner": "Administrator",
+ "parent_page": "Millitrix",
+ "public": 1,
+ "restrict_to_domain": "",
+ "roles": [],
+ "sequence_id": 5.0,
+ "shortcuts": [
+  {
+   "label": "Chart Of Accounting",
+   "link_to": "chart-of-accounting-setup",
+   "type": "Page"
+  },
+  {
+   "label": "GL Opening",
+   "link_to": "Accounts Opening",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "Payment Voucher",
+   "link_to": "Payment Voucher",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "Receipt Voucher",
+   "link_to": "Receipt Voucher",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "Trial Balance",
+   "link_to": "Trial_Balance",
+   "type": "Report"
+  }
+ ],
+ "title": "Financial"
+}

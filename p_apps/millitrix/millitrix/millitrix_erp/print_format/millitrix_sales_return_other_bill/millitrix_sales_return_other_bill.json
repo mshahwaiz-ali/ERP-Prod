@@ -1,0 +1,17 @@
+{
+ "creation": "2026-06-14 22:00:00.000000",
+ "custom_format": 1,
+ "disabled": 0,
+ "doc_type": "Sales Return Other Bill",
+ "doctype": "Print Format",
+ "html": "<style>\n.mill-print { font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #111; }\n.mill-print h2 { margin: 0 0 8px; font-size: 16px; text-align: center; }\n.mill-print .meta { width: 100%; margin-bottom: 10px; }\n.mill-print .meta td { padding: 2px 6px; vertical-align: top; }\n.mill-print .meta .label { font-weight: bold; width: 130px; }\n.mill-print table.lines { width: 100%; border-collapse: collapse; margin-top: 8px; }\n.mill-print table.lines th, .mill-print table.lines td { border: 1px solid #999; padding: 4px 5px; }\n.mill-print table.lines th { background: #f0f0f0; font-weight: bold; text-align: left; }\n.mill-print .text-right { text-align: right; }\n.mill-print .totals { margin-top: 10px; width: 100%; }\n.mill-print .totals td { padding: 3px 6px; }\n.mill-print .footer { margin-top: 16px; font-size: 10px; color: #555; }\n</style>\n\n{% set location_name = (doc.location_id and frappe.db.get_value(\"Location\", doc.location_id, \"description\")) or \"\" %}\n{% set company_id = (doc.location_id and frappe.db.get_value(\"Location\", doc.location_id, \"company_id\")) or \"\" %}\n{% set company_name = (company_id and frappe.db.get_value(\"Mill Information\", company_id, \"description\")) or \"\" %}\n<div class=\"mill-print\">\n<h2>Sales Return Other Bill</h2>\n{% if company_name %}<div style=\"text-align:center;margin-bottom:6px;\"><strong>{{ company_name }}</strong>{% if location_name %} &mdash; {{ location_name }}{% endif %}</div>{% endif %}\n\n\n<table class=\"meta\">\n<tr><td class=\"label\">Return No</td><td>{{ doc.srbillno }}</td><td class=\"label\">Date</td><td>{{ doc.get_formatted(\"brdate\") }}</td></tr>\n<tr><td class=\"label\">Bill No</td><td>{{ doc.sbillno }}</td><td class=\"label\">Party</td><td>{{ doc.party_name or \"\" }}</td></tr>\n<tr><td class=\"label\">Reference</td><td colspan=\"3\">{{ doc.referno or \"\" }}</td></tr>\n</table>\n<table class=\"lines\">\n<thead><tr><th>#</th><th>Item</th><th>Qty</th><th>Rate</th><th>Amount</th><th>Store</th></tr></thead>\n<tbody>{% for row in doc.details %}\n<tr><td>{{ row.idx }}</td><td>{{ row.item_name or \"\" }}</td>\n<td class=\"text-right\">{{ row.get_formatted(\"quantity\", doc) }}</td>\n<td class=\"text-right\">{{ row.get_formatted(\"rate\", doc) }}</td>\n<td class=\"text-right\">{{ row.get_formatted(\"amount\", doc) }}</td>\n<td>{{ row.storeid or \"\" }}</td></tr>\n{% endfor %}</tbody></table>\n{% if doc.remarks %}<p><strong>Remarks:</strong> {{ doc.remarks }}</p>{% endif %}\n\n\n<div class=\"footer\">Printed on {{ frappe.utils.formatdate(frappe.utils.nowdate()) }} &mdash; {{ doc.doctype }} #{{ doc.name }}</div>\n</div>\n",
+ "idx": 0,
+ "modified": "2026-06-18 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Sales Return Other Bill",
+ "owner": "Administrator",
+ "print_format_for": "DocType",
+ "print_format_type": "Jinja",
+ "standard": "Yes"
+}

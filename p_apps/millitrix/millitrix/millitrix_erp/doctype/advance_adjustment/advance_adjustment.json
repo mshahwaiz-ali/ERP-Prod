@@ -1,0 +1,156 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "adjid",
+  "partyid",
+  "adjdate",
+  "amount",
+  "narration",
+  "pnr_lines",
+  "invoice_lines"
+ ],
+ "fields": [
+  {
+   "fieldname": "adjid",
+   "fieldtype": "Data",
+   "label": "Adjustment ID",
+   "unique": 1,
+   "reqd": 0,
+   "read_only": 1
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "partyid",
+   "fieldtype": "Link",
+   "label": "Party",
+   "options": "Party",
+   "reqd": 1
+  },
+  {
+   "fieldname": "adjdate",
+   "fieldtype": "Date",
+   "label": "Adj Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "narration",
+   "fieldtype": "Small Text",
+   "label": "Narration"
+  },
+  {
+   "fieldname": "pnr_lines",
+   "fieldtype": "Table",
+   "label": "PNR Lines",
+   "options": "Adjustment PNR"
+  },
+  {
+   "fieldname": "invoice_lines",
+   "fieldtype": "Table",
+   "label": "Invoice Lines",
+   "options": "Adjustment Invoice"
+  },
+  {
+   "fieldname": "doctypeid",
+   "fieldtype": "Data",
+   "label": "Doc Type ID",
+   "reqd": 0,
+   "hidden": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "posted",
+   "fieldtype": "Select",
+   "label": "Submitted",
+   "options": "Draft\nSubmitted",
+   "reqd": 0,
+   "default": "Draft",
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-09 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Advance Adjustment",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 0,
+   "submit": 1,
+   "cancel": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "is_submittable": 1,
+ "autoname": "field:adjid",
+ "naming_rule": "By fieldname",
+ "show_name_in_global_search": 0,
+ "allow_import": 0
+}

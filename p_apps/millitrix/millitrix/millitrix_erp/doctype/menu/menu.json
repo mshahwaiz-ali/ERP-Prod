@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "description",
+  "parentid",
+  "sortby",
+  "menuid"
+ ],
+ "fields": [
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Menu",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "parentid",
+   "fieldtype": "Int",
+   "label": "Parent Menu",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "sortby",
+   "fieldtype": "Int",
+   "label": "Sort Order",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "menuid",
+   "fieldtype": "Data",
+   "label": "Menu No.",
+   "unique": 1,
+   "reqd": 0,
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-09 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Menu",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 0
+  }
+ ],
+ "sort_field": "sortby",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:menuid",
+ "naming_rule": "By fieldname",
+ "title_field": "description",
+ "show_title_field_in_link": 1,
+ "search_fields": "description,menuid"
+}

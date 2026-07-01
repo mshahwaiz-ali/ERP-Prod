@@ -1,0 +1,169 @@
+{
+ "actions": [],
+ "autoname": "field:empno",
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "ename",
+  "location_id",
+  "deptid",
+  "desigid",
+  "ecatid",
+  "salary",
+  "hiredate",
+  "nic",
+  "phno1",
+  "address",
+  "ldate",
+  "empno"
+ ],
+ "fields": [
+  {
+   "fieldname": "ename",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Employee",
+   "reqd": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Mill",
+   "options": "Location",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "deptid",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Departments",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "desigid",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "ecatid",
+   "fieldtype": "Link",
+   "label": "Category",
+   "options": "Employee Category",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "salary",
+   "fieldtype": "Currency",
+   "label": "Salary",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "hiredate",
+   "fieldtype": "Date",
+   "label": "Hiredate"
+  },
+  {
+   "fieldname": "nic",
+   "fieldtype": "Data",
+   "label": "NIC"
+  },
+  {
+   "fieldname": "phno1",
+   "fieldtype": "Data",
+   "label": "Phone No.",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "ldate",
+   "fieldtype": "Date",
+   "label": "Left Date"
+  },
+  {
+   "fieldname": "empno",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "reqd": 0,
+   "unique": 1,
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-06-19 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Employee Setup",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP User",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "ename,empno,location_id,deptid",
+ "show_title_field_in_link": 1,
+ "sort_field": "ename",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "ename",
+ "track_changes": 1
+}

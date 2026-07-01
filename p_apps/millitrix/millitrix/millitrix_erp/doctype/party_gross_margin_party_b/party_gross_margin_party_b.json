@@ -1,0 +1,156 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-14 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "pgmdetlid",
+  "partyid",
+  "itemcode",
+  "accid",
+  "trans_id",
+  "pgmode",
+  "instrument",
+  "referno",
+  "referdate",
+  "amount",
+  "narration"
+ ],
+ "fields": [
+  {
+   "fieldname": "pgmdetlid",
+   "fieldtype": "Int",
+   "label": "PGM Detail ID",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "partyid",
+   "fieldtype": "Link",
+   "label": "Party",
+   "options": "Party",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "itemcode",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item Setup",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "accid",
+   "fieldtype": "Link",
+   "label": "A/c Id",
+   "options": "Chart of Accounting",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "trans_id",
+   "fieldtype": "Int",
+   "label": "Transaction",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "pgmode",
+   "fieldtype": "Select",
+   "label": "PGM Mode",
+   "reqd": 1,
+   "options": "Cash\nCheque\nBank\nTravellers Cheque",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "instrument",
+   "fieldtype": "Data",
+   "label": "Instrument",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "referno",
+   "fieldtype": "Data",
+   "label": "Refer No",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "referdate",
+   "fieldtype": "Date",
+   "label": "Refer Date",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "narration",
+   "fieldtype": "Small Text",
+   "label": "Narration",
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-14 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Party Gross Margin Party B",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,325 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "sec_trading",
+  "trade_purchase",
+  "trade_sales",
+  "cash",
+  "sec_brokery",
+  "party_brokery",
+  "brokery_exp",
+  "receivable_discount",
+  "payable_discount",
+  "sec_expenses",
+  "purchase_cartage_exp",
+  "stock_movement_cartage",
+  "labour_payable",
+  "labour_receivable",
+  "salary_exp",
+  "sec_other_bills",
+  "purchases_other_bill",
+  "purchase_other_bill",
+  "sales_other_bill",
+  "sec_stock_gl",
+  "item_stock_gl",
+  "item_opening_gl",
+  "item_closing_gl",
+  "closing_item_gl",
+  "sec_bardana",
+  "bardana",
+  "bardana_store",
+  "dust_item",
+  "sec_balance_sheet",
+  "capital",
+  "income_summary",
+  "suspense",
+  "employee_account",
+  "sec_financial_year",
+  "financial_year_from",
+  "financial_year_to",
+  "enforce_fiscal_period_validation",
+  "sec_system",
+  "custom_ui_url"
+ ],
+ "fields": [
+  {
+   "fieldname": "sec_trading",
+   "fieldtype": "Section Break",
+   "label": "Trading Accounts"
+  },
+  {
+   "fieldname": "trade_purchase",
+   "fieldtype": "Link",
+   "label": "Trade Purchase",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "trade_sales",
+   "fieldtype": "Link",
+   "label": "Trade Sales",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "cash",
+   "fieldtype": "Link",
+   "label": "Cash",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "sec_brokery",
+   "fieldtype": "Section Break",
+   "label": "Brokery"
+  },
+  {
+   "fieldname": "party_brokery",
+   "fieldtype": "Link",
+   "label": "Party Brokery",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "brokery_exp",
+   "fieldtype": "Link",
+   "label": "Brokery Exp",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "receivable_discount",
+   "fieldtype": "Link",
+   "label": "Receivable Discount",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "payable_discount",
+   "fieldtype": "Link",
+   "label": "Payable Discount",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "sec_expenses",
+   "fieldtype": "Section Break",
+   "label": "Expenses and Labour"
+  },
+  {
+   "fieldname": "purchase_cartage_exp",
+   "fieldtype": "Link",
+   "label": "Purchase Cartage Exp",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "stock_movement_cartage",
+   "fieldtype": "Link",
+   "label": "Stock Movement Cartage",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "labour_payable",
+   "fieldtype": "Link",
+   "label": "Labour Payable",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "labour_receivable",
+   "fieldtype": "Link",
+   "label": "Labour Receivable",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "salary_exp",
+   "fieldtype": "Link",
+   "label": "Salary Exp",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "sec_other_bills",
+   "fieldtype": "Section Break",
+   "label": "Other Bills"
+  },
+  {
+   "fieldname": "purchases_other_bill",
+   "fieldtype": "Link",
+   "label": "Purchases Other Bill",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "purchase_other_bill",
+   "fieldtype": "Link",
+   "label": "Purchase Other Bill",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "sales_other_bill",
+   "fieldtype": "Link",
+   "label": "Sales Other Bill",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "sec_stock_gl",
+   "fieldtype": "Section Break",
+   "label": "Stock General Ledger"
+  },
+  {
+   "fieldname": "item_stock_gl",
+   "fieldtype": "Link",
+   "label": "Item Stock GL",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "item_opening_gl",
+   "fieldtype": "Link",
+   "label": "Item Opening GL",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "item_closing_gl",
+   "fieldtype": "Link",
+   "label": "Item Closing GL",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "closing_item_gl",
+   "fieldtype": "Link",
+   "label": "Closing Item GL",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "sec_bardana",
+   "fieldtype": "Section Break",
+   "label": "Bardana and Dust"
+  },
+  {
+   "fieldname": "bardana",
+   "fieldtype": "Link",
+   "label": "Bardana",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "bardana_store",
+   "fieldtype": "Link",
+   "label": "Bardana Store",
+   "options": "Store Setup"
+  },
+  {
+   "fieldname": "dust_item",
+   "fieldtype": "Link",
+   "label": "Dust Item",
+   "options": "Item Setup"
+  },
+  {
+   "fieldname": "sec_balance_sheet",
+   "fieldtype": "Section Break",
+   "label": "Balance Sheet"
+  },
+  {
+   "fieldname": "capital",
+   "fieldtype": "Link",
+   "label": "Capital",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "income_summary",
+   "fieldtype": "Link",
+   "label": "Income Summary",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "suspense",
+   "fieldtype": "Link",
+   "label": "Suspense",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "employee_account",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "sec_financial_year",
+   "fieldtype": "Section Break",
+   "label": "Financial Year"
+  },
+  {
+   "fieldname": "financial_year_from",
+   "fieldtype": "Date",
+   "label": "Financial Year From"
+  },
+  {
+   "fieldname": "financial_year_to",
+   "fieldtype": "Date",
+   "label": "Financial Year To"
+  },
+  {
+   "default": "0",
+   "description": "When enabled, document dates must fall within Financial Year From/To (Oracle Financial Year setting). Turn off during UAT if you need to test outside the current period.",
+   "fieldname": "enforce_fiscal_period_validation",
+   "fieldtype": "Check",
+   "label": "Enforce Fiscal Period Validation"
+  },
+  {
+   "fieldname": "sec_system",
+   "fieldtype": "Section Break",
+   "label": "System"
+  },
+  {
+   "fieldname": "custom_ui_url",
+   "fieldtype": "Data",
+   "label": "Custom UI URL"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-14 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "GL Parameter",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 0,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP User",
+   "share": 0,
+   "write": 0
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,194 @@
+{
+ "actions": [],
+ "autoname": "field:sopenid",
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "opendate",
+  "primary_item",
+  "primary_store",
+  "line_count",
+  "total_stock",
+  "remarks",
+  "details",
+  "sopenid",
+  "location_id",
+  "doctypeid",
+  "posted",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "opendate",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today",
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "primary_item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item Setup",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "primary_store",
+   "fieldtype": "Link",
+   "label": "Store",
+   "options": "Store Setup",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "line_count",
+   "fieldtype": "Int",
+   "label": "Lines",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "total_stock",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "read_only": 1,
+   "default": "0",
+   "precision": "2",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Table",
+   "label": "Details",
+   "options": "Opening Stock Detail"
+  },
+  {
+   "fieldname": "sopenid",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "reqd": 0,
+   "unique": 1,
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "doctypeid",
+   "fieldtype": "Data",
+   "label": "Doc Type ID",
+   "reqd": 0,
+   "hidden": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "posted",
+   "fieldtype": "Select",
+   "label": "Submitted",
+   "options": "Draft\nSubmitted",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Closing Stock",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-06-19 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Closing Stock",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP User",
+   "write": 1,
+   "submit": 1,
+   "cancel": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "primary_item",
+ "track_changes": 1
+}

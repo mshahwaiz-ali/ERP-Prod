@@ -1,0 +1,132 @@
+{
+ "actions": [],
+ "autoname": "field:storeid",
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "store_name",
+  "trans_allow",
+  "storetypeid",
+  "location_id",
+  "parentid",
+  "store_address",
+  "storeid"
+ ],
+ "fields": [
+  {
+   "fieldname": "store_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Store Name",
+   "reqd": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "default": "No",
+   "fieldname": "trans_allow",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Transaction",
+   "options": "No\nYes",
+   "reqd": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "storetypeid",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Type",
+   "options": "Store Types",
+   "reqd": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Location",
+   "options": "Location",
+   "reqd": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "parentid",
+   "fieldtype": "Link",
+   "label": "Parent Store",
+   "options": "Store Setup"
+  },
+  {
+   "fieldname": "store_address",
+   "fieldtype": "Small Text",
+   "label": "Address",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "storeid",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "read_only": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-06-19 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Store Setup",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP User",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "store_name,storeid,location_id",
+ "show_title_field_in_link": 1,
+ "sort_field": "store_name",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "store_name",
+ "track_changes": 1
+}

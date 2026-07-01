@@ -1,0 +1,138 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "storeid",
+  "itemcode",
+  "bagitemcode",
+  "partyid",
+  "bags_are",
+  "bagweight",
+  "current_stock",
+  "inc_stock",
+  "dec_stock",
+  "rate",
+  "adjusted_stock",
+  "amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "storeid",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Store",
+   "options": "Store Setup",
+   "reqd": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "itemcode",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item Setup",
+   "reqd": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "bagitemcode",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Bardana Bag Item",
+   "description": "Grain inside bardana \u2014 only when Item is a bardana sack",
+   "options": "Item Setup",
+   "columns": 1
+  },
+  {
+   "fieldname": "partyid",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Party",
+   "options": "Party",
+   "columns": 1
+  },
+  {
+   "default": "Our",
+   "fieldname": "bags_are",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Bags Are",
+   "options": "Our\nParty\nPurchase Bardana\nSales Bardana",
+   "columns": 1
+  },
+  {
+   "fieldname": "bagweight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Bag Weight",
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "current_stock",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Current Stock",
+   "read_only": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "inc_stock",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Increase Stock",
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "dec_stock",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Decrease Stock",
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Rate",
+   "columns": 1
+  },
+  {
+   "fieldname": "adjusted_stock",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Adjusted Stock",
+   "read_only": 1,
+   "precision": "2",
+   "columns": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "read_only": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-06-16 00:15:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Stock Adjustment Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

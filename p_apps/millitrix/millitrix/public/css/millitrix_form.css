@@ -1,0 +1,19 @@
+/* Hide Frappe Alt+hover fieldname pills on all Millitrix forms */
+.frappe-control .tooltip-content {
+	display: none !important;
+}
+
+/* Compact parent form — multi-column header rows */
+body[data-route^="Form/Purchase Invoice"] .form-layout .form-page .form-section .section-body {
+	max-width: 100%;
+}
+
+body[data-route^="Form/Purchase Invoice"] .form-layout .frappe-control {
+	margin-bottom: var(--margin-sm);
+}
+
+/* Summary amount fields slightly emphasized */
+body[data-route^="Form/Purchase Invoice"] [data-fieldname="amount"] .control-value,
+body[data-route^="Form/Purchase Invoice"] [data-fieldname="payable"] .control-value {
+	font-weight: 600;
+}

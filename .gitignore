@@ -1,0 +1,31 @@
+# Installed/generated Frappe bench. Recreated by install.sh.
+/frappe-bench/
+
+# Local runtime output.
+/logs/
+/offline_bundle/
+*.log
+*.pid
+.expose-state
+
+# Local editor/agent state.
+/.codex/
+/.agents/
+
+# Secrets and machine-specific config.
+.env
+.env.*
+*.backup.*
+*.sql
+*.sqlite
+*.sqlite3
+
+# Python/Node/build caches.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+dist/
+build/

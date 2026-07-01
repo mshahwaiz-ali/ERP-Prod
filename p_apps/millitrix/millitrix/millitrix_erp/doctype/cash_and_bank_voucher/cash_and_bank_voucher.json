@@ -1,0 +1,183 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-06-09 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "cnbvno",
+  "bankaccid",
+  "vouchdate",
+  "vouchmode",
+  "referno",
+  "referdate",
+  "amount",
+  "narration",
+  "details",
+  "documents"
+ ],
+ "fields": [
+  {
+   "fieldname": "cnbvno",
+   "fieldtype": "Data",
+   "label": "CNB Voucher No",
+   "unique": 1,
+   "reqd": 0,
+   "read_only": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "bankaccid",
+   "fieldtype": "Int",
+   "label": "Bank Account",
+   "columns": 4
+  },
+  {
+   "fieldname": "vouchdate",
+   "fieldtype": "Date",
+   "label": "Voucher Date",
+   "reqd": 1,
+   "default": "Today",
+   "columns": 3
+  },
+  {
+   "fieldname": "vouchmode",
+   "fieldtype": "Select",
+   "label": "Voucher Mode",
+   "reqd": 1,
+   "options": "Cash\nCheque\nBank\nTravellers Cheque",
+   "columns": 3
+  },
+  {
+   "fieldname": "referno",
+   "fieldtype": "Data",
+   "label": "Refer No",
+   "columns": 3
+  },
+  {
+   "fieldname": "referdate",
+   "fieldtype": "Date",
+   "label": "Refer Date",
+   "columns": 3
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "read_only": 1,
+   "columns": 4
+  },
+  {
+   "fieldname": "narration",
+   "fieldtype": "Small Text",
+   "label": "Narration",
+   "columns": 12
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Table",
+   "label": "Details",
+   "options": "Cash and Bank Voucher Detail"
+  },
+  {
+   "fieldname": "documents",
+   "fieldtype": "Table",
+   "label": "Documents",
+   "options": "Cash and Bank Voucher Document"
+  },
+  {
+   "fieldname": "doctypeid",
+   "fieldtype": "Data",
+   "label": "Doc Type ID",
+   "reqd": 0,
+   "hidden": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "posted",
+   "fieldtype": "Select",
+   "label": "Submitted",
+   "options": "Draft\nSubmitted",
+   "reqd": 0,
+   "default": "Draft",
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-09 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Cash and Bank Voucher",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 0,
+   "submit": 1,
+   "cancel": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "is_submittable": 1,
+ "autoname": "field:cnbvno",
+ "naming_rule": "By fieldname",
+ "show_name_in_global_search": 0,
+ "allow_import": 0
+}

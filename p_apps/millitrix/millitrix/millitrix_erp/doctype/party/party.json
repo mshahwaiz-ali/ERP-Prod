@@ -1,0 +1,173 @@
+{
+ "actions": [],
+ "autoname": "field:partyid",
+ "creation": "2026-06-09 12:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "party_name",
+  "cityid",
+  "city_name",
+  "address",
+  "creditlimit",
+  "creditdays",
+  "phno1",
+  "phno2",
+  "resphno",
+  "mobileno",
+  "pcat_id",
+  "party_items",
+  "partyid"
+ ],
+ "fields": [
+  {
+   "fieldname": "party_name",
+   "fieldtype": "Data",
+   "label": "Name",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "cityid",
+   "fieldtype": "Link",
+   "label": "City",
+   "options": "City Setup",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "city_name",
+   "fieldtype": "Data",
+   "label": "City",
+   "fetch_from": "cityid.cityname",
+   "read_only": 1
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address",
+   "in_list_view": 0,
+   "columns": 1
+  },
+  {
+   "fieldname": "creditlimit",
+   "fieldtype": "Currency",
+   "label": "Cr. Limit",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "creditdays",
+   "fieldtype": "Int",
+   "label": "Cr. Days"
+  },
+  {
+   "fieldname": "phno1",
+   "fieldtype": "Data",
+   "label": "Phone.01",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "phno2",
+   "fieldtype": "Data",
+   "label": "Phone.02"
+  },
+  {
+   "fieldname": "resphno",
+   "fieldtype": "Data",
+   "label": "Res. Ph."
+  },
+  {
+   "fieldname": "mobileno",
+   "fieldtype": "Data",
+   "label": "Mobile",
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "pcat_id",
+   "fieldtype": "Link",
+   "label": "Party Category",
+   "options": "Party Category",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "party_items",
+   "fieldtype": "Table",
+   "label": "Party Items",
+   "options": "Party Item"
+  },
+  {
+   "fieldname": "partyid",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "read_only": 1,
+   "reqd": 0,
+   "unique": 1,
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-06-19 14:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Party",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP User",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "party_name,partyid,cityid,mobileno",
+ "show_title_field_in_link": 1,
+ "sort_field": "party_name",
+ "sort_order": "ASC",
+ "states": [],
+ "title_field": "party_name",
+ "track_changes": 1
+}

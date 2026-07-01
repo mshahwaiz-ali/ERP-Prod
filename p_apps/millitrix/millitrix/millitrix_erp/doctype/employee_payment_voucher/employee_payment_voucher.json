@@ -1,0 +1,206 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:empvno",
+ "creation": "2026-06-11 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "vouchdate",
+  "primary_employee",
+  "paymode",
+  "amount",
+  "line_count",
+  "bankaccid",
+  "referno",
+  "referdate",
+  "narration",
+  "documents",
+  "empvno",
+  "location_id",
+  "doctypeid",
+  "posted"
+ ],
+ "fields": [
+  {
+   "fieldname": "vouchdate",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today",
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "primary_employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee Setup",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "default": "Cash",
+   "fieldname": "paymode",
+   "fieldtype": "Select",
+   "label": "Payment Mode",
+   "options": "Cash\nCheque\nBank\nTravellers Cheque",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "line_count",
+   "fieldtype": "Int",
+   "label": "Lines",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "bankaccid",
+   "fieldtype": "Link",
+   "label": "Bank",
+   "options": "Chart of Accounting"
+  },
+  {
+   "fieldname": "referno",
+   "fieldtype": "Data",
+   "label": "Refer No"
+  },
+  {
+   "fieldname": "referdate",
+   "fieldtype": "Date",
+   "label": "Refer Date"
+  },
+  {
+   "fieldname": "narration",
+   "fieldtype": "Small Text",
+   "label": "Narration",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "documents",
+   "fieldtype": "Table",
+   "label": "Employee Lines",
+   "options": "Cash and Bank Voucher Document"
+  },
+  {
+   "fieldname": "empvno",
+   "fieldtype": "Data",
+   "label": "Ref No.",
+   "unique": 1,
+   "reqd": 0,
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "doctypeid",
+   "fieldtype": "Data",
+   "label": "Doc Type ID",
+   "reqd": 0,
+   "hidden": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "posted",
+   "fieldtype": "Select",
+   "label": "Submitted",
+   "options": "Draft\nSubmitted",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-06-19 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Employee Payment Voucher",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 1,
+   "submit": 1,
+   "cancel": 1
+  },
+  {
+   "role": "Millitrix ERP User",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 0,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "report": 1,
+   "share": 0,
+   "submit": 1,
+   "cancel": 1
+  }
+ ],
+ "search_fields": "empvno,primary_employee",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "primary_employee",
+ "track_changes": 1,
+ "is_submittable": 1
+}

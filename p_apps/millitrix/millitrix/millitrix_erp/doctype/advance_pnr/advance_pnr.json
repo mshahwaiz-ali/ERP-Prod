@@ -1,0 +1,231 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:pnrno",
+ "creation": "2026-06-15 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "pnrno",
+  "advance_flow",
+  "pnrdate",
+  "partyid",
+  "party_name",
+  "bankaccid",
+  "bank_name",
+  "narration",
+  "referno",
+  "referdate",
+  "pnrmode",
+  "amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "pnrno",
+   "fieldtype": "Data",
+   "label": "Document Id",
+   "reqd": 0,
+   "unique": 1,
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "default": "Payment",
+   "fieldname": "advance_flow",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Type",
+   "options": "Payment\nReceipt",
+   "reqd": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "location_id",
+   "fieldtype": "Link",
+   "label": "Location",
+   "options": "Location",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "partyid",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Party",
+   "options": "Party",
+   "reqd": 1,
+   "columns": 4
+  },
+  {
+   "fetch_from": "partyid.party_name",
+   "fieldname": "party_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Party Name",
+   "read_only": 1,
+   "columns": 4
+  },
+  {
+   "fieldname": "pnrdate",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today",
+   "columns": 3
+  },
+  {
+   "fieldname": "bankaccid",
+   "fieldtype": "Link",
+   "label": "Bank Account",
+   "options": "Chart of Accounting",
+   "columns": 4
+  },
+  {
+   "fetch_from": "bankaccid.description",
+   "fieldname": "bank_name",
+   "fieldtype": "Data",
+   "label": "Bank Name",
+   "read_only": 1,
+   "columns": 4
+  },
+  {
+   "fieldname": "referno",
+   "fieldtype": "Data",
+   "label": "Refer No",
+   "columns": 3
+  },
+  {
+   "fieldname": "referdate",
+   "fieldtype": "Date",
+   "label": "Refer Date",
+   "columns": 3
+  },
+  {
+   "default": "Cash",
+   "fieldname": "pnrmode",
+   "fieldtype": "Select",
+   "label": "Payment Mode",
+   "options": "Cash\nCheque\nBank\nTravellers Cheque",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 4
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "reqd": 1,
+   "columns": 4
+  },
+  {
+   "fieldname": "balance",
+   "fieldtype": "Currency",
+   "hidden": 1,
+   "label": "Balance",
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "fieldname": "narration",
+   "fieldtype": "Small Text",
+   "label": "Narration",
+   "columns": 12
+  },
+  {
+   "fieldname": "instruments",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Instruments",
+   "options": "Payment and Receipt Instrument"
+  },
+  {
+   "fieldname": "doctypeid",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Doc Type ID",
+   "print_hide": 1,
+   "report_hide": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "posted",
+   "fieldtype": "Select",
+   "label": "Submitted",
+   "options": "Draft\nSubmitted",
+   "reqd": 0,
+   "hidden": 1,
+   "read_only": 1,
+   "print_hide": 1,
+   "report_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-06-15 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Advance PNR",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Millitrix ERP User",
+   "share": 0,
+   "submit": 1,
+   "cancel": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "pnrno,partyid",
+ "show_title_field_in_link": 0,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "pnrno",
+ "track_changes": 1
+}

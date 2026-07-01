@@ -1,0 +1,442 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr_cards\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Modules</b></span>\", \"col\": 12}}, {\"id\": \"card_0\", \"type\": \"card\", \"data\": {\"card_name\": \"Sales\", \"col\": 4}}, {\"id\": \"card_1\", \"type\": \"card\", \"data\": {\"card_name\": \"Quick Reports\", \"col\": 4}}, {\"id\": \"card_2\", \"type\": \"card\", \"data\": {\"card_name\": \"Sales Reports\", \"col\": 4}}]",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "sell",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Sales",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales",
+   "link_count": 9,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Report Parameter",
+   "link_count": 0,
+   "link_to": "sales-parameter-form",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Order",
+   "link_count": 0,
+   "link_to": "Sales Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Register \u00b7 SO Register",
+   "link_count": 0,
+   "link_to": "So_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Order Cancellation",
+   "link_count": 0,
+   "link_to": "SO Cancellation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Invoice",
+   "link_count": 0,
+   "link_to": "Sales Invoice",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Register \u00b7 Sales Invoice Register",
+   "link_count": 0,
+   "link_to": "S_Inv_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Return",
+   "link_count": 0,
+   "link_to": "Sales Return",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Other Bill",
+   "link_count": 0,
+   "link_to": "Sales Other Bill",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Return Other Bill",
+   "link_count": 0,
+   "link_to": "Sales Return Other Bill",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Quick Reports",
+   "link_count": 8,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Trial Balance",
+   "link_count": 0,
+   "link_to": "Trial_Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Account Ledger",
+   "link_count": 0,
+   "link_to": "Acc_Ledger",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Purchase Invoice Register",
+   "link_count": 0,
+   "link_to": "P_Inv_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Register",
+   "link_count": 0,
+   "link_to": "S_Inv_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "PO Pending",
+   "link_count": 0,
+   "link_to": "Po_Pending",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "SO Pending",
+   "link_count": 0,
+   "link_to": "So_Pending",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Party Balance",
+   "link_count": 0,
+   "link_to": "Party_Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Payment Register",
+   "link_count": 0,
+   "link_to": "Payment_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Reports",
+   "link_count": 20,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "SO Pending",
+   "link_count": 0,
+   "link_to": "So_Pending",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "SO Register",
+   "link_count": 0,
+   "link_to": "So_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "SO Summary",
+   "link_count": 0,
+   "link_to": "So_Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "SO Invoice Detail",
+   "link_count": 0,
+   "link_to": "So_Inv_Detail",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Register",
+   "link_count": 0,
+   "link_to": "S_Inv_Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Outstanding",
+   "link_count": 0,
+   "link_to": "Si_Outstanding",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "SI Summary",
+   "link_count": 0,
+   "link_to": "Si_Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice",
+   "link_count": 0,
+   "link_to": "Sales_Invoice",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Summary",
+   "link_count": 0,
+   "link_to": "Sales_Inv_Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Item Summary",
+   "link_count": 0,
+   "link_to": "Sales_Item_Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Receipt",
+   "link_count": 0,
+   "link_to": "Sales_Inv_Receipt",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Receipt Detail",
+   "link_count": 0,
+   "link_to": "Sales_Inv_Rcpt_Detl",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Receipt Detail (Consider)",
+   "link_count": 0,
+   "link_to": "Sales_Inv_Rcpt_Detl_Consider",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Invoice Payment Outstanding",
+   "link_count": 0,
+   "link_to": "Sip_Outstanding",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Daily Item Sales",
+   "link_count": 0,
+   "link_to": "Daily_Item_Sales",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Monthly Item Sales",
+   "link_count": 0,
+   "link_to": "Monthly_Item_Sales",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Customer Invoice and Payment",
+   "link_count": 0,
+   "link_to": "Supp_Inv_And_Pay",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Customer Ledger Summary",
+   "link_count": 0,
+   "link_to": "Cust_Ledger_Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Customer Aging",
+   "link_count": 0,
+   "link_to": "Cust_Aging",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Customer Order Invoice Detail",
+   "link_count": 0,
+   "link_to": "Cust_Ord_Inv_Detl",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-06-14 22:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Millitrix ERP",
+ "name": "Sales",
+ "owner": "Administrator",
+ "parent_page": "Millitrix",
+ "public": 1,
+ "restrict_to_domain": "",
+ "roles": [],
+ "sequence_id": 8.0,
+ "shortcuts": [
+  {
+   "label": "Sales Order",
+   "link_to": "Sales Order",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "Sales Invoice",
+   "link_to": "Sales Invoice",
+   "type": "DocType",
+   "doc_view": "New"
+  },
+  {
+   "label": "SO Pending",
+   "link_to": "So_Pending",
+   "type": "Report"
+  }
+ ],
+ "title": "Sales"
+}
