@@ -1,24 +1,36 @@
-# Installed/generated Frappe bench. Recreated by install.sh.
+# Installed/generated Frappe bench. Recreated by install.sh or deploy scripts.
+frappe-bench/
 /frappe-bench/
 
-# Local runtime output.
+# Local and production runtime output.
+logs/
 /logs/
+install_logs/
+deploy/logs/
+backups/
 /offline_bundle/
 *.log
 *.pid
 .expose-state
 
-# Local editor/agent state.
-/.codex/
-/.agents/
-
 # Secrets and machine-specific config.
 .env
 .env.*
+*.env.local
+secrets.md
+deploy/production.secrets.md
+deploy/backups-index.md
 *.backup.*
 *.sql
+*.sql.gz
 *.sqlite
 *.sqlite3
+*.tar
+*.tgz
+
+# Local editor/agent state.
+.codex/
+.agents/
 
 # Python/Node/build caches.
 __pycache__/
@@ -30,15 +42,5 @@ node_modules/
 dist/
 build/
 
-# Local secrets
-secrets.md
-install_logs/
-logs/
-frappe-bench/
-
-# Local Frappe runtime
-frappe-bench/
-logs/
-install_logs/
-secrets.md
-*.log
+# Frappe site backups
+frappe-bench/sites/*/private/backups/

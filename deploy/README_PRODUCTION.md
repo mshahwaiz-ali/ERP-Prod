@@ -1,0 +1,126 @@
+# Production EC2 Deployment
+
+These scripts prepare and operate a Frappe production deployment using Supervisor and Nginx. They are designed for a real EC2/server environment and should be tested first on a clean test server.
+
+## First Run
+
+```bash
+chmod +x install.sh deploy/*.sh
+deploy/production_setup.sh --dry-run
+deploy/production_setup.sh
+```
+
+The main menu:
+
+```text
+1) Full Production Setup
+2) Preflight Check
+3) Prepare Server Packages
+4) Setup / Validate Bench
+5) Sync and Validate Apps
+6) Create Production Site
+7) Setup Supervisor + Nginx
+8) Setup SSL
+9) Backup Site
+10) Deploy Update
+11) Status
+12) Exit
+```
+
+## Non-Interactive Defaults
+
+Use `--yes` only when the required values are provided by environment variables:
+
+```bash
+export PRODUCTION_DOMAIN=erp.example.com
+export PRODUCTION_SITE=erp.example.com
+export LETSENCRYPT_EMAIL=admin@example.com
+export APP_NAME=ledgix_saas
+deploy/production_setup.sh --yes
+```
+
+Exact safety confirmations, such as DNS mismatch or dirty Git tree confirmations, are still required unless the script is in `--dry-run` mode.
+
+## DNS
+
+Create an A record before SSL:
+
+```text
+erp.example.com -> EC2 public IPv4
+```
+
+The script detects the public IP with `curl` and checks DNS with `dig`, `nslookup`, or `getent` when available.
+
+## Secrets
+
+Production credentials are saved to:
+
+```text
+deploy/production.secrets.md
+```
+
+Permissions are set to `600`. The file is ignored by Git. The script never prints generated passwords to the terminal.
+
+## Updates
+
+Safe deploy update:
+
+```bash
+deploy/deploy_update.sh
+```
+
+The update flow checks for a dirty Git tree, takes a backup by default, runs a fast-forward-only pull, syncs `p_apps/`, installs apps editable in the bench env, builds assets, migrates the selected site, clears caches, restarts Supervisor, and reloads Nginx.
+
+## Backups
+
+```bash
+deploy/backup.sh
+```
+
+Backups use:
+
+```bash
+bench --site site backup --with-files
+```
+
+Backup locations are indexed in `deploy/backups-index.md`, which is ignored by Git.
+
+## Status
+
+```bash
+deploy/status.sh
+```
+
+Status reports repo/branch/remote, bench validity, sites, apps per site, Supervisor, Nginx, ports, HTTP checks, disk usage, MariaDB, Redis, and the latest backup.
+
+## Common Issues
+
+Nginx welcome page:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+ls -l /etc/nginx/sites-enabled /etc/nginx/conf.d
+```
+
+Multisite `127.0.0.1` 404:
+
+```bash
+curl -I -H "Host: erp.example.com" http://127.0.0.1
+```
+
+DNS mismatch before SSL:
+
+```bash
+dig +short A erp.example.com
+curl -fsS https://ifconfig.me
+```
+
+Supervisor/Nginx restart:
+
+```bash
+sudo supervisorctl status
+sudo supervisorctl restart all
+sudo nginx -t
+sudo systemctl reload nginx
+```

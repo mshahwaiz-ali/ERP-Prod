@@ -1,13 +1,14 @@
 # ERP-Prod
 
-ERP-Prod contains the local Frappe installer/control scripts and custom apps used by this setup.
+ERP-Prod contains the local Frappe installer/control scripts, production EC2 deployment helpers, and custom apps used by this setup.
 
 ## What Is Included
 
-- `install.sh` - main installer and repair launcher.
-- `site_setup.sh` - site creation, site deletion, app copy/install, and site listing flow.
-- `start.sh` - local development bench launcher.
-- `p_apps/` - custom Frappe apps that the installer copies into the bench.
+- `install.sh` - main launcher for local development setup or production EC2 setup.
+- `site_setup.sh` - local site creation, app install, site deletion, and site listing flow.
+- `start.sh` - local development bench runner only.
+- `deploy/` - production EC2/server setup, update, backup, status, Nginx, Supervisor, and SSL helpers.
+- `p_apps/` - custom Frappe apps that the scripts copy into the bench.
 
 The generated Frappe bench folder is intentionally ignored by Git:
 
@@ -15,102 +16,160 @@ The generated Frappe bench folder is intentionally ignored by Git:
 frappe-bench/
 ```
 
-## Install Procedure
+## Local Setup Quickstart
 
-From the project root, run:
+From the project root:
 
 ```bash
 chmod +x install.sh site_setup.sh start.sh
 ./install.sh
 ```
 
-Then choose from the installer menu:
+Choose:
 
 ```text
-1) Install / Setup Frappe
-2) Repair Frappe
-3) Start Bench
-4) Site Setup
-5) Exit
+1) Local / Development Setup
 ```
 
-For a fresh setup, choose:
+The local menu can install Frappe, run `site_setup.sh`, start `bench start` in the background, stop local bench processes, or show local status.
 
-```text
-1) Install / Setup Frappe
-```
+Local development uses:
 
-The installer will:
+- `bench start`
+- port `8000`
+- local secrets in `secrets.md`
+- local logs in `install_logs/` and `logs/`
 
-- install missing system dependencies and skip what is already installed;
-- initialize `frappe-bench` with Frappe `version-15` if a valid bench does not already exist;
-- keep `frappe-bench/` local only and out of Git;
-- copy valid apps from `p_apps/` into the bench apps folder without overwriting existing apps;
-- prepare app imports/assets;
-- start bench in the background;
-- open the site setup menu.
+It does not configure production Nginx, Supervisor, Certbot, or system services.
 
-## Site Setup
+## Production EC2 Quickstart
 
-You can also run site setup directly:
+Production scripts are intended for a real EC2/server deployment and should be first run on a clean test server.
+
+From the project root on the server:
 
 ```bash
-./site_setup.sh
+chmod +x install.sh deploy/*.sh
+./install.sh
 ```
 
-Site setup menu:
+Choose:
 
 ```text
-1) New Site
-2) Delete Site
-3) List Sites and Apps
-4) Exit
+2) Production / EC2 Setup
 ```
 
-When creating a site:
-
-- enter a site name such as `ledgix.local` or `millitrix.local`;
-- select one app, multiple apps using `1,2`, or all apps using `all`;
-- the default Frappe Administrator password is `admin`;
-- MariaDB database/user setup is handled automatically by the script;
-- the script does not prompt for MariaDB username/password during normal site creation.
-
-## Start Bench
-
-To start the local development bench and print available site URLs:
+Or run the production script directly:
 
 ```bash
-./start.sh --background
+deploy/production_setup.sh
 ```
 
-To stop bench processes:
-
-```bash
-./start.sh --stop
-```
-
-To show status and detected sites:
-
-```bash
-./start.sh --status
-```
-
-## Logs
-
-Installer and site setup logs are written to:
+Default production Git URL:
 
 ```text
-install_logs/
+https://github.com/mshahwaiz-ali/ERP-Prod.git
 ```
 
-Bench startup logs are written to:
+Production uses:
+
+- Supervisor for Frappe processes
+- Nginx for HTTP/HTTPS
+- ports `80` and `443`
+- optional Certbot SSL
+- generated strong Administrator passwords by default
+- production secrets saved to `deploy/production.secrets.md`
+
+Never use `start.sh` for production.
+
+## Production Helpers
+
+```bash
+deploy/production_setup.sh --help
+deploy/production_setup.sh --dry-run
+deploy/deploy_update.sh
+deploy/backup.sh
+deploy/status.sh
+```
+
+The production menu includes preflight checks, package preparation, bench validation, app sync, site creation, Supervisor/Nginx setup, SSL setup, backups, deploy updates, and status checks.
+
+## DNS And SSL Requirements
+
+Before SSL, point your production domain A record to the EC2 public IP:
 
 ```text
-logs/bench-start.log
+erp.example.com -> EC2_PUBLIC_IP
 ```
 
-## Notes
+The SSL flow asks for a Let's Encrypt email address and validates DNS before running Certbot. If DNS does not match the server public IP, the script stops unless you type the exact confirmation phrase shown on screen.
 
-- `frappe-bench/` is generated locally and should not be committed.
-- Custom apps live in `p_apps/` and are committed to this repository.
-- This setup is for local/development control, not a full production Nginx/Supervisor deployment.
+## Local vs Production
+
+```text
+Local:
+  runner: bench start
+  URL: http://site.local:8000
+  services: development processes
+
+Production:
+  runner: Supervisor
+  web: Nginx
+  URL: http://domain or https://domain
+  services: system-managed production processes
+```
+
+## Secrets
+
+Do not commit secrets. The repo ignores:
+
+```text
+secrets.md
+deploy/production.secrets.md
+deploy/logs/
+deploy/backups-index.md
+*.sql.gz
+*.tar
+*.tgz
+.env
+*.env.local
+```
+
+Example environment templates live in:
+
+```text
+env/local.example.env
+env/production.example.env
+```
+
+## Troubleshooting
+
+If you see the Nginx welcome page, the default Nginx site may still be enabled or the Frappe Nginx config may not be loaded. Run:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+If `http://127.0.0.1` returns `404` in multisite mode, test with the Host header:
+
+```bash
+curl -I -H "Host: your.domain.com" http://127.0.0.1
+```
+
+If SSL fails, verify DNS first:
+
+```bash
+dig +short A your.domain.com
+curl -fsS https://ifconfig.me
+```
+
+Useful production restart/status commands:
+
+```bash
+sudo supervisorctl status
+sudo supervisorctl restart all
+sudo nginx -t
+sudo systemctl reload nginx
+deploy/status.sh
+```

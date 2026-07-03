@@ -381,20 +381,73 @@ install_flow() {
   final_summary
 }
 
-main_menu() {
+run_local_script() {
+  local script="$1"
+  shift || true
+  [[ -f "$script" ]] || die "required local script is missing: $script"
+  if [[ ! -x "$script" ]]; then
+    run chmod +x "$script"
+  fi
+  run "$script" "$@"
+}
+
+local_development_menu() {
   while true; do
     printf '\n'
     printf '=================================\n'
-    printf ' Frappe Local Installer\n'
+    printf ' Local / Development Setup\n'
     printf '=================================\n'
     printf 'Bench: %s\n' "$BENCH_DIR"
     printf 'Log:   %s\n\n' "$LOG_FILE"
     printf '1) Install / Setup Frappe\n'
-    printf '2) Exit\n'
+    printf '2) Site Setup\n'
+    printf '3) Start Bench\n'
+    printf '4) Stop Bench\n'
+    printf '5) Status\n'
+    printf '6) Back\n'
     read -r -p "Choose: " choice
     case "${choice:-}" in
       1) install_flow ;;
-      2) info "bye"; exit 0 ;;
+      2) run_local_script "$SCRIPT_DIR/site_setup.sh" ;;
+      3) run_local_script "$SCRIPT_DIR/start.sh" --background ;;
+      4) run_local_script "$SCRIPT_DIR/start.sh" --stop ;;
+      5) run_local_script "$SCRIPT_DIR/start.sh" --status ;;
+      6) return 0 ;;
+      *) warn "invalid option" ;;
+    esac
+  done
+}
+
+production_setup_flow() {
+  local production_script="$SCRIPT_DIR/deploy/production_setup.sh"
+  section "Production / EC2 Setup"
+  warn "Production mode is for real EC2/server deployment and uses nginx/supervisor."
+  warn "This path does not run bench start or use start.sh."
+  if [[ ! -f "$production_script" ]]; then
+    die "production setup script is missing: $production_script"
+  fi
+  if [[ ! -x "$production_script" ]]; then
+    run chmod +x "$production_script"
+  fi
+  run "$production_script"
+}
+
+main_menu() {
+  while true; do
+    printf '\n'
+    printf '=================================\n'
+    printf ' Frappe Installer\n'
+    printf '=================================\n'
+    printf 'Bench: %s\n' "$BENCH_DIR"
+    printf 'Log:   %s\n\n' "$LOG_FILE"
+    printf '1) Local / Development Setup\n'
+    printf '2) Production / EC2 Setup\n'
+    printf '3) Exit\n'
+    read -r -p "Choose: " choice
+    case "${choice:-}" in
+      1) local_development_menu ;;
+      2) production_setup_flow ;;
+      3) info "bye"; exit 0 ;;
       *) warn "invalid option" ;;
     esac
   done
