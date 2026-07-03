@@ -1,52 +1,255 @@
 # ERP-Prod
 
-ERP-Prod contains the local Frappe installer/control scripts, production EC2 deployment helpers, and custom apps used by this setup.
+> **A clean Frappe v15 ERP deployment toolkit for Ledgix SaaS — built for local development, site setup, production deployment, backups, updates, and server operations.**
 
-## What Is Included
+---
 
-- `install.sh` - main launcher for local development setup or production EC2 setup.
-- `site_setup.sh` - local site creation, app install, site deletion, and site listing flow.
-- `start.sh` - local development bench runner only.
-- `deploy/` - production EC2/server setup, update, backup, status, Nginx, Supervisor, and SSL helpers.
-- `p_apps/` - custom Frappe apps that the scripts copy into the bench.
+<div align="center">
 
-The generated Frappe bench folder is intentionally ignored by Git:
+# Ledgix SaaS Deployment Kit
+
+**Local setup. Production deployment. Site management. App installation. One clean workflow.**
+
+</div>
+
+---
+
+## Overview
+
+`ERP-Prod` is a complete setup and deployment repository for running **Ledgix SaaS** on the Frappe Framework.
+
+It includes scripts for:
+
+* Local Frappe development setup
+* Bench initialization
+* Site creation
+* Ledgix SaaS app installation
+* Local bench start/restart
+* Production EC2/server deployment
+* Nginx, Supervisor, SSL, backup, update, and status helpers
+
+The repository is designed to keep the full ERP setup process organized, repeatable, and production-friendly.
+
+---
+
+## Project Snapshot
 
 ```text
-frappe-bench/
+┌─────────────────────────────────────────────────────────────┐
+│                         ERP-Prod                            │
+├─────────────────────────────────────────────────────────────┤
+│ Framework      │ Frappe v15                                 │
+│ Main App       │ Ledgix SaaS                                │
+│ Environment    │ Local Development + Production Server       │
+│ Database       │ MariaDB                                    │
+│ Cache/Queue    │ Redis                                      │
+│ Web Server     │ Nginx for production                        │
+│ Process Manager│ Supervisor for production                   │
+│ Local Runner   │ bench start                                │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## Local Setup Quickstart
+---
 
-From the project root:
+## What This Repository Includes
+
+```text
+┌─────────────────────┬───────────────────────────────────────┐
+│ Area                │ Purpose                               │
+├─────────────────────┼───────────────────────────────────────┤
+│ install.sh          │ Main setup launcher                    │
+│ site_setup.sh       │ Local site creation and app install    │
+│ start.sh            │ Local bench start/restart helper       │
+│ deploy/             │ Production deployment helpers          │
+│ env/                │ Example environment templates          │
+│ clean_erp/          │ Cleanup/helper scripts                 │
+│ p_apps/ledgix_saas  │ Custom Ledgix SaaS Frappe app          │
+└─────────────────────┴───────────────────────────────────────┘
+```
+
+---
+
+## Core Workflow
+
+```text
+┌──────────────┐
+│ Clone Repo   │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│ Run Installer│
+└──────┬───────┘
+       │
+       ├───────────────────────┐
+       │                       │
+       ▼                       ▼
+┌──────────────────┐   ┌─────────────────────┐
+│ Local Setup      │   │ Production Setup     │
+│ bench start      │   │ Nginx + Supervisor   │
+│ port 8000        │   │ ports 80 / 443       │
+└──────┬───────────┘   └──────────┬──────────┘
+       │                          │
+       ▼                          ▼
+┌──────────────────┐   ┌─────────────────────┐
+│ Create Site      │   │ Configure Domain     │
+└──────┬───────────┘   └──────────┬──────────┘
+       │                          │
+       ▼                          ▼
+┌──────────────────┐   ┌─────────────────────┐
+│ Install Ledgix   │   │ Enable SSL / Backups │
+└──────┬───────────┘   └──────────┬──────────┘
+       │                          │
+       ▼                          ▼
+┌──────────────────┐   ┌─────────────────────┐
+│ Start Working    │   │ Live ERP Deployment  │
+└──────────────────┘   └─────────────────────┘
+```
+
+---
+
+## Ledgix SaaS App
+
+Ledgix SaaS is the main custom Frappe app included in this repository.
+
+The app is stored inside:
+
+```text
+p_apps/ledgix_saas/
+```
+
+### App Structure
+
+```text
+p_apps/ledgix_saas/
+├── api/
+├── config/
+├── fixtures/
+├── ledgix/
+├── ledgix_saas.egg-info/
+├── ledgix_saas/setup/
+├── patches/
+├── public/
+├── setup/
+├── templates/
+├── www/
+├── __init__.py
+├── hooks.py
+├── modules.txt
+├── patches.txt
+└── pyproject.toml
+```
+
+### Ledgix SaaS Covers
+
+```text
+┌─────────────────────┬───────────────────────────────────────┐
+│ Module Area         │ Description                           │
+├─────────────────────┼───────────────────────────────────────┤
+│ API Layer           │ Backend endpoints and integrations     │
+│ Config              │ App configuration and setup logic      │
+│ Fixtures            │ Exported roles, settings, and records  │
+│ Patches             │ Versioned database/app migrations      │
+│ Public Assets       │ Static files and frontend assets        │
+│ Templates           │ Jinja/web templates                    │
+│ Web Pages           │ Website routes and public pages         │
+│ Setup               │ App installation/setup utilities        │
+└─────────────────────┴───────────────────────────────────────┘
+```
+
+---
+
+## Quick Start
+
+Clone the repository:
+
+```bash
+git clone https://github.com/mshahwaiz-ali/ERP-Prod.git
+cd ERP-Prod
+```
+
+Make scripts executable:
 
 ```bash
 chmod +x install.sh site_setup.sh start.sh
+```
+
+Run the installer:
+
+```bash
 ./install.sh
 ```
 
-Choose:
+Choose local setup:
 
 ```text
 1) Local / Development Setup
 ```
 
-The local menu can install Frappe, run `site_setup.sh`, start `bench start` in the background, stop local bench processes, or show local status.
+Create or manage a site:
 
-Local development uses:
+```bash
+./site_setup.sh
+```
 
-- `bench start`
-- port `8000`
-- local secrets in `secrets.md`
-- local logs in `install_logs/` and `logs/`
+Start local bench:
 
-It does not configure production Nginx, Supervisor, Certbot, or system services.
+```bash
+./start.sh
+```
 
-## Production EC2 Quickstart
+Open your site:
 
-Production scripts are intended for a real EC2/server deployment and should be first run on a clean test server.
+```text
+http://your-site.local:8000
+```
 
-From the project root on the server:
+Example:
+
+```text
+http://ledgix.local:8000
+```
+
+---
+
+## Local vs Production
+
+```text
+┌─────────────────────┬─────────────────────┬─────────────────────┐
+│ Area                │ Local Development   │ Production Server   │
+├─────────────────────┼─────────────────────┼─────────────────────┤
+│ Runner              │ bench start         │ Supervisor          │
+│ Web Server          │ Bench dev server    │ Nginx               │
+│ Port                │ 8000                │ 80 / 443            │
+│ SSL                 │ Not required        │ Certbot / HTTPS     │
+│ Logs                │ Local logs          │ Production logs     │
+│ Best For            │ Development/testing │ Live deployment     │
+│ Main Script         │ start.sh            │ deploy scripts      │
+└─────────────────────┴─────────────────────┴─────────────────────┘
+```
+
+---
+
+## Production Deployment
+
+Production helpers are stored in:
+
+```text
+deploy/
+```
+
+Available production scripts:
+
+```text
+deploy/
+├── production_setup.sh
+├── deploy_update.sh
+├── backup.sh
+├── status.sh
+└── README_PRODUCTION.md
+```
+
+Run production setup:
 
 ```bash
 chmod +x install.sh deploy/*.sh
@@ -59,69 +262,169 @@ Choose:
 2) Production / EC2 Setup
 ```
 
-Or run the production script directly:
+Or run directly:
 
 ```bash
 deploy/production_setup.sh
 ```
 
-Default production Git URL:
+Production setup is intended for real server environments and may configure:
+
+* Required system packages
+* Frappe bench
+* Ledgix SaaS app sync
+* Site creation
+* Supervisor
+* Nginx
+* SSL
+* Backups
+* Deployment updates
+* Status checks
+
+> `start.sh` is for local development only. Do not use it as the production process manager.
+
+---
+
+## Recommended Documentation Map
 
 ```text
-https://github.com/mshahwaiz-ali/ERP-Prod.git
+┌────────────────────────┬────────────────────────────────────┐
+│ File                   │ Purpose                            │
+├────────────────────────┼────────────────────────────────────┤
+│ README.md              │ Project overview and quick start    │
+│ LOCAL_INSTALLATION.md  │ Complete local setup guide          │
+│ DEPLOYMENT.md          │ Production / EC2 deployment guide   │
+│ APPS.md                │ Ledgix SaaS app structure/details   │
+└────────────────────────┴────────────────────────────────────┘
 ```
 
-Production uses:
+---
 
-- Supervisor for Frappe processes
-- Nginx for HTTP/HTTPS
-- ports `80` and `443`
-- optional Certbot SSL
-- generated strong Administrator passwords by default
-- production secrets saved to `deploy/production.secrets.md`
+## Repository Structure
 
-Never use `start.sh` for production.
+```text
+ERP-Prod/
+├── README.md
+├── install.sh
+├── site_setup.sh
+├── start.sh
+│
+├── env/
+│   ├── local.example.env
+│   └── production.example.env
+│
+├── deploy/
+│   ├── production_setup.sh
+│   ├── deploy_update.sh
+│   ├── backup.sh
+│   ├── status.sh
+│   └── README_PRODUCTION.md
+│
+├── clean_erp/
+│   └── cleanup/helper scripts
+│
+├── p_apps/
+│   └── ledgix_saas/
+│
+└── frappe-bench/
+    └── generated locally, ignored by Git
+```
 
-## Production Helpers
+---
+
+## Site Strategy
+
+ERP-Prod is structured around a clean Frappe bench workflow.
+
+```text
+┌───────────────────────────────┐
+│ One Repository                │
+└───────────────┬───────────────┘
+                │
+                ▼
+┌───────────────────────────────┐
+│ One Frappe Bench              │
+└───────────────┬───────────────┘
+                │
+                ▼
+┌───────────────────────────────┐
+│ One or More Sites             │
+└───────────────┬───────────────┘
+                │
+                ▼
+┌───────────────────────────────┐
+│ Ledgix SaaS Installed Per Site│
+└───────────────────────────────┘
+```
+
+Example:
+
+```text
+┌─────────────────────┬─────────────────────┐
+│ Site                │ Installed App        │
+├─────────────────────┼─────────────────────┤
+│ ledgix.local        │ Ledgix SaaS          │
+│ demo.local          │ Ledgix SaaS          │
+│ client.local        │ Ledgix SaaS          │
+└─────────────────────┴─────────────────────┘
+```
+
+---
+
+## Useful Commands
+
+Check installed apps:
 
 ```bash
-deploy/production_setup.sh --help
-deploy/production_setup.sh --dry-run
-deploy/deploy_update.sh
-deploy/backup.sh
+bench --site your-site.local list-apps
+```
+
+Run migration:
+
+```bash
+bench --site your-site.local migrate
+```
+
+Start bench manually:
+
+```bash
+cd frappe-bench
+bench start
+```
+
+Check production services:
+
+```bash
+sudo supervisorctl status
+sudo nginx -t
+sudo systemctl status nginx
+```
+
+Run production status helper:
+
+```bash
 deploy/status.sh
 ```
 
-The production menu includes preflight checks, package preparation, bench validation, app sync, site creation, Supervisor/Nginx setup, SSL setup, backups, deploy updates, and status checks.
+Run backup helper:
 
-## DNS And SSL Requirements
-
-Before SSL, point your production domain A record to the EC2 public IP:
-
-```text
-erp.example.com -> EC2_PUBLIC_IP
+```bash
+deploy/backup.sh
 ```
 
-The SSL flow asks for a Let's Encrypt email address and validates DNS before running Certbot. If DNS does not match the server public IP, the script stops unless you type the exact confirmation phrase shown on screen.
+Run deployment update helper:
 
-## Local vs Production
-
-```text
-Local:
-  runner: bench start
-  URL: http://site.local:8000
-  services: development processes
-
-Production:
-  runner: Supervisor
-  web: Nginx
-  URL: http://domain or https://domain
-  services: system-managed production processes
+```bash
+deploy/deploy_update.sh
 ```
 
-## Secrets
+---
 
-Do not commit secrets. The repo ignores:
+## Security Notes
+
+Do not commit secrets, database passwords, SSL keys, backups, local logs, or generated bench files.
+
+Ignored/private files should include:
 
 ```text
 secrets.md
@@ -133,43 +436,74 @@ deploy/backups-index.md
 *.tgz
 .env
 *.env.local
+frappe-bench/
 ```
 
-Example environment templates live in:
+Use example files as templates:
 
 ```text
 env/local.example.env
 env/production.example.env
 ```
 
-## Troubleshooting
+---
 
-If you see the Nginx welcome page, the default Nginx site may still be enabled or the Frappe Nginx config may not be loaded. Run:
+## Troubleshooting Quick Notes
 
-```bash
-sudo nginx -t
-sudo systemctl reload nginx
+```text
+┌───────────────────────────────┬────────────────────────────────┐
+│ Issue                         │ Check                          │
+├───────────────────────────────┼────────────────────────────────┤
+│ Site not opening locally      │ bench start / port 8000        │
+│ App not installed             │ bench --site site list-apps    │
+│ Migration issue               │ bench --site site migrate      │
+│ Nginx welcome page            │ nginx config / default site    │
+│ SSL failure                   │ DNS A record + Certbot logs    │
+│ Production process down       │ supervisorctl status           │
+└───────────────────────────────┴────────────────────────────────┘
 ```
 
-If `http://127.0.0.1` returns `404` in multisite mode, test with the Host header:
+---
 
-```bash
-curl -I -H "Host: your.domain.com" http://127.0.0.1
+## Suggested GitHub About
+
+Description:
+
+```text
+Frappe v15 ERP deployment toolkit with local setup, EC2 production scripts, and the Ledgix SaaS custom app.
 ```
 
-If SSL fails, verify DNS first:
+Topics:
 
-```bash
-dig +short A your.domain.com
-curl -fsS https://ifconfig.me
+```text
+frappe
+erpnext
+erp
+saas
+frappe-framework
+python
+javascript
+mariadb
+redis
+nginx
+supervisor
+deployment
+ubuntu
+ec2
 ```
 
-Useful production restart/status commands:
+---
 
-```bash
-sudo supervisorctl status
-sudo supervisorctl restart all
-sudo nginx -t
-sudo systemctl reload nginx
-deploy/status.sh
-```
+## Notes
+
+ERP-Prod is not just an app folder. It is a complete Frappe setup and deployment toolkit for Ledgix SaaS.
+
+Use the local setup for development and testing. Use production deployment only on a properly prepared server.
+
+---
+
+## License
+
+Private / internal project unless a license is added.
+
+Before public distribution or commercial reuse, define the correct license and ownership terms.
