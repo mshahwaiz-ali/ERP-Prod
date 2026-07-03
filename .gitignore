@@ -29,3 +29,16 @@ __pycache__/
 node_modules/
 dist/
 build/
+
+# Local secrets
+secrets.md
+install_logs/
+logs/
+frappe-bench/
+
+# Local Frappe runtime
+frappe-bench/
+logs/
+install_logs/
+secrets.md
+*.log
