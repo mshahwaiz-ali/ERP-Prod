@@ -27,6 +27,7 @@ It includes scripts for:
 * Local bench start/restart
 * Production EC2/server deployment
 * Nginx, Supervisor, SSL, backup, update, and status helpers
+* Local CI-style validation, secret scanning, and smoke testing
 
 The repository is designed to keep the full ERP setup process organized, repeatable, and production-friendly.
 
@@ -61,6 +62,10 @@ The repository is designed to keep the full ERP setup process organized, repeata
 │ site_setup.sh       │ Local site creation and app install    │
 │ start.sh            │ Local bench start/restart helper       │
 │ deploy/             │ Production deployment helpers          │
+│ scripts/            │ Local validation and secret checks      │
+│ docs/               │ Production, FBR, command, troubleshoot  │
+│ SECURITY.md         │ Security policy and deployment notes    │
+│ config/example.env  │ Private environment template            │
 │ env/                │ Example environment templates          │
 │ clean_erp/          │ Cleanup/helper scripts                 │
 │ p_apps/ledgix_saas  │ Custom Ledgix SaaS Frappe app          │
@@ -246,6 +251,7 @@ deploy/
 ├── deploy_update.sh
 ├── backup.sh
 ├── status.sh
+├── smoke_test.sh
 └── README_PRODUCTION.md
 ```
 
@@ -295,6 +301,16 @@ Production setup is intended for real server environments and may configure:
 │ LOCAL_INSTALLATION.md  │ Complete local setup guide          │
 │ DEPLOYMENT.md          │ Production / EC2 deployment guide   │
 │ APPS.md                │ Ledgix SaaS app structure/details   │
+│ SECURITY.md            │ Security rules and secret handling  │
+│ config/example.env     │ Deployment environment template     │
+│ scripts/validate_repo.sh│ Syntax/import/package validation   │
+│ scripts/check_secrets.sh│ Accidental secret scanner          │
+│ scripts/ci_local.sh    │ Runs validation + secret scan       │
+│ deploy/smoke_test.sh   │ Offline/online deployment smoke     │
+│ docs/COMMANDS.md       │ Common local and production commands│
+│ docs/PRODUCTION_CHECKLIST.md │ Production readiness checklist│
+│ docs/FBR_PRODUCTION_CHECKLIST.md │ FBR go-live checklist       │
+│ docs/TROUBLESHOOTING.md│ Common failure diagnosis            │
 └────────────────────────┴────────────────────────────────────┘
 ```
 
@@ -308,6 +324,21 @@ ERP-Prod/
 ├── install.sh
 ├── site_setup.sh
 ├── start.sh
+├── SECURITY.md
+│
+├── config/
+│   └── example.env
+│
+├── scripts/
+│   ├── validate_repo.sh
+│   ├── check_secrets.sh
+│   └── ci_local.sh
+│
+├── docs/
+│   ├── COMMANDS.md
+│   ├── PRODUCTION_CHECKLIST.md
+│   ├── FBR_PRODUCTION_CHECKLIST.md
+│   └── TROUBLESHOOTING.md
 │
 ├── env/
 │   ├── local.example.env
@@ -318,6 +349,7 @@ ERP-Prod/
 │   ├── deploy_update.sh
 │   ├── backup.sh
 │   ├── status.sh
+│   ├── smoke_test.sh
 │   └── README_PRODUCTION.md
 │
 ├── clean_erp/
@@ -418,12 +450,21 @@ Run deployment update helper:
 deploy/deploy_update.sh
 ```
 
+Run local CI and smoke checks:
+
+```bash
+./scripts/ci_local.sh
+./deploy/smoke_test.sh --site ledgix.local --offline
+./start.sh --smoke --site ledgix.local
+```
+
 ---
 
 ## Security Notes
 
 Do not commit secrets, database passwords, SSL keys, backups, local logs, or generated bench files.
 Setup scripts save manually entered or auto-generated site credentials to the ignored secrets files.
+See `SECURITY.md` before public production deployment.
 
 Ignored/private files should include:
 
@@ -437,6 +478,7 @@ deploy/backups-index.md
 *.tgz
 .env
 *.env.local
+config/*.env
 frappe-bench/
 ```
 
@@ -445,6 +487,7 @@ Use example files as templates:
 ```text
 env/local.example.env
 env/production.example.env
+config/example.env
 ```
 
 ---

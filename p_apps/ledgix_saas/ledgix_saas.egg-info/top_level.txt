@@ -1,3 +1,2 @@
-api
 ledgix
 ledgix_saas

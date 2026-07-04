@@ -29,6 +29,8 @@ skip_dirs = {
     "backups",
     "offline_bundle",
     "node_modules",
+    "build",
+    "dist",
     "__pycache__",
     ".pytest_cache",
     ".mypy_cache",

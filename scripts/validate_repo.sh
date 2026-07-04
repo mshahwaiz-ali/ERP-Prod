@@ -35,6 +35,10 @@ find_repo_files() {
     -o -path "$REPO_ROOT/backups" \
     -o -path "$REPO_ROOT/offline_bundle" \
     -o -path "$REPO_ROOT/node_modules" \
+    -o -path "$REPO_ROOT/dist" \
+    -o -path "$REPO_ROOT/build" \
+    -o -path "*/build" \
+    -o -path "*/dist" \
     -o -path "$REPO_ROOT/clean_erp" \) -prune \
     -o -type f -name "$pattern" -print0
 }
@@ -70,6 +74,8 @@ skip = {
     "backups",
     "offline_bundle",
     "node_modules",
+    "build",
+    "dist",
     "clean_erp",
 }
 files = [
@@ -102,6 +108,8 @@ skip = {
     "backups",
     "offline_bundle",
     "node_modules",
+    "build",
+    "dist",
     "clean_erp",
 }
 files = [
@@ -139,6 +147,8 @@ skip = {
     "backups",
     "offline_bundle",
     "node_modules",
+    "build",
+    "dist",
     "clean_erp",
 }
 files = [
