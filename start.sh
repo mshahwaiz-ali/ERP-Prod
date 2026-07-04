@@ -8,6 +8,8 @@ NODE_MAJOR="${NODE_MAJOR:-24}"
 BACKGROUND=0
 STOP=0
 STATUS=0
+SMOKE=0
+SMOKE_SITE=""
 DEV_PORTS=(8000 9000 11000 12000 13000)
 declare -a SITES=()
 declare -a SELECTED_SITES=()
@@ -36,6 +38,8 @@ Options:
   --background       Start bench start in background
   --stop             Stop tracked dev process for this bench
   --status           Show bench/site/process status
+  --smoke            Run local smoke checks without starting bench
+  --site SITE        Site to smoke test
   --help             Show this help
 EOF
 }
@@ -83,6 +87,12 @@ parse_args() {
       --background) BACKGROUND=1; shift ;;
       --stop) STOP=1; shift ;;
       --status) STATUS=1; shift ;;
+      --smoke) SMOKE=1; shift ;;
+      --site)
+        [[ $# -ge 2 ]] || die "--site requires a site name"
+        SMOKE_SITE="$2"
+        shift 2
+        ;;
       --help|-h) usage; exit 0 ;;
       *) die "Unknown option: $1" ;;
     esac
@@ -252,6 +262,125 @@ print_http_status() {
       printf '  %s: not reachable or bench is stopped\n' "$site"
     fi
   done
+}
+
+SMOKE_FAILURES=0
+SMOKE_WARNINGS=0
+
+smoke_pass() {
+  printf '[PASS] %s\n' "$*"
+}
+
+smoke_warn() {
+  SMOKE_WARNINGS=$((SMOKE_WARNINGS + 1))
+  printf '[WARN] %s\n' "$*" >&2
+}
+
+smoke_fail() {
+  SMOKE_FAILURES=$((SMOKE_FAILURES + 1))
+  printf '[FAIL] %s\n' "$*" >&2
+}
+
+select_smoke_site() {
+  local -n _site="$1"
+  local candidate
+  if [[ -n "$SMOKE_SITE" ]]; then
+    for candidate in "${SITES[@]}"; do
+      if [[ "$candidate" == "$SMOKE_SITE" ]]; then
+        _site="$candidate"
+        return 0
+      fi
+    done
+    die "smoke site was not found in $BENCH_DIR/sites: $SMOKE_SITE"
+  fi
+
+  if [[ "${#SITES[@]}" -eq 1 ]]; then
+    _site="${SITES[0]}"
+    return 0
+  fi
+
+  die "multiple sites found; pass --site SITE for smoke checks"
+}
+
+site_path_http_code() {
+  local site="$1"
+  local path="$2"
+  curl -sS -o /dev/null -w "%{http_code}" --max-time 5 -H "Host: $site" "http://127.0.0.1:8000$path" 2>/dev/null || true
+}
+
+smoke_http_path() {
+  local site="$1"
+  local path="$2"
+  local label="$3"
+  local code
+  if ! have_cmd curl; then
+    smoke_fail "curl is required for HTTP smoke checks"
+    return 0
+  fi
+  code="$(site_path_http_code "$site" "$path")"
+  if [[ "$code" =~ ^[23] ]]; then
+    smoke_pass "$label responded with $code"
+  elif [[ "$code" =~ ^4 ]]; then
+    smoke_warn "$label responded with $code"
+  elif [[ -n "$code" && "$code" != "000" ]]; then
+    smoke_fail "$label responded with $code"
+  else
+    smoke_fail "$label did not respond"
+  fi
+}
+
+smoke_site_app() {
+  local site="$1"
+  local app="${2:-ledgix_saas}"
+  local output
+  if output="$(cd "$BENCH_DIR" && bench --site "$site" list-apps 2>&1)"; then
+    if awk '{print $1}' <<<"$output" | grep -Fxq "$app"; then
+      smoke_pass "$app is installed on $site"
+    else
+      smoke_fail "$app is not installed on $site"
+    fi
+  else
+    smoke_warn "could not verify installed apps with bench list-apps; DB may be stopped or sandboxed"
+    if grep -Eq "Operation not permitted|Can't connect to MySQL" <<<"$output"; then
+      printf '  MariaDB connection failed or was blocked by the current execution environment.\n' >&2
+    else
+      printf '%s\n' "$output" | tail -n 12 | sed 's/^/  /' >&2
+    fi
+  fi
+}
+
+run_smoke() {
+  local site pid_count
+  require_sites_for_start
+  select_smoke_site site
+  printf 'Local smoke site: %s\n' "$site"
+
+  [[ -f "$BENCH_DIR/sites/$site/site_config.json" ]] &&
+    smoke_pass "site_config.json exists" ||
+    smoke_fail "site_config.json is missing for $site"
+
+  hosts_entry_exists "$site" &&
+    smoke_pass "/etc/hosts maps $site to 127.0.0.1" ||
+    smoke_fail "/etc/hosts does not map $site to 127.0.0.1"
+
+  pid_count="$(bench_owned_port_pids 8000 | wc -l | tr -d ' ')"
+  if [[ "$pid_count" =~ ^[1-9] ]]; then
+    smoke_pass "port 8000 is served by this bench"
+  elif [[ -n "$(port_pids 8000 || true)" ]]; then
+    smoke_warn "port 8000 is occupied by another process"
+  else
+    smoke_fail "port 8000 is not listening; start local bench first"
+  fi
+
+  smoke_http_path "$site" "/login" "/login"
+  smoke_http_path "$site" "/app" "/app"
+  smoke_site_app "$site" "ledgix_saas"
+
+  printf '\nSmoke summary: %s failure(s), %s warning(s)\n' "$SMOKE_FAILURES" "$SMOKE_WARNINGS"
+  if [[ "$SMOKE_FAILURES" -eq 0 ]]; then
+    return 0
+  fi
+  return 1
 }
 
 is_process_in_bench() {
@@ -565,6 +694,12 @@ main() {
   if [[ "$STATUS" -eq 1 ]]; then
     show_status
     exit 0
+  fi
+  if [[ "$SMOKE" -eq 1 ]]; then
+    if run_smoke; then
+      exit 0
+    fi
+    exit 1
   fi
 
   require_sites_for_start

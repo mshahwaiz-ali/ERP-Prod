@@ -1692,15 +1692,16 @@ ensure_git_remote_origin() {
 deploy_update() {
   section "Deploy Update"
   require_valid_bench
-  ensure_git_remote_origin
 
   local dirty
-  dirty="$(git_dirty_status || true)"
-  if [[ -n "$dirty" ]]; then
-    warn "Git working tree is dirty:"
-    printf '%s\n' "$dirty" | sed 's/^/  /'
-    exact_confirm "CONTINUE WITH DIRTY TREE" "Deploy update should normally start from a clean working tree." ||
-      die "dirty tree confirmation not provided"
+  if git_is_repo; then
+    dirty="$(git_dirty_status || true)"
+    if [[ -n "$dirty" ]]; then
+      warn "Git working tree has local changes. Deploy update will use these local files unless you explicitly pull."
+      printf '%s\n' "$dirty" | sed 's/^/  /'
+    fi
+  else
+    warn "Deploy update is not running inside a Git repository; continuing with local files only."
   fi
 
   local site branch overwrite_mode="ask"
@@ -1708,9 +1709,20 @@ deploy_update() {
   if confirm "Backup $site before update?" "Y"; then
     backup_site
   fi
-  prompt_value branch "Git branch to deploy" "$(git_branch)" 1
-  run_cmd git -C "$REPO_ROOT" fetch origin
-  run_cmd git -C "$REPO_ROOT" pull --ff-only origin "$branch"
+
+  if git_is_repo && confirm "Fetch/pull from Git remote before deploying? Local files are used by default." "N"; then
+    ensure_git_remote_origin
+    dirty="$(git_dirty_status || true)"
+    if [[ -n "$dirty" ]]; then
+      exact_confirm "CONTINUE WITH DIRTY TREE" "Git pull with local changes can fail or mix unreviewed work." ||
+        die "dirty tree confirmation not provided"
+    fi
+    prompt_value branch "Git branch to deploy" "$(git_branch)" 1
+    run_cmd git -C "$REPO_ROOT" fetch origin
+    run_cmd git -C "$REPO_ROOT" pull --ff-only origin "$branch"
+  else
+    info "Skipping Git fetch/pull; deploying current local source tree."
+  fi
 
   if confirm "Update existing bench app copies from p_apps?" "Y"; then
     overwrite_mode="yes"

@@ -17,6 +17,8 @@ backups/
 .env
 .env.*
 *.env.local
+config/*.env
+!config/example.env
 secrets.md
 deploy/production.secrets.md
 deploy/backups-index.md
