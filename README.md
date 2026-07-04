@@ -423,6 +423,7 @@ deploy/deploy_update.sh
 ## Security Notes
 
 Do not commit secrets, database passwords, SSL keys, backups, local logs, or generated bench files.
+Setup scripts save manually entered or auto-generated site credentials to the ignored secrets files.
 
 Ignored/private files should include:
 

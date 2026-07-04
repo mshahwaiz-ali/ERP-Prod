@@ -566,8 +566,8 @@ journalctl -u redis-server -f
 │ Domain points to server                      │   □    │
 │ HTTPS enabled                                │   □    │
 │ Root SSH login disabled if required          │   □    │
-│ Strong Administrator password set            │   □    │
-│ Database password stored safely              │   □    │
+│ Administrator password entered/generated     │   □    │
+│ Site DB password entered/generated and saved │   □    │
 │ Secrets not committed to Git                 │   □    │
 │ Backups enabled                              │   □    │
 │ Firewall allows only required ports          │   □    │

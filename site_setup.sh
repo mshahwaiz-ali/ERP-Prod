@@ -17,7 +17,7 @@ export NVM_DIR="$HOME/.nvm"
 
 SUDO=()
 ADMIN_PASSWORD=""
-ADMIN_PASSWORD_LABEL="admin"
+ADMIN_PASSWORD_SOURCE=""
 
 mkdir -p "$LOG_DIR"
 exec > >(tee -a "$RUN_LOG") 2>&1
@@ -81,9 +81,11 @@ ensure_secrets_file() {
 append_site_secret() {
   local site="$1"
   local admin_password="$2"
-  local db_name="$3"
-  local db_password="$4"
-  local apps="$5"
+  local admin_password_source="$3"
+  local db_name="$4"
+  local db_password="$5"
+  local db_password_source="$6"
+  local apps="$7"
 
   ensure_secrets_file
   {
@@ -91,9 +93,11 @@ append_site_secret() {
     printf -- '- URL: http://%s:8000\n' "$site"
     printf -- '- Admin user: Administrator\n'
     printf -- '- Admin password: %s\n' "$admin_password"
+    printf -- '- Admin password source: %s\n' "$admin_password_source"
     printf -- '- DB name: %s\n' "$db_name"
     printf -- '- DB user: %s\n' "$db_name"
     printf -- '- DB password: %s\n' "$db_password"
+    printf -- '- DB password source: %s\n' "$db_password_source"
     printf -- '- Apps: %s\n' "$apps"
     printf -- '- Created at: %s\n' "$(now_iso)"
   } >>"$SECRETS_FILE"
@@ -446,12 +450,21 @@ random_hex() {
   fi
 }
 
+strong_password() {
+  if have_cmd openssl; then
+    openssl rand -base64 42 | tr -d '\n' | cut -c 1-40
+  else
+    warn "openssl is missing; using a weaker random fallback"
+    printf '%s%s' "$(date +%s%N)" "$RANDOM" | sha256sum | cut -c 1-40
+  fi
+}
+
 make_db_name() {
   printf '_%s' "$(random_hex 8)"
 }
 
 make_db_password() {
-  random_hex 18
+  strong_password
 }
 
 sql_quote() {
@@ -594,20 +607,65 @@ drop_database_and_user() {
   esac
 }
 
+read_optional_secret_with_confirm() {
+  local -n _secret="$1"
+  local prompt="$2"
+  local confirm_prompt="$3"
+  local first second
+
+  while true; do
+    read -r -s -p "$prompt" first
+    printf '\n'
+    if [[ -z "$first" ]]; then
+      _secret=""
+      return 0
+    fi
+
+    read -r -s -p "$confirm_prompt" second
+    printf '\n'
+    if [[ "$first" == "$second" ]]; then
+      _secret="$first"
+      return 0
+    fi
+    warn "passwords did not match; try again or press Enter to auto-generate"
+  done
+}
+
 read_admin_password() {
   if [[ -n "${FRAPPE_ADMIN_PASSWORD:-}" ]]; then
     ADMIN_PASSWORD="$FRAPPE_ADMIN_PASSWORD"
-    ADMIN_PASSWORD_LABEL="your chosen password"
+    ADMIN_PASSWORD_SOURCE="FRAPPE_ADMIN_PASSWORD environment variable"
+    if [[ "$ADMIN_PASSWORD" == "admin" ]]; then
+      warn "FRAPPE_ADMIN_PASSWORD is set to 'admin'; consider using a stronger password."
+    fi
     return 0
   fi
 
-  read -r -s -p "Admin password [admin]: " ADMIN_PASSWORD
-  printf '\n'
+  read_optional_secret_with_confirm ADMIN_PASSWORD \
+    "Administrator password (press Enter to auto-generate): " \
+    "Confirm Administrator password: "
   if [[ -z "$ADMIN_PASSWORD" ]]; then
-    ADMIN_PASSWORD="admin"
-    ADMIN_PASSWORD_LABEL="admin"
+    ADMIN_PASSWORD="$(strong_password)"
+    ADMIN_PASSWORD_SOURCE="auto-generated"
+    ok "Administrator password auto-generated; it will be saved to secrets.md after site creation"
   else
-    ADMIN_PASSWORD_LABEL="your chosen password"
+    ADMIN_PASSWORD_SOURCE="entered manually"
+  fi
+}
+
+read_site_db_password() {
+  local -n _password="$1"
+  local -n _source="$2"
+
+  read_optional_secret_with_confirm "$1" \
+    "Site DB password (press Enter to auto-generate): " \
+    "Confirm Site DB password: "
+  if [[ -z "$_password" ]]; then
+    _password="$(make_db_password)"
+    _source="auto-generated"
+    ok "Site DB password auto-generated; it will be saved to secrets.md after site creation"
+  else
+    _source="entered manually"
   fi
 }
 
@@ -820,7 +878,7 @@ print_site_summary() {
   section "Site Summary"
   printf 'Site URL: http://%s:8000\n' "$site"
   printf 'Admin user: Administrator\n'
-  printf 'Admin password: %s\n' "$ADMIN_PASSWORD_LABEL"
+  printf 'Admin password: %s (saved to secrets.md)\n' "$ADMIN_PASSWORD_SOURCE"
   if ! bench_run --site "$site" list-apps; then
     warn "could not read installed apps for $site"
   fi
@@ -836,9 +894,9 @@ create_site_once() {
   read_admin_password
   select_apps selected_apps
 
-  local db_name db_password
+  local db_name db_password db_password_source
   db_name="$(make_db_name)"
-  db_password="$(make_db_password)"
+  read_site_db_password db_password db_password_source
   create_database_and_user "$db_name" "$db_password"
 
   info "creating site: $site"
@@ -888,7 +946,7 @@ create_site_once() {
   fi
 
   ensure_hosts_entry "$site"
-  append_site_secret "$site" "$ADMIN_PASSWORD" "$db_name" "$db_password" "$(join_by ', ' "${selected_apps[@]}")"
+  append_site_secret "$site" "$ADMIN_PASSWORD" "$ADMIN_PASSWORD_SOURCE" "$db_name" "$db_password" "$db_password_source" "$(join_by ', ' "${selected_apps[@]}")"
   print_site_summary "$site"
 }
 

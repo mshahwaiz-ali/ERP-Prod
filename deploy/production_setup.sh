@@ -596,12 +596,14 @@ append_production_secret() {
   local domain="$1"
   local site="$2"
   local admin_password="$3"
-  local db_name="$4"
-  local db_password="$5"
-  local app="$6"
+  local admin_password_source="$4"
+  local db_name="$5"
+  local db_password="$6"
+  local db_password_source="$7"
+  local app="$8"
   ensure_secrets_file
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    info "[DRY-RUN] would save generated credentials to $SECRETS_FILE"
+    info "[DRY-RUN] would save site credentials to $SECRETS_FILE"
     return 0
   fi
   {
@@ -611,9 +613,11 @@ append_production_secret() {
     printf -- '- Site name: %s\n' "$site"
     printf -- '- Admin user: Administrator\n'
     printf -- '- Admin password: %s\n' "$admin_password"
+    printf -- '- Admin password source: %s\n' "$admin_password_source"
     printf -- '- DB name: %s\n' "$db_name"
     printf -- '- DB user: %s\n' "$db_name"
     printf -- '- DB password: %s\n' "$db_password"
+    printf -- '- DB password source: %s\n' "$db_password_source"
     printf -- '- App: %s\n' "$app"
     printf -- '- Timestamp: %s\n' "$(now_iso)"
   } >>"$SECRETS_FILE"
@@ -1408,34 +1412,88 @@ create_database_and_user() {
 
 select_admin_password() {
   local -n _password="$1"
-  local mode manual confirm_manual
+  local -n _source="$2"
+  local manual
   if [[ -n "${FRAPPE_ADMIN_PASSWORD:-}" ]]; then
     _password="$FRAPPE_ADMIN_PASSWORD"
+    _source="FRAPPE_ADMIN_PASSWORD environment variable"
     info "Using FRAPPE_ADMIN_PASSWORD from environment"
+    if [[ "$_password" == "admin" ]]; then
+      warn "FRAPPE_ADMIN_PASSWORD is set to 'admin'; consider using a stronger password."
+    fi
     return 0
   fi
   if [[ "$ASSUME_YES" -eq 1 ]]; then
     _password="$(strong_password)"
+    _source="auto-generated"
     info "Generated strong Administrator password"
     return 0
   fi
-  printf '\nAdministrator password:\n'
-  printf '  1) Generate strong password automatically (default)\n'
-  printf '  2) Enter manually\n'
-  read -r -p "Choose [1]: " mode
-  mode="${mode:-1}"
-  case "$mode" in
-    2)
-      prompt_secret manual "Administrator password" 1
-      prompt_secret confirm_manual "Confirm Administrator password" 1
-      [[ "$manual" == "$confirm_manual" ]] || die "Administrator passwords did not match"
-      _password="$manual"
-      ;;
-    *)
-      _password="$(strong_password)"
-      info "Generated strong Administrator password"
-      ;;
-  esac
+  prompt_optional_secret_with_confirm manual \
+    "Administrator password (press Enter to auto-generate)" \
+    "Confirm Administrator password"
+  if [[ -z "$manual" ]]; then
+    _password="$(strong_password)"
+    _source="auto-generated"
+    info "Generated strong Administrator password"
+  else
+    _password="$manual"
+    _source="entered manually"
+  fi
+}
+
+prompt_optional_secret_with_confirm() {
+  local -n _out="$1"
+  local prompt="$2"
+  local confirm_prompt="$3"
+  local first second
+
+  if [[ "$ASSUME_YES" -eq 1 ]]; then
+    _out=""
+    return 0
+  fi
+
+  while true; do
+    read -r -s -p "$prompt: " first
+    printf '\n'
+    if [[ -z "$first" ]]; then
+      _out=""
+      return 0
+    fi
+
+    read -r -s -p "$confirm_prompt: " second
+    printf '\n'
+    if [[ "$first" == "$second" ]]; then
+      _out="$first"
+      return 0
+    fi
+    warn "passwords did not match; try again or press Enter to auto-generate"
+  done
+}
+
+select_site_db_password() {
+  local -n _password="$1"
+  local -n _source="$2"
+  local manual
+
+  if [[ "$ASSUME_YES" -eq 1 ]]; then
+    _password="$(make_db_password)"
+    _source="auto-generated"
+    info "Generated strong site DB password"
+    return 0
+  fi
+
+  prompt_optional_secret_with_confirm manual \
+    "Site DB password (press Enter to auto-generate)" \
+    "Confirm Site DB password"
+  if [[ -z "$manual" ]]; then
+    _password="$(make_db_password)"
+    _source="auto-generated"
+    info "Generated strong site DB password"
+  else
+    _password="$manual"
+    _source="entered manually"
+  fi
 }
 
 site_has_app() {
@@ -1448,10 +1506,9 @@ site_has_app() {
 create_production_site() {
   section "Create Production Site"
   require_valid_bench
-  local domain site app admin_password scheduler_answer db_name db_password
+  local domain site app admin_password admin_password_source scheduler_answer db_name db_password db_password_source
   read_domain_and_site domain site
   select_importable_app app
-  select_admin_password admin_password
 
   scheduler_answer=1
   if ! confirm "Enable scheduler after setup?" "Y"; then
@@ -1476,8 +1533,9 @@ create_production_site() {
     return 0
   fi
 
+  select_admin_password admin_password admin_password_source
   db_name="$(make_db_name)"
-  db_password="$(make_db_password)"
+  select_site_db_password db_password db_password_source
   create_database_and_user "$db_name" "$db_password"
 
   run_bench_label "bench new-site $site --admin-password [redacted] --db-name $db_name --db-password [redacted] --no-setup-db" \
@@ -1488,7 +1546,7 @@ create_production_site() {
   run_bench --site "$site" clear-cache
   run_bench --site "$site" clear-website-cache
 
-  append_production_secret "$domain" "$site" "$admin_password" "$db_name" "$db_password" "$app"
+  append_production_secret "$domain" "$site" "$admin_password" "$admin_password_source" "$db_name" "$db_password" "$db_password_source" "$app"
 }
 
 disable_nginx_default_if_needed() {

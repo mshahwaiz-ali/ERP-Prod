@@ -367,7 +367,7 @@ final_summary() {
   if valid_bench; then
     ok "Bench validation passed: $BENCH_DIR"
     ok "Install completed. Next run ./site_setup.sh to create sites."
-    ok "Credentials created during site setup will be saved to ./secrets.md"
+    ok "Site setup will prompt for credentials first; blank values are generated and saved to ./secrets.md"
   else
     die "Install finished but bench validation failed"
   fi

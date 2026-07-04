@@ -167,11 +167,14 @@ During setup, provide:
 │ Input                │ Example                            │
 ├──────────────────────┼────────────────────────────────────┤
 │ Site name            │ ledgix.local                       │
-│ Administrator pass   │ Your local admin password           │
+│ Administrator pass   │ Enter one, or press Enter for auto  │
+│ Site DB password     │ Enter one, or press Enter for auto  │
 │ Database admin user  │ Local MariaDB admin user            │
 │ App selection        │ Ledgix SaaS                         │
 └──────────────────────┴────────────────────────────────────┘
 ```
+
+Site credentials are saved under that site's section in `secrets.md` with `600` permissions.
 
 ---
 
