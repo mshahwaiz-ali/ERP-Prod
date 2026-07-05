@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BENCH_DIR="$SCRIPT_DIR/frappe-bench"
-APPS_SRC="$SCRIPT_DIR/apps"
+APPS_SRC="${APPS_SRC:-$SCRIPT_DIR/apps}"
 LOG_DIR="$SCRIPT_DIR/logs/site_setup"
 RUN_LOG="$LOG_DIR/site-setup-$(date +%Y%m%d-%H%M%S).log"
 BENCH_LOG_DIR="$SCRIPT_DIR/logs/bench"

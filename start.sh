@@ -4,7 +4,7 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BENCH_DIR="$SCRIPT_DIR/frappe-bench"
 LOG_DIR="$SCRIPT_DIR/logs"
-NODE_MAJOR="${NODE_MAJOR:-24}"
+NODE_MAJOR="${NODE_MAJOR:-22}"
 BACKGROUND=0
 STOP=0
 STATUS=0

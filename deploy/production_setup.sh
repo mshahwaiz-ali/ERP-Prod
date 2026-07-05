@@ -8,11 +8,11 @@ LOG_DIR="$REPO_ROOT/logs/deploy"
 LOG_FILE="$LOG_DIR/production-setup-$TIMESTAMP.log"
 SECRETS_FILE="$SCRIPT_DIR/production.secrets.md"
 BACKUPS_INDEX="$SCRIPT_DIR/backups-index.md"
-APPS_SRC="$REPO_ROOT/apps"
+APPS_SRC="${APPS_SRC:-$REPO_ROOT/apps}"
 
 DEFAULT_REPO_URL="${DEFAULT_REPO_URL:-https://github.com/mshahwaiz-ali/ERP-Prod.git}"
 FRAPPE_BRANCH="${FRAPPE_BRANCH:-version-15}"
-NODE_MAJOR="${NODE_MAJOR:-24}"
+NODE_MAJOR="${NODE_MAJOR:-22}"
 NVM_INSTALL_VERSION="${NVM_INSTALL_VERSION:-v0.40.3}"
 BENCH_DIR_INPUT="${BENCH_DIR:-./frappe-bench}"
 case "$BENCH_DIR_INPUT" in
