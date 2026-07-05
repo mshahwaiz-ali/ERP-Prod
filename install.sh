@@ -2,30 +2,36 @@
 set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BENCH_DIR="$SCRIPT_DIR/frappe-bench"
+BENCH_DIR="${BENCH_DIR:-$SCRIPT_DIR/frappe-bench}"
 LOG_DIR="$SCRIPT_DIR/install_logs"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 LOG_FILE="$LOG_DIR/install-$TIMESTAMP.log"
+ACTION_LOG="$LOG_DIR/install-$TIMESTAMP.actions"
+
 FRAPPE_BRANCH="${FRAPPE_BRANCH:-version-15}"
-NODE_MAJOR="${NODE_MAJOR:-24}"
+DEFAULT_NODE_MAJOR="${NODE_MAJOR:-22}"
 NVM_INSTALL_VERSION="${NVM_INSTALL_VERSION:-v0.40.3}"
 
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 export PIPX_BIN_DIR="$HOME/.local/bin"
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
 
 SUDO=()
 BENCH_CREATED_THIS_RUN=0
+IS_WSL=0
+ENV_MODE="native"
+SELECTED_NODE_MAJOR="$DEFAULT_NODE_MAJOR"
+YARN_MODE="corepack"
 
 mkdir -p "$LOG_DIR"
+touch "$ACTION_LOG"
 exec > >(tee -a "$LOG_FILE") 2>&1
 
 info() { printf '[INFO] %s\n' "$*"; }
-warn() { printf '[WARN] %s\n' "$*"; }
+warn() { printf '[WARN] %s\n' "$*" >&2; }
 err() { printf '[ERROR] %s\n' "$*" >&2; }
 ok() { printf '[OK] %s\n' "$*"; }
-die() { err "$*"; exit 1; }
-
-trap 'err "Failed at line $LINENO: $BASH_COMMAND"' ERR
+die() { err "$*"; err "Log file: $LOG_FILE"; exit 1; }
 
 section() {
   printf '\n'
@@ -39,19 +45,41 @@ run() {
   "$@"
 }
 
+record_action() {
+  printf '%s\n' "$*" >>"$ACTION_LOG"
+}
+
 have_cmd() {
   command -v "$1" >/dev/null 2>&1
 }
 
+confirm_default_no() {
+  local prompt="$1"
+  local answer
+  read -r -p "$prompt [y/N]: " answer
+  [[ "${answer:-}" =~ ^[Yy]$ ]]
+}
+
+detect_wsl() {
+  IS_WSL=0
+  ENV_MODE="native"
+
+  if grep -qiE 'microsoft|wsl' /proc/version 2>/dev/null || grep -qiE 'microsoft|wsl' /proc/sys/kernel/osrelease 2>/dev/null; then
+    IS_WSL=1
+    ENV_MODE="wsl"
+  fi
+}
+
 refresh_path() {
   export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-  if [[ -n "${NVM_DIR:-}" && -s "$NVM_DIR/nvm.sh" ]]; then
+  export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+
+  if [[ -s "$NVM_DIR/nvm.sh" ]]; then
     # shellcheck disable=SC1090
     . "$NVM_DIR/nvm.sh"
-  elif [[ -s "$HOME/.nvm/nvm.sh" ]]; then
-    export NVM_DIR="$HOME/.nvm"
-    # shellcheck disable=SC1091
-    . "$NVM_DIR/nvm.sh"
+    if [[ -n "${SELECTED_NODE_MAJOR:-}" ]]; then
+      nvm use "$SELECTED_NODE_MAJOR" >/dev/null 2>&1 || true
+    fi
   fi
 }
 
@@ -60,6 +88,7 @@ need_sudo() {
     SUDO=()
     return 0
   fi
+
   have_cmd sudo || die "sudo is required for dependency installation"
   sudo -v || die "sudo permission is required"
   SUDO=(sudo)
@@ -72,15 +101,19 @@ apt_has_candidate() {
 
 install_apt_if_missing() {
   local pkg="$1"
+
   if dpkg -s "$pkg" >/dev/null 2>&1; then
     info "skip installed package: $pkg"
     return 0
   fi
+
   if ! apt_has_candidate "$pkg"; then
     warn "package has no apt candidate, skipping: $pkg"
     return 0
   fi
+
   run "${SUDO[@]}" apt-get install -y "$pkg"
+  record_action "INSTALLED_PACKAGE $pkg"
 }
 
 install_tiff_dependency() {
@@ -95,21 +128,29 @@ install_tiff_dependency() {
   fi
 }
 
+service_systemd_usable() {
+  have_cmd systemctl || return 1
+  systemctl is-system-running >/dev/null 2>&1 || systemctl list-units >/dev/null 2>&1
+}
+
 ensure_services() {
   local svc unit
+
   for svc in mariadb redis-server; do
     unit="$svc.service"
-    if have_cmd systemctl && systemctl list-unit-files "$unit" >/dev/null 2>&1; then
+
+    if service_systemd_usable && systemctl list-unit-files "$unit" >/dev/null 2>&1; then
       if ! systemctl is-enabled "$unit" >/dev/null 2>&1; then
         run "${SUDO[@]}" systemctl enable "$unit" || warn "could not enable $svc"
       fi
+
       if systemctl is-active "$unit" >/dev/null 2>&1; then
         info "service already running: $svc"
-      elif ! run "${SUDO[@]}" systemctl start "$unit"; then
-        warn "could not start $svc with systemctl"
+      else
+        run "${SUDO[@]}" systemctl start "$unit" || warn "could not start $svc with systemctl"
       fi
     elif have_cmd service; then
-      warn "systemctl unavailable or service not systemd-managed: $svc"
+      warn "systemctl unavailable/not usable; using service fallback for $svc"
       run "${SUDO[@]}" service "$svc" start || warn "could not start $svc with service"
     else
       warn "could not manage $svc automatically; make sure it is running"
@@ -117,9 +158,143 @@ ensure_services() {
   done
 }
 
+installed_version_or_missing() {
+  local label="$1"
+  shift
+
+  if have_cmd "$1"; then
+    printf '%-18s %s\n' "$label" "$("$@" 2>&1 | sed -n '1p')"
+  else
+    printf '%-18s missing\n' "$label"
+  fi
+}
+
+preflight_summary() {
+  section "Preflight Summary"
+  detect_wsl
+
+  printf 'Repo path:          %s\n' "$SCRIPT_DIR"
+  printf 'Bench path:         %s\n' "$BENCH_DIR"
+  printf 'Frappe branch:      %s\n' "$FRAPPE_BRANCH"
+  printf 'Environment:        %s\n' "$ENV_MODE"
+  printf 'Architecture:       %s\n' "$(uname -m)"
+  printf 'Kernel:             %s\n' "$(uname -r)"
+  printf 'Memory:             %s\n' "$(free -h 2>/dev/null | awk '/Mem:/ {print $2}' || printf unknown)"
+  printf '\n'
+
+  installed_version_or_missing "git" git --version
+  installed_version_or_missing "curl" curl --version
+  installed_version_or_missing "python3" python3 --version
+  installed_version_or_missing "node" node -v
+  installed_version_or_missing "npm" npm -v
+  installed_version_or_missing "yarn" yarn --version
+  installed_version_or_missing "mariadb" mariadb --version
+  installed_version_or_missing "redis-server" redis-server --version
+  installed_version_or_missing "bench" bench --version
+  installed_version_or_missing "uv" uv --version
+  printf '\n'
+}
+
+choose_environment_mode() {
+  detect_wsl
+  section "Environment Mode"
+
+  if [[ "$IS_WSL" -eq 1 ]]; then
+    warn "WSL detected. WSL mode is recommended for Windows laptop/client setups."
+    printf '1) WSL / Windows laptop setup [recommended]\n'
+    printf '2) Native Linux setup\n'
+    read -r -p "Choose [1]: " choice
+
+    case "${choice:-1}" in
+      1) ENV_MODE="wsl" ;;
+      2) ENV_MODE="native" ;;
+      *) warn "invalid choice, using WSL mode"; ENV_MODE="wsl" ;;
+    esac
+  else
+    ENV_MODE="native"
+    ok "Native Linux mode selected"
+  fi
+}
+
+node_major_installed() {
+  refresh_path
+  have_cmd node || return 1
+  node -v | sed -E 's/^v([0-9]+).*/\1/'
+}
+
+choose_node_version() {
+  section "Node.js Version"
+  refresh_path
+
+  local installed_major installed_text recommended choice
+  installed_major="$(node_major_installed 2>/dev/null || true)"
+  installed_text="missing"
+
+  if [[ -n "$installed_major" ]]; then
+    installed_text="$(node -v)"
+  fi
+
+  recommended="22"
+  if [[ "$DEFAULT_NODE_MAJOR" =~ ^[0-9]+$ ]]; then
+    recommended="$DEFAULT_NODE_MAJOR"
+  fi
+
+  printf 'Detected Node:      %s\n' "$installed_text"
+  printf 'Recommended Node:   %s\n' "$recommended"
+  printf '\n'
+
+  if [[ -n "$installed_major" ]]; then
+    printf '1) Use installed Node %s [recommended]\n' "$installed_text"
+    printf '2) Install/use Node 22 LTS\n'
+    printf '3) Install/use Node 24\n'
+    printf '4) Manual Node major\n'
+    read -r -p "Choose [1]: " choice
+
+    case "${choice:-1}" in
+      1) SELECTED_NODE_MAJOR="$installed_major" ;;
+      2) SELECTED_NODE_MAJOR="22" ;;
+      3) SELECTED_NODE_MAJOR="24" ;;
+      4) read -r -p "Enter Node major version: " SELECTED_NODE_MAJOR ;;
+      *) warn "invalid choice, using installed Node"; SELECTED_NODE_MAJOR="$installed_major" ;;
+    esac
+  else
+    printf '1) Install/use Node 22 LTS [recommended]\n'
+    printf '2) Install/use Node 24\n'
+    printf '3) Manual Node major\n'
+    read -r -p "Choose [1]: " choice
+
+    case "${choice:-1}" in
+      1) SELECTED_NODE_MAJOR="22" ;;
+      2) SELECTED_NODE_MAJOR="24" ;;
+      3) read -r -p "Enter Node major version: " SELECTED_NODE_MAJOR ;;
+      *) warn "invalid choice, using Node 22"; SELECTED_NODE_MAJOR="22" ;;
+    esac
+  fi
+
+  [[ "$SELECTED_NODE_MAJOR" =~ ^[0-9]+$ ]] || die "invalid Node major version: $SELECTED_NODE_MAJOR"
+  ok "selected Node major: $SELECTED_NODE_MAJOR"
+}
+
+choose_yarn_mode() {
+  section "Yarn Setup"
+
+  printf '1) Corepack/Yarn setup [recommended]\n'
+  printf '2) npm global yarn fallback\n'
+  printf '3) Use existing yarn if available\n'
+  read -r -p "Choose [1]: " choice
+
+  case "${choice:-1}" in
+    1) YARN_MODE="corepack" ;;
+    2) YARN_MODE="npm-global" ;;
+    3) YARN_MODE="existing" ;;
+    *) warn "invalid choice, using Corepack"; YARN_MODE="corepack" ;;
+  esac
+}
+
 install_dependencies() {
   section "System Dependencies"
   need_sudo
+
   run "${SUDO[@]}" apt-get update
   run "${SUDO[@]}" apt-get --fix-broken install -y
 
@@ -138,6 +313,7 @@ install_dependencies() {
   for pkg in "${packages[@]}"; do
     install_apt_if_missing "$pkg"
   done
+
   install_tiff_dependency
 
   if dpkg -s wkhtmltopdf >/dev/null 2>&1; then
@@ -152,44 +328,52 @@ install_dependencies() {
 }
 
 ensure_nvm() {
-  export NVM_DIR="$HOME/.nvm"
+  export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+
   if [[ -s "$NVM_DIR/nvm.sh" ]]; then
-    # shellcheck disable=SC1091
+    # shellcheck disable=SC1090
     . "$NVM_DIR/nvm.sh"
     return 0
   fi
 
   have_cmd curl || die "curl is required to install nvm"
+
   info "Installing nvm into $NVM_DIR"
   run bash -c "curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_INSTALL_VERSION}/install.sh | bash"
+  record_action "INSTALLED_NVM $NVM_DIR"
+
   [[ -s "$NVM_DIR/nvm.sh" ]] || die "nvm install completed but $NVM_DIR/nvm.sh was not found"
-  # shellcheck disable=SC1091
+
+  # shellcheck disable=SC1090
   . "$NVM_DIR/nvm.sh"
 }
 
 ensure_node() {
   section "Node"
   refresh_path
-  if have_cmd node; then
-    local existing_major
-    existing_major="$(node -v | sed -E 's/^v([0-9]+).*/\1/')"
-    if [[ "$existing_major" != "$NODE_MAJOR" ]]; then
-      warn "node exists but is not Node $NODE_MAJOR: $(node -v)"
-      warn "using nvm Node $NODE_MAJOR for this script session"
-    fi
+
+  local installed_major current_major
+  installed_major="$(node_major_installed 2>/dev/null || true)"
+
+  if [[ -n "$installed_major" && "$installed_major" == "$SELECTED_NODE_MAJOR" ]]; then
+    ok "using installed node $(node -v)"
+    ok "npm $(npm -v)"
+    return 0
   fi
+
   ensure_nvm
-  run nvm install "$NODE_MAJOR"
-  run nvm alias default "$NODE_MAJOR"
-  run nvm use "$NODE_MAJOR"
+
+  run nvm install "$SELECTED_NODE_MAJOR"
+  record_action "INSTALLED_NODE $SELECTED_NODE_MAJOR"
+  run nvm alias default "$SELECTED_NODE_MAJOR"
+  run nvm use "$SELECTED_NODE_MAJOR"
   hash -r
 
   have_cmd node || die "node is unavailable after nvm setup"
   have_cmd npm || die "npm is unavailable after nvm setup"
 
-  local current_major
   current_major="$(node -v | sed -E 's/^v([0-9]+).*/\1/')"
-  [[ "$current_major" == "$NODE_MAJOR" ]] || die "active node is $(node -v), expected Node $NODE_MAJOR"
+  [[ "$current_major" == "$SELECTED_NODE_MAJOR" ]] || die "active node is $(node -v), expected Node $SELECTED_NODE_MAJOR"
 
   ok "node $(node -v)"
   ok "npm $(npm -v)"
@@ -198,17 +382,38 @@ ensure_node() {
 ensure_yarn() {
   section "Yarn"
   refresh_path
-  have_cmd npm || die "npm is required before installing yarn"
+
+  if [[ "$YARN_MODE" == "existing" ]]; then
+    have_cmd yarn || die "existing yarn selected but yarn is missing"
+    ok "yarn $(yarn --version)"
+    return 0
+  fi
+
+  if [[ "$YARN_MODE" == "corepack" ]]; then
+    if have_cmd corepack; then
+      run corepack enable || warn "corepack enable failed"
+      run corepack prepare yarn@1.22.22 --activate || warn "corepack yarn prepare failed"
+      refresh_path
+    else
+      warn "corepack not available; falling back to npm global yarn"
+      YARN_MODE="npm-global"
+    fi
+  fi
+
   if ! have_cmd yarn; then
+    have_cmd npm || die "npm is required before installing yarn"
     run npm install -g yarn
+    record_action "INSTALLED_NPM_GLOBAL yarn"
     refresh_path
   fi
+
   have_cmd yarn || die "yarn command is unavailable after install"
   ok "yarn $(yarn --version)"
 }
 
 ensure_pipx() {
   refresh_path
+
   if have_cmd pipx; then
     info "pipx available: $(pipx --version 2>/dev/null || true)"
     run pipx ensurepath || true
@@ -238,6 +443,7 @@ pip_user_install() {
 ensure_uv() {
   section "uv"
   refresh_path
+
   if have_cmd uv; then
     ok "$(uv --version 2>/dev/null || true)"
     return 0
@@ -260,6 +466,7 @@ ensure_uv() {
 ensure_bench_cli() {
   section "Bench CLI"
   refresh_path
+
   if have_cmd bench; then
     ok "$(bench --version 2>/dev/null || true)"
     return 0
@@ -292,38 +499,123 @@ valid_bench() {
 rollback_new_failed_bench() {
   [[ "$BENCH_CREATED_THIS_RUN" -eq 1 ]] || return 0
   [[ -e "$BENCH_DIR" ]] || return 0
+
   valid_bench && return 0
 
   local failed_dir="$SCRIPT_DIR/frappe-bench.failed-$TIMESTAMP"
+
   if [[ -e "$failed_dir" ]]; then
     failed_dir="$failed_dir.$$"
   fi
+
   warn "bench init did not complete; moving incomplete bench to: $failed_dir"
   run mv "$BENCH_DIR" "$failed_dir"
+  record_action "ROLLED_BACK_FAILED_BENCH $failed_dir"
+}
+
+rollback_prompt() {
+  local rc="$1"
+
+  err "Installer failed. Exit code: $rc"
+  err "Action log: $ACTION_LOG"
+
+  if [[ "$BENCH_CREATED_THIS_RUN" -eq 1 ]]; then
+    rollback_new_failed_bench || true
+  fi
+
+  warn "Safe rollback was applied only for incomplete bench created in this run."
+  warn "System packages, existing bench, existing sites, and existing databases were not removed."
+  err "Log file: $LOG_FILE"
+}
+
+on_error() {
+  local rc=$?
+  err "Failed at line $LINENO: $BASH_COMMAND"
+  rollback_prompt "$rc"
+  exit "$rc"
+}
+
+trap on_error ERR
+
+repair_bench() {
+  section "Repair Bench"
+
+  valid_bench || die "cannot repair invalid bench automatically"
+
+  run bash -c "cd '$BENCH_DIR' && ./env/bin/python -m pip install --upgrade pip"
+  run bash -c "cd '$BENCH_DIR' && bench setup requirements"
+
+  ok "bench repair completed"
+}
+
+recreate_bench() {
+  warn "This removes only generated bench folder: $BENCH_DIR"
+  read -r -p "Type RECREATE to continue: " confirm
+
+  [[ "$confirm" == "RECREATE" ]] || die "recreate cancelled"
+
+  run rm -rf "$BENCH_DIR"
+  record_action "REMOVED_BENCH $BENCH_DIR"
+}
+
+bench_choice_for_existing() {
+  section "Existing Bench"
+  printf 'Existing bench path: %s\n\n' "$BENCH_DIR"
+
+  if valid_bench; then
+    printf '1) Reuse existing bench [recommended]\n'
+    printf '2) Repair existing bench requirements\n'
+    printf '3) Recreate bench\n'
+    printf '4) Cancel\n'
+    read -r -p "Choose [1]: " choice
+
+    case "${choice:-1}" in
+      1) return 0 ;;
+      2) repair_bench; return 0 ;;
+      3) recreate_bench ;;
+      4) die "cancelled" ;;
+      *) warn "invalid choice, reusing existing bench"; return 0 ;;
+    esac
+  else
+    warn "Existing frappe-bench is incomplete or invalid."
+    printf '1) Move incomplete bench aside and create new bench [recommended]\n'
+    printf '2) Cancel\n'
+    read -r -p "Choose [1]: " choice
+
+    case "${choice:-1}" in
+      1)
+        local failed_dir="$SCRIPT_DIR/frappe-bench.incomplete-$TIMESTAMP"
+        run mv "$BENCH_DIR" "$failed_dir"
+        record_action "MOVED_INCOMPLETE_BENCH $failed_dir"
+        ;;
+      2) die "cancelled" ;;
+      *) die "invalid choice" ;;
+    esac
+  fi
 }
 
 ensure_bench() {
   section "Bench"
   refresh_path
+
   ensure_bench_cli
   ensure_uv
   ensure_node
   ensure_yarn
   refresh_path
 
+  if [[ -e "$BENCH_DIR" ]]; then
+    bench_choice_for_existing
+  fi
+
   if valid_bench; then
     ok "valid bench found, reusing: $BENCH_DIR"
     return 0
   fi
 
-  if [[ -e "$BENCH_DIR" ]]; then
-    err "Existing frappe-bench is incomplete. Move it manually or delete it, then rerun installer."
-    err "Path: $BENCH_DIR"
-    exit 1
-  fi
-
   BENCH_CREATED_THIS_RUN=1
   info "initializing Frappe bench: $BENCH_DIR"
+
   if ! run bench init --frappe-branch "$FRAPPE_BRANCH" "$BENCH_DIR"; then
     rollback_new_failed_bench
     die "bench init failed; no site was created"
@@ -334,6 +626,7 @@ ensure_bench() {
     die "bench init finished but validation failed"
   fi
 
+  record_action "CREATED_BENCH $BENCH_DIR"
   ok "bench initialized: $BENCH_DIR"
 }
 
@@ -341,6 +634,7 @@ print_cmd_version() {
   local label="$1"
   shift
   local cmd="$1"
+
   if have_cmd "$cmd"; then
     info "$label: $("$@" 2>&1 | sed -n '1p')"
   else
@@ -351,6 +645,7 @@ print_cmd_version() {
 environment_summary() {
   section "Environment Summary"
   refresh_path
+
   print_cmd_version "node" node -v
   print_cmd_version "npm" npm -v
   print_cmd_version "yarn" yarn --version
@@ -361,91 +656,97 @@ environment_summary() {
   print_cmd_version "redis-server" redis-server --version
 }
 
+wsl_final_notes() {
+  [[ "$ENV_MODE" == "wsl" ]] || return 0
+
+  section "WSL Notes"
+  warn "For Windows browser access, localhost usually works:"
+  printf '  http://localhost:8000\n\n'
+  warn "For custom site domains, add this to Windows hosts as Administrator:"
+  printf '  127.0.0.1 yoursite.local\n\n'
+  printf 'PowerShell example:\n'
+  printf "  Start-Process powershell -Verb runAs -ArgumentList \"Add-Content -Path C:\\Windows\\System32\\drivers\\etc\\hosts -Value '127.0.0.1 yoursite.local'\"\n"
+}
+
 final_summary() {
   section "Final Summary"
   environment_summary
+
   if valid_bench; then
     ok "Bench validation passed: $BENCH_DIR"
-    ok "Install completed. Next run ./site_setup.sh to create sites."
-    ok "Site setup will prompt for credentials first; blank values are generated and saved to ./secrets.md"
+    ok "Local installer completed."
+    info "Log file: $LOG_FILE"
+    info "Action log: $ACTION_LOG"
+    wsl_final_notes
+
+    if [[ -f "$SCRIPT_DIR/site_setup.sh" ]]; then
+      printf '\n'
+      printf 'Next step:\n'
+      printf '1) Run site setup now\n'
+      printf '2) Exit\n'
+      read -r -p "Choose [2]: " choice
+
+      case "${choice:-2}" in
+        1)
+          chmod +x "$SCRIPT_DIR/site_setup.sh" 2>/dev/null || true
+          run "$SCRIPT_DIR/site_setup.sh"
+          ;;
+        *) ok "exit. Run ./site_setup.sh later to create/manage sites." ;;
+      esac
+    else
+      warn "site_setup.sh not found. Create/manage sites manually."
+    fi
   else
     die "Install finished but bench validation failed"
   fi
-  info "Log file: $LOG_FILE"
 }
 
 install_flow() {
-  section "Frappe v15 Local Installer"
+  section "Local / Development Installer"
+
+  preflight_summary
+  choose_environment_mode
+  choose_node_version
+  choose_yarn_mode
+
+  printf '\n'
+  warn "Installer will skip compatible installed packages and reuse existing bench unless you choose otherwise."
+  confirm_default_no "Continue local install?" || die "cancelled"
+
   install_dependencies
   ensure_bench
   final_summary
 }
 
-run_local_script() {
-  local script="$1"
-  shift || true
-  [[ -f "$script" ]] || die "required local script is missing: $script"
-  if [[ ! -x "$script" ]]; then
-    run chmod +x "$script"
-  fi
-  run "$script" "$@"
-}
-
-local_development_menu() {
-  while true; do
-    printf '\n'
-    printf '=================================\n'
-    printf ' Local / Development Setup\n'
-    printf '=================================\n'
-    printf 'Bench: %s\n' "$BENCH_DIR"
-    printf 'Log:   %s\n\n' "$LOG_FILE"
-    printf '1) Install / Setup Frappe\n'
-    printf '2) Site Setup\n'
-    printf '3) Start Bench\n'
-    printf '4) Stop Bench\n'
-    printf '5) Status\n'
-    printf '6) Back\n'
-    read -r -p "Choose: " choice
-    case "${choice:-}" in
-      1) install_flow ;;
-      2) run_local_script "$SCRIPT_DIR/site_setup.sh" ;;
-      3) run_local_script "$SCRIPT_DIR/start.sh" --background ;;
-      4) run_local_script "$SCRIPT_DIR/start.sh" --stop ;;
-      5) run_local_script "$SCRIPT_DIR/start.sh" --status ;;
-      6) return 0 ;;
-      *) warn "invalid option" ;;
-    esac
-  done
-}
-
 production_setup_flow() {
   local production_script="$SCRIPT_DIR/deploy/production_setup.sh"
-  section "Production / EC2 Setup"
-  warn "Production mode is for real EC2/server deployment and uses nginx/supervisor."
-  warn "This path does not run bench start or use start.sh."
+
+  section "Production / Server Setup"
+  warn "Production mode is for real server deployment and uses deploy/production_setup.sh."
+
   if [[ ! -f "$production_script" ]]; then
     die "production setup script is missing: $production_script"
   fi
-  if [[ ! -x "$production_script" ]]; then
-    run chmod +x "$production_script"
-  fi
+
+  chmod +x "$production_script" 2>/dev/null || true
   run "$production_script"
 }
 
 main_menu() {
+  preflight_summary
+
   while true; do
     printf '\n'
     printf '=================================\n'
-    printf ' Frappe Installer\n'
+    printf ' ERP Prod Installer\n'
     printf '=================================\n'
-    printf 'Bench: %s\n' "$BENCH_DIR"
-    printf 'Log:   %s\n\n' "$LOG_FILE"
-    printf '1) Local / Development Setup\n'
-    printf '2) Production / EC2 Setup\n'
+    printf '1) Local / Development Install\n'
+    printf '2) Production / Server Install\n'
     printf '3) Exit\n'
     read -r -p "Choose: " choice
+
     case "${choice:-}" in
-      1) local_development_menu ;;
+      1) install_flow ;;
       2) production_setup_flow ;;
       3) info "bye"; exit 0 ;;
       *) warn "invalid option" ;;

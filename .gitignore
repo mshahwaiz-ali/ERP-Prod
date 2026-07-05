@@ -46,3 +46,6 @@ build/
 
 # Frappe site backups
 frappe-bench/sites/*/private/backups/
+
+# Local generated secrets
+.secrets/
