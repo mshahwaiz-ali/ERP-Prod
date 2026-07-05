@@ -252,7 +252,7 @@ deploy/
 ├── backup.sh
 ├── status.sh
 ├── smoke_test.sh
-└── docs/production/README_PRODUCTION.md
+└── docs/production/DEPLOYMENT.md
 ```
 
 Run production setup:
@@ -335,10 +335,10 @@ ERP-Prod/
 │   └── ci_local.sh
 │
 ├── docs/
-│   ├── docs/commands/COMMANDS.md
-│   ├── docs/production/PRODUCTION_CHECKLIST.md
-│   ├── docs/fbr/FBR_PRODUCTION_CHECKLIST.md
-│   └── docs/production/TROUBLESHOOTING.md
+│   ├── commands/COMMANDS.md
+│   ├── production/PRODUCTION_CHECKLIST.md
+│   ├── fbr/FBR_PRODUCTION_CHECKLIST.md
+│   └── production/TROUBLESHOOTING.md
 │
 ├── env/
 │   ├── local.example.env

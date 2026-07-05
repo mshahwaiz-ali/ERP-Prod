@@ -245,7 +245,7 @@ Run the main installer:
 Choose:
 
 ```text
-2) Production / EC2 Setup
+2) Production / Server Setup
 ```
 
 Or run the production setup directly:
@@ -272,7 +272,7 @@ deploy/
 │ deploy_update.sh     │ Pull/update/deploy latest changes    │
 │ backup.sh            │ Create backups                       │
 │ status.sh            │ Check production service status      │
-│ docs/production/README_PRODUCTION.md │ Extra production notes               │
+│ docs/production/DEPLOYMENT.md │ Production deployment guide               │
 └──────────────────────┴─────────────────────────────────────┘
 ```
 

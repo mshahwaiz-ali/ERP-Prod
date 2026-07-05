@@ -4,7 +4,7 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
-LOG_DIR="$SCRIPT_DIR/logs"
+LOG_DIR="$REPO_ROOT/logs/deploy"
 LOG_FILE="$LOG_DIR/production-setup-$TIMESTAMP.log"
 SECRETS_FILE="$SCRIPT_DIR/production.secrets.md"
 BACKUPS_INDEX="$SCRIPT_DIR/backups-index.md"
@@ -1503,10 +1503,80 @@ site_has_app() {
   (cd "$BENCH_DIR" && bench --site "$site" list-apps 2>/dev/null | awk '{print $1}' | grep -Fxq "$app")
 }
 
+production_site_config_value() {
+  local site="$1"
+  local key="$2"
+  local site_config="$BENCH_DIR/sites/$site/site_config.json"
+  [[ -f "$site_config" ]] || return 1
+  "$BENCH_DIR/env/bin/python" -c 'import json, sys
+with open(sys.argv[1], encoding="utf-8") as f:
+    data = json.load(f)
+value = data.get(sys.argv[2], "")
+print("" if value is None else value)
+' "$site_config" "$key"
+}
+
+select_mariadb_root_password() {
+  local -n _password="$1"
+  local -n _source="$2"
+  local manual
+
+  if [[ -n "${MARIADB_ROOT_PASSWORD:-}" ]]; then
+    _password="$MARIADB_ROOT_PASSWORD"
+    _source="MARIADB_ROOT_PASSWORD environment variable"
+    info "Using MariaDB root/admin password from environment"
+    return 0
+  fi
+
+  if [[ "$ASSUME_YES" -eq 1 ]]; then
+    _password="admin"
+    _source="default admin password"
+    warn "Using default MariaDB root/admin password for --yes mode: admin"
+    return 0
+  fi
+
+  read -r -s -p "MariaDB root/admin password for bench new-site [admin]: " manual
+  printf '\n'
+  _password="${manual:-admin}"
+  if [[ -z "$manual" ]]; then
+    _source="default admin password"
+  else
+    _source="entered manually"
+  fi
+}
+
+restart_frappe_supervisor() {
+  section "Restart Frappe Supervisor"
+  need_sudo
+
+  local bench_name groups group
+  bench_name="$(basename "$BENCH_DIR")"
+  groups="$("${SUDO[@]}" supervisorctl status 2>/dev/null | awk -v prefix="$bench_name-" '
+    $1 ~ "^" prefix {
+      split($1, parts, ":")
+      print parts[1]
+    }
+  ' | sort -u || true)"
+
+  if [[ -n "$groups" ]]; then
+    while IFS= read -r group; do
+      [[ -n "$group" ]] || continue
+      sudo_env_cmd supervisorctl restart "$group:" || warn "supervisor restart returned non-zero for group: $group"
+    done <<<"$groups"
+    return 0
+  fi
+
+  warn "Could not detect Frappe supervisor groups for bench: $bench_name"
+  warn "Keeping restart scoped to common Frappe group names instead of restarting all supervisor programs."
+  sudo_env_cmd supervisorctl restart frappe-bench-web: || true
+  sudo_env_cmd supervisorctl restart frappe-bench-workers: || true
+}
+
 create_production_site() {
   section "Create Production Site"
   require_valid_bench
-  local domain site app admin_password admin_password_source scheduler_answer db_name db_password db_password_source
+  local domain site app admin_password admin_password_source scheduler_answer
+  local db_name db_password db_password_source mariadb_root_password mariadb_root_password_source
   read_domain_and_site domain site
   select_importable_app app
 
@@ -1534,19 +1604,22 @@ create_production_site() {
   fi
 
   select_admin_password admin_password admin_password_source
-  db_name="$(make_db_name)"
-  select_site_db_password db_password db_password_source
-  create_database_and_user "$db_name" "$db_password"
+  select_mariadb_root_password mariadb_root_password mariadb_root_password_source
 
-  run_bench_label "bench new-site $site --admin-password [redacted] --db-name $db_name --db-password [redacted] --no-setup-db" \
-    new-site "$site" --admin-password "$admin_password" --db-name "$db_name" --db-password "$db_password" --no-setup-db
+  run_bench_label "bench new-site $site --admin-password [redacted] --mariadb-root-password [redacted]" \
+    new-site "$site" --admin-password "$admin_password" --mariadb-root-password "$mariadb_root_password"
+
   run_bench --site "$site" install-app "$app"
   run_bench --site "$site" migrate
   [[ "$scheduler_answer" -eq 1 ]] && run_bench --site "$site" enable-scheduler || true
   run_bench --site "$site" clear-cache
   run_bench --site "$site" clear-website-cache
 
-  append_production_secret "$domain" "$site" "$admin_password" "$admin_password_source" "$db_name" "$db_password" "$db_password_source" "$app"
+  db_name="$(production_site_config_value "$site" db_name 2>/dev/null || true)"
+  db_password="$(production_site_config_value "$site" db_password 2>/dev/null || true)"
+  db_password_source="created by bench new-site; saved in site_config.json"
+
+  append_production_secret "$domain" "$site" "$admin_password" "$admin_password_source" "${db_name:-created-by-bench}" "${db_password:-stored-in-site-config}" "$db_password_source" "$app"
 }
 
 disable_nginx_default_if_needed() {
@@ -1579,7 +1652,7 @@ setup_supervisor_nginx() {
     disable_nginx_default_if_needed
     sudo_env_cmd supervisorctl reread
     sudo_env_cmd supervisorctl update
-    sudo_env_cmd supervisorctl restart all || warn "supervisor restart returned non-zero"
+    restart_frappe_supervisor
   fi
 
   if ! run_cmd "${SUDO[@]}" nginx -t; then
@@ -1706,9 +1779,6 @@ deploy_update() {
 
   local site branch overwrite_mode="ask"
   select_site site
-  if confirm "Backup $site before update?" "Y"; then
-    backup_site
-  fi
 
   if git_is_repo && confirm "Fetch/pull from Git remote before deploying? Local files are used by default." "N"; then
     ensure_git_remote_origin
@@ -1732,8 +1802,7 @@ deploy_update() {
   run_bench --site "$site" migrate
   run_bench --site "$site" clear-cache
   run_bench --site "$site" clear-website-cache
-  need_sudo
-  sudo_env_cmd supervisorctl restart all
+  restart_frappe_supervisor
   run_cmd "${SUDO[@]}" systemctl reload nginx || run_cmd "${SUDO[@]}" service nginx reload
   status_report
 }
