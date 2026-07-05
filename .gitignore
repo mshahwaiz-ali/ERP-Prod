@@ -2,11 +2,8 @@
 frappe-bench/
 /frappe-bench/
 
-# Local and production runtime output.
+# Runtime output and logs.
 logs/
-/logs/
-install_logs/
-deploy/logs/
 backups/
 /offline_bundle/
 *.log
@@ -19,7 +16,7 @@ backups/
 *.env.local
 config/*.env
 !config/example.env
-secrets.md
+docs/private/secrets.md
 deploy/production.secrets.md
 deploy/backups-index.md
 *.backup.*
@@ -37,15 +34,19 @@ deploy/backups-index.md
 # Python/Node/build caches.
 __pycache__/
 *.py[cod]
+*.pyo
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 node_modules/
 dist/
 build/
+apps/*/build/
+apps/*.egg-info/
+apps/*/*.egg-info/
 
-# Frappe site backups
+# Frappe site backups.
 frappe-bench/sites/*/private/backups/
 
-# Local generated secrets
+# Local generated secrets.
 .secrets/

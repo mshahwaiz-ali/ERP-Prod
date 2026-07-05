@@ -94,10 +94,10 @@ ERP-Prod/
 ├── site_setup.sh
 ├── start.sh
 ├── README.md
-├── LOCAL_INSTALLATION.md
+├── docs/local/LOCAL_INSTALLATION.md
 ├── env/
 │   └── local.example.env
-├── p_apps/
+├── apps/
 │   └── ledgix_saas/
 └── frappe-bench/
     └── generated during setup
@@ -359,7 +359,7 @@ bench watch
 Ledgix SaaS source app is stored in:
 
 ```text
-p_apps/ledgix_saas/
+apps/ledgix_saas/
 ```
 
 During setup, it is copied or linked into:
@@ -626,4 +626,4 @@ http://ledgix.local:8000
 
 ## Next Step
 
-After local setup is working, use `DEPLOYMENT.md` for production EC2/server deployment.
+After local setup is working, use `docs/production/DEPLOYMENT.md` for production EC2/server deployment.

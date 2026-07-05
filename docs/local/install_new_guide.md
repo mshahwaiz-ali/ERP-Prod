@@ -77,7 +77,7 @@ MariaDB	mysql --version	installed + running check
 Redis	redis-server --version	installed + running check
 Bench	bench --version	installed hai to skip
 Frappe bench folder	frappe-bench/ exists	reuse/repair/recreate prompt
-Apps	p_apps/app_name exists	copy/install check
+Apps	apps/app_name exists	copy/install check
 Site	frappe-bench/sites/site.local exists	skip/repair/delete prompt
 
 Example output:
@@ -305,7 +305,7 @@ Transaction log
 
 During install, maintain:
 
-install_logs/install-xxxx.actions
+logs/install/install-xxxx.actions
 
 Example:
 
@@ -350,7 +350,7 @@ existing secrets
 
 Never silently delete:
 
-existing p_apps
+existing apps
 existing repo files
 existing client data
 existing database unless created in this run and confirmed
@@ -379,17 +379,17 @@ Repair should:
 reinstall Python requirements
 run bench setup requirements
 run bench build if needed
-copy missing apps from p_apps
+copy missing apps from apps
 do not destroy sites
 Recreate mode
 
 Ask hard confirmation:
 
-This will remove ./frappe-bench but not p_apps or repo source.
+This will remove ./frappe-bench but not apps or repo source.
 Type RECREATE to continue:
 10. Apps preparation
 
-p_apps/ remains source of truth.
+apps/ remains source of truth.
 
 Flow:
 
@@ -406,7 +406,7 @@ Prepare apps for bench?
 For each app:
 
 millitrix:
-- source found in p_apps/millitrix
+- source found in apps/millitrix
 - destination missing in frappe-bench/apps/millitrix
 Action: copy
 
@@ -548,14 +548,14 @@ ERP-Prod/
 ├── start.sh
 ├── deploy/
 │   └── production_setup.sh
-├── p_apps/
+├── apps/
 │   ├── millitrix/
 │   └── ledgix_saas/
 ├── .secrets/
 │   ├── sites.env
 │   └── sites/
 │       └── site.local.env
-└── install_logs/
+└── logs/install/
     ├── install-xxxx.log
     └── install-xxxx.actions
 My final recommendation

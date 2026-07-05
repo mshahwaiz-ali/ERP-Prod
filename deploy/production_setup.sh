@@ -8,7 +8,7 @@ LOG_DIR="$SCRIPT_DIR/logs"
 LOG_FILE="$LOG_DIR/production-setup-$TIMESTAMP.log"
 SECRETS_FILE="$SCRIPT_DIR/production.secrets.md"
 BACKUPS_INDEX="$SCRIPT_DIR/backups-index.md"
-APPS_SRC="$REPO_ROOT/p_apps"
+APPS_SRC="$REPO_ROOT/apps"
 
 DEFAULT_REPO_URL="${DEFAULT_REPO_URL:-https://github.com/mshahwaiz-ali/ERP-Prod.git}"
 FRAPPE_BRANCH="${FRAPPE_BRANCH:-version-15}"
@@ -557,7 +557,7 @@ add_gitignore_entry() {
 
 ensure_gitignore_entries() {
   add_gitignore_entry "deploy/production.secrets.md"
-  add_gitignore_entry "deploy/logs/"
+  add_gitignore_entry "logs/deploy/"
   add_gitignore_entry "deploy/backups-index.md"
   add_gitignore_entry "backups/"
   add_gitignore_entry "*.sql.gz"
@@ -825,7 +825,7 @@ preflight_check() {
     printf '  none\n'
   fi
 
-  printf 'Available p_apps:\n'
+  printf 'Available apps:\n'
   local source_apps
   source_apps="$(discover_source_apps || true)"
   if [[ -n "$source_apps" ]]; then
@@ -860,10 +860,10 @@ preflight_check() {
 
   check_gitignore_entry "frappe-bench/"
   check_gitignore_entry "logs/"
-  check_gitignore_entry "install_logs/"
+  check_gitignore_entry "logs/install/"
   check_gitignore_entry "secrets.md"
   check_gitignore_entry "deploy/production.secrets.md"
-  check_gitignore_entry "deploy/logs/"
+  check_gitignore_entry "logs/deploy/"
   check_gitignore_entry "deploy/backups-index.md"
   check_gitignore_entry "backups/"
 }
@@ -1124,14 +1124,14 @@ copy_or_update_app() {
 
   if [[ "$overwrite_mode" == "yes" ]]; then
     run_cmd cp -a "$src/." "$dest/"
-    ok "updated existing app from p_apps: $app"
+    ok "updated existing app from apps: $app"
     return 0
   fi
 
   warn "App already exists in bench: $app"
-  if confirm "Overwrite/update $app from p_apps now?" "N"; then
+  if confirm "Overwrite/update $app from apps now?" "N"; then
     run_cmd cp -a "$src/." "$dest/"
-    ok "updated existing app from p_apps: $app"
+    ok "updated existing app from apps: $app"
   else
     info "left existing bench app untouched: $app"
   fi
@@ -1724,7 +1724,7 @@ deploy_update() {
     info "Skipping Git fetch/pull; deploying current local source tree."
   fi
 
-  if confirm "Update existing bench app copies from p_apps?" "Y"; then
+  if confirm "Update existing bench app copies from apps?" "Y"; then
     overwrite_mode="yes"
   fi
   sync_validate_apps "$overwrite_mode"

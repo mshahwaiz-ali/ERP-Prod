@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BENCH_DIR="${BENCH_DIR:-$SCRIPT_DIR/frappe-bench}"
-LOG_DIR="$SCRIPT_DIR/install_logs"
+LOG_DIR="$SCRIPT_DIR/logs/install"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 LOG_FILE="$LOG_DIR/install-$TIMESTAMP.log"
 ACTION_LOG="$LOG_DIR/install-$TIMESTAMP.actions"

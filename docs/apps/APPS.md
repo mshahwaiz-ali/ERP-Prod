@@ -25,7 +25,7 @@ ledgix_saas
 The app is stored in:
 
 ```text id="5vhhlp"
-p_apps/ledgix_saas/
+apps/ledgix_saas/
 ```
 
 During local or production setup, the app is copied or synced into the Frappe bench apps directory:
@@ -46,7 +46,7 @@ Then it is installed on the required site using Bench.
 ├─────────────────────────────────────────────────────────────┤
 │ Framework      │ Frappe v15                                 │
 │ App Name       │ ledgix_saas                                │
-│ Source Path    │ p_apps/ledgix_saas                         │
+│ Source Path    │ apps/ledgix_saas                         │
 │ Bench Path     │ frappe-bench/apps/ledgix_saas              │
 │ Install Type   │ Per-site app installation                  │
 │ Package File   │ pyproject.toml                             │
@@ -61,7 +61,7 @@ Then it is installed on the required site using Bench.
 ## App Directory Structure
 
 ```text id="25ngjv"
-p_apps/ledgix_saas/
+apps/ledgix_saas/
 ├── api/
 ├── config/
 ├── fixtures/
@@ -117,7 +117,7 @@ p_apps/ledgix_saas/
                 │
                 ▼
 ┌──────────────────────────────┐
-│ p_apps/ledgix_saas           │
+│ apps/ledgix_saas           │
 │ Source app stored in repo     │
 └───────────────┬──────────────┘
                 │
@@ -275,7 +275,7 @@ It can define app metadata, fixtures, scheduled jobs, boot session hooks, docume
 Check location:
 
 ```text id="f4n7a3"
-p_apps/ledgix_saas/hooks.py
+apps/ledgix_saas/hooks.py
 ```
 
 ---
@@ -287,7 +287,7 @@ p_apps/ledgix_saas/hooks.py
 Check location:
 
 ```text id="0tj2i1"
-p_apps/ledgix_saas/modules.txt
+apps/ledgix_saas/modules.txt
 ```
 
 ---
@@ -299,7 +299,7 @@ p_apps/ledgix_saas/modules.txt
 Check location:
 
 ```text id="ns2iwf"
-p_apps/ledgix_saas/patches.txt
+apps/ledgix_saas/patches.txt
 ```
 
 Run patches through:
@@ -317,7 +317,7 @@ bench --site ledgix.local migrate
 Check location:
 
 ```text id="b8q3yb"
-p_apps/ledgix_saas/pyproject.toml
+apps/ledgix_saas/pyproject.toml
 ```
 
 Install package manually if required:
@@ -549,7 +549,7 @@ bench restart
 ┌──────────────────────────────────────────────┬────────┐
 │ Check                                        │ Status │
 ├──────────────────────────────────────────────┼────────┤
-│ App exists in p_apps/ledgix_saas             │   □    │
+│ App exists in apps/ledgix_saas             │   □    │
 │ App copied to frappe-bench/apps/ledgix_saas  │   □    │
 │ pyproject.toml exists                        │   □    │
 │ hooks.py exists                              │   □    │
@@ -636,10 +636,10 @@ Before pushing, make sure secrets and generated bench files are not included.
 │ File                   │ Purpose                            │
 ├────────────────────────┼────────────────────────────────────┤
 │ README.md              │ Project overview and quick start    │
-│ LOCAL_INSTALLATION.md  │ Local setup guide                   │
-│ DEPLOYMENT.md          │ Production deployment guide         │
-│ APPS.md                │ Ledgix SaaS app details             │
-│ COMMANDS.md            │ Useful terminal and bench commands  │
+│ docs/local/LOCAL_INSTALLATION.md  │ Local setup guide                   │
+│ docs/production/DEPLOYMENT.md          │ Production deployment guide         │
+│ docs/apps/APPS.md                │ Ledgix SaaS app details             │
+│ docs/commands/COMMANDS.md            │ Useful terminal and bench commands  │
 └────────────────────────┴────────────────────────────────────┘
 ```
 

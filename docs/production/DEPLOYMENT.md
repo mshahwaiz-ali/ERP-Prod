@@ -272,7 +272,7 @@ deploy/
 │ deploy_update.sh     │ Pull/update/deploy latest changes    │
 │ backup.sh            │ Create backups                       │
 │ status.sh            │ Check production service status      │
-│ README_PRODUCTION.md │ Extra production notes               │
+│ docs/production/README_PRODUCTION.md │ Extra production notes               │
 └──────────────────────┴─────────────────────────────────────┘
 ```
 
@@ -810,10 +810,10 @@ https://erp.yourdomain.com
 │ File                   │ Purpose                            │
 ├────────────────────────┼────────────────────────────────────┤
 │ README.md              │ Project overview and quick start    │
-│ LOCAL_INSTALLATION.md  │ Local setup guide                   │
-│ DEPLOYMENT.md          │ Production deployment guide         │
-│ APPS.md                │ Ledgix SaaS app details             │
-│ COMMANDS.md            │ Useful terminal and bench commands  │
+│ docs/local/LOCAL_INSTALLATION.md  │ Local setup guide                   │
+│ docs/production/DEPLOYMENT.md          │ Production deployment guide         │
+│ docs/apps/APPS.md                │ Ledgix SaaS app details             │
+│ docs/commands/COMMANDS.md            │ Useful terminal and bench commands  │
 └────────────────────────┴────────────────────────────────────┘
 ```
 

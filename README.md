@@ -64,11 +64,11 @@ The repository is designed to keep the full ERP setup process organized, repeata
 │ deploy/             │ Production deployment helpers          │
 │ scripts/            │ Local validation and secret checks      │
 │ docs/               │ Production, FBR, command, troubleshoot  │
-│ SECURITY.md         │ Security policy and deployment notes    │
+│ docs/production/SECURITY.md │ Security policy and deployment notes    │
 │ config/example.env  │ Private environment template            │
 │ env/                │ Example environment templates          │
-│ clean_erp/          │ Cleanup/helper scripts                 │
-│ p_apps/ledgix_saas  │ Custom Ledgix SaaS Frappe app          │
+│ tools/cleanup/      │ Cleanup/helper scripts                 │
+│ apps/ledgix_saas   │ Custom Ledgix SaaS Frappe app          │
 └─────────────────────┴───────────────────────────────────────┘
 ```
 
@@ -120,13 +120,13 @@ Ledgix SaaS is the main custom Frappe app included in this repository.
 The app is stored inside:
 
 ```text
-p_apps/ledgix_saas/
+apps/ledgix_saas/
 ```
 
 ### App Structure
 
 ```text
-p_apps/ledgix_saas/
+apps/ledgix_saas/
 ├── api/
 ├── config/
 ├── fixtures/
@@ -252,7 +252,7 @@ deploy/
 ├── backup.sh
 ├── status.sh
 ├── smoke_test.sh
-└── README_PRODUCTION.md
+└── docs/production/README_PRODUCTION.md
 ```
 
 Run production setup:
@@ -298,19 +298,19 @@ Production setup is intended for real server environments and may configure:
 │ File                   │ Purpose                            │
 ├────────────────────────┼────────────────────────────────────┤
 │ README.md              │ Project overview and quick start    │
-│ LOCAL_INSTALLATION.md  │ Complete local setup guide          │
-│ DEPLOYMENT.md          │ Production / EC2 deployment guide   │
-│ APPS.md                │ Ledgix SaaS app structure/details   │
-│ SECURITY.md            │ Security rules and secret handling  │
+│ docs/local/LOCAL_INSTALLATION.md │ Complete local setup guide          │
+│ docs/production/DEPLOYMENT.md │ Production / EC2 deployment guide   │
+│ docs/apps/APPS.md │ Ledgix SaaS app structure/details   │
+│ docs/production/SECURITY.md │ Security rules and secret handling  │
 │ config/example.env     │ Deployment environment template     │
 │ scripts/validate_repo.sh│ Syntax/import/package validation   │
 │ scripts/check_secrets.sh│ Accidental secret scanner          │
 │ scripts/ci_local.sh    │ Runs validation + secret scan       │
 │ deploy/smoke_test.sh   │ Offline/online deployment smoke     │
-│ docs/COMMANDS.md       │ Common local and production commands│
-│ docs/PRODUCTION_CHECKLIST.md │ Production readiness checklist│
-│ docs/FBR_PRODUCTION_CHECKLIST.md │ FBR go-live checklist       │
-│ docs/TROUBLESHOOTING.md│ Common failure diagnosis            │
+│ docs/commands/COMMANDS.md       │ Common local and production commands│
+│ docs/production/PRODUCTION_CHECKLIST.md │ Production readiness checklist│
+│ docs/fbr/FBR_PRODUCTION_CHECKLIST.md │ FBR go-live checklist       │
+│ docs/production/TROUBLESHOOTING.md│ Common failure diagnosis            │
 └────────────────────────┴────────────────────────────────────┘
 ```
 
@@ -324,7 +324,7 @@ ERP-Prod/
 ├── install.sh
 ├── site_setup.sh
 ├── start.sh
-├── SECURITY.md
+├── docs/production/SECURITY.md
 │
 ├── config/
 │   └── example.env
@@ -335,10 +335,10 @@ ERP-Prod/
 │   └── ci_local.sh
 │
 ├── docs/
-│   ├── COMMANDS.md
-│   ├── PRODUCTION_CHECKLIST.md
-│   ├── FBR_PRODUCTION_CHECKLIST.md
-│   └── TROUBLESHOOTING.md
+│   ├── docs/commands/COMMANDS.md
+│   ├── docs/production/PRODUCTION_CHECKLIST.md
+│   ├── docs/fbr/FBR_PRODUCTION_CHECKLIST.md
+│   └── docs/production/TROUBLESHOOTING.md
 │
 ├── env/
 │   ├── local.example.env
@@ -350,12 +350,12 @@ ERP-Prod/
 │   ├── backup.sh
 │   ├── status.sh
 │   ├── smoke_test.sh
-│   └── README_PRODUCTION.md
 │
-├── clean_erp/
-│   └── cleanup/helper scripts
 │
-├── p_apps/
+├── tools/
+│   └── cleanup/
+│
+├── apps/
 │   └── ledgix_saas/
 │
 └── frappe-bench/
@@ -464,14 +464,14 @@ Run local CI and smoke checks:
 
 Do not commit secrets, database passwords, SSL keys, backups, local logs, or generated bench files.
 Setup scripts save manually entered or auto-generated site credentials to the ignored secrets files.
-See `SECURITY.md` before public production deployment.
+See `docs/production/SECURITY.md` before public production deployment.
 
 Ignored/private files should include:
 
 ```text
 secrets.md
 deploy/production.secrets.md
-deploy/logs/
+logs/deploy/
 deploy/backups-index.md
 *.sql.gz
 *.tar

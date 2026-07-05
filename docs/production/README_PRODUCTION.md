@@ -69,7 +69,7 @@ Safe deploy update:
 deploy/deploy_update.sh
 ```
 
-The update flow checks for a dirty Git tree, takes a backup by default, runs a fast-forward-only pull, syncs `p_apps/`, installs apps editable in the bench env, builds assets, migrates the selected site, clears caches, restarts Supervisor, and reloads Nginx.
+The update flow checks for a dirty Git tree, takes a backup by default, runs a fast-forward-only pull, syncs `apps/`, installs apps editable in the bench env, builds assets, migrates the selected site, clears caches, restarts Supervisor, and reloads Nginx.
 
 ## Backups
 

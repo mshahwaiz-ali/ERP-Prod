@@ -40,12 +40,12 @@ Ledgix stores operational sale data, item data, customer data, and tax settings 
 
 | File | Responsibility |
 |---|---|
-| `p_apps/ledgix_saas/api/taxation.py` | Core Ledgix tax engine. Reads tax profile, resolves item/category/shop tax settings, selects tax rates, calculates inclusive/exclusive tax, and writes invoice tax snapshots. |
-| `p_apps/ledgix_saas/api/fbr_payload.py` | FBR readiness validation and payload builder. Builds internal Ledgix payloads and official FBR JSON payloads for sales and sales returns. |
-| `p_apps/ledgix_saas/api/fbr_client.py` | Low-level HTTP client for FBR validate/post endpoints. Handles endpoint selection, Bearer token auth, `requests` dependency checks, response safeguards, and network errors. |
-| `p_apps/ledgix_saas/api/fbr_submission.py` | Submission engine. Manages manual validation, manual post, auto post, submission logs, duplicate protection, retry, offline upload, and status updates. |
-| `p_apps/ledgix_saas/api/fbr_settings.py` | Settings access layer for `Ledgix FBR Settings`. Handles modes, triggers, tokens, permissions, control state, and pause/manual/auto readiness. |
-| `p_apps/ledgix_saas/hooks.py` | Registers scheduled workers for FBR retry and offline upload queues. Also defines Ledgix app metadata, roles, assets, and fixtures. |
+| `apps/ledgix_saas/api/taxation.py` | Core Ledgix tax engine. Reads tax profile, resolves item/category/shop tax settings, selects tax rates, calculates inclusive/exclusive tax, and writes invoice tax snapshots. |
+| `apps/ledgix_saas/api/fbr_payload.py` | FBR readiness validation and payload builder. Builds internal Ledgix payloads and official FBR JSON payloads for sales and sales returns. |
+| `apps/ledgix_saas/api/fbr_client.py` | Low-level HTTP client for FBR validate/post endpoints. Handles endpoint selection, Bearer token auth, `requests` dependency checks, response safeguards, and network errors. |
+| `apps/ledgix_saas/api/fbr_submission.py` | Submission engine. Manages manual validation, manual post, auto post, submission logs, duplicate protection, retry, offline upload, and status updates. |
+| `apps/ledgix_saas/api/fbr_settings.py` | Settings access layer for `Ledgix FBR Settings`. Handles modes, triggers, tokens, permissions, control state, and pause/manual/auto readiness. |
+| `apps/ledgix_saas/hooks.py` | Registers scheduled workers for FBR retry and offline upload queues. Also defines Ledgix app metadata, roles, assets, and fixtures. |
 
 ---
 
@@ -320,7 +320,7 @@ Important tax fields:
 
 ## 4. Tax Engine
 
-The tax engine lives in `p_apps/ledgix_saas/api/taxation.py`.
+The tax engine lives in `apps/ledgix_saas/api/taxation.py`.
 
 ### Tax enabled / disabled
 
@@ -515,7 +515,7 @@ If a sale has no `tax_details`, the payload builder attempts to prepare a tax sn
 
 ## 6. FBR Settings
 
-FBR behavior is controlled by `Ledgix FBR Settings` through `p_apps/ledgix_saas/api/fbr_settings.py`.
+FBR behavior is controlled by `Ledgix FBR Settings` through `apps/ledgix_saas/api/fbr_settings.py`.
 
 ### Core settings
 
@@ -588,7 +588,7 @@ The settings API uses these role groups:
 
 ## 7. FBR Payload Builder
 
-The payload builder lives in `p_apps/ledgix_saas/api/fbr_payload.py`.
+The payload builder lives in `apps/ledgix_saas/api/fbr_payload.py`.
 
 It builds two types of payload output:
 
@@ -731,7 +731,7 @@ FBR item rows are built from the invoice tax snapshot.
 
 ## 8. FBR Client
 
-The FBR client lives in `p_apps/ledgix_saas/api/fbr_client.py`.
+The FBR client lives in `apps/ledgix_saas/api/fbr_client.py`.
 
 ### Endpoints
 
@@ -821,7 +821,7 @@ Only FBR view roles can call this API.
 
 ## 9. FBR Submission Engine
 
-The submission engine lives in `p_apps/ledgix_saas/api/fbr_submission.py`.
+The submission engine lives in `apps/ledgix_saas/api/fbr_submission.py`.
 
 ### Sale must be submitted first
 
@@ -990,7 +990,7 @@ The engine updates these fields on `Ledgix Sales Return`:
 
 ## 10. Retry and Offline Handling
 
-Retry and offline workers are registered in `p_apps/ledgix_saas/hooks.py`.
+Retry and offline workers are registered in `apps/ledgix_saas/hooks.py`.
 
 ### Scheduler hooks
 

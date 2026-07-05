@@ -30,8 +30,8 @@ find_repo_files() {
     -o -path "$REPO_ROOT/.codex" \
     -o -path "$REPO_ROOT/frappe-bench" \
     -o -path "$REPO_ROOT/logs" \
-    -o -path "$REPO_ROOT/install_logs" \
-    -o -path "$REPO_ROOT/deploy/logs" \
+    -o -path "$REPO_ROOT/logs/install" \
+    -o -path "$REPO_ROOT/logs/deploy" \
     -o -path "$REPO_ROOT/backups" \
     -o -path "$REPO_ROOT/offline_bundle" \
     -o -path "$REPO_ROOT/node_modules" \
@@ -39,7 +39,7 @@ find_repo_files() {
     -o -path "$REPO_ROOT/build" \
     -o -path "*/build" \
     -o -path "*/dist" \
-    -o -path "$REPO_ROOT/clean_erp" \) -prune \
+    -o -path "$REPO_ROOT/tools/cleanup/clean_erp" \) -prune \
     -o -type f -name "$pattern" -print0
 }
 
@@ -70,13 +70,13 @@ skip = {
     ".codex",
     "frappe-bench",
     "logs",
-    "install_logs",
+    "logs/install",
     "backups",
     "offline_bundle",
     "node_modules",
     "build",
     "dist",
-    "clean_erp",
+    "tools/cleanup/clean_erp",
 }
 files = [
     path
@@ -104,13 +104,13 @@ skip = {
     ".codex",
     "frappe-bench",
     "logs",
-    "install_logs",
+    "logs/install",
     "backups",
     "offline_bundle",
     "node_modules",
     "build",
     "dist",
-    "clean_erp",
+    "tools/cleanup/clean_erp",
 }
 files = [
     path
@@ -143,13 +143,13 @@ skip = {
     ".codex",
     "frappe-bench",
     "logs",
-    "install_logs",
+    "logs/install",
     "backups",
     "offline_bundle",
     "node_modules",
     "build",
     "dist",
-    "clean_erp",
+    "tools/cleanup/clean_erp",
 }
 files = [
     path
@@ -177,7 +177,7 @@ import sys
 
 root = pathlib.Path(sys.argv[1])
 bench_python = pathlib.Path(sys.argv[2])
-p_apps = root / "p_apps"
+apps = root / "apps"
 required = ("hooks.py", "__init__.py", "modules.txt")
 key_imports = {
     "ledgix_saas": [
@@ -193,12 +193,12 @@ key_imports = {
     ],
 }
 
-if not p_apps.is_dir():
-    raise SystemExit("[ERROR] p_apps directory is missing")
+if not apps.is_dir():
+    raise SystemExit("[ERROR] apps directory is missing")
 
-apps = sorted(path for path in p_apps.iterdir() if path.is_dir())
+apps = sorted(path for path in apps.iterdir() if path.is_dir())
 if not apps:
-    raise SystemExit("[ERROR] no custom apps found under p_apps")
+    raise SystemExit("[ERROR] no custom apps found under apps")
 
 
 def fail(message):
@@ -258,10 +258,10 @@ def validate_imports(app_name):
             f"importlib.import_module({name!r})" for name in imports
         )
         env = os.environ.copy()
-        env["PYTHONPATH"] = f"{p_apps}:{env.get('PYTHONPATH', '')}"
+        env["PYTHONPATH"] = f"{apps}:{env.get('PYTHONPATH', '')}"
         subprocess.run([str(bench_python), "-c", script], check=True, env=env)
     else:
-        sys.path.insert(0, str(p_apps))
+        sys.path.insert(0, str(apps))
         importlib.import_module(app_name)
 
 

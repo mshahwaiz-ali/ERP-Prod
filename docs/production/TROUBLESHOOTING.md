@@ -17,7 +17,7 @@
 ## Module Import Errors
 
 - Run `./scripts/validate_repo.sh`.
-- Confirm `p_apps/ledgix_saas/hooks.py`, `pyproject.toml`, and `modules.txt` exist.
+- Confirm `apps/ledgix_saas/hooks.py`, `pyproject.toml`, and `modules.txt` exist.
 - Confirm the app copy exists under `frappe-bench/apps/ledgix_saas`.
 - Reinstall editable package with `frappe-bench/env/bin/python -m pip install -e frappe-bench/apps/ledgix_saas`.
 

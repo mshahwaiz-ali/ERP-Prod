@@ -156,26 +156,26 @@ run_offline() {
   require_dir "$BENCH_DIR/sites" "bench sites directory"
   require_file "$BENCH_DIR/sites/$SITE/site_config.json" "site_config.json for $SITE"
   require_file "$BENCH_DIR/sites/apps.txt" "bench apps.txt"
-  require_dir "$REPO_ROOT/p_apps/ledgix_saas" "Ledgix source app"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/hooks.py" "Ledgix hooks.py"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/pyproject.toml" "Ledgix pyproject.toml"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/modules.txt" "Ledgix modules.txt"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/public/css/ledgix_brand.css" "brand CSS asset"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/public/js/ledgix_brand.js" "brand JS asset"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/ledgix/doctype/ledgix_fbr_settings/ledgix_fbr_settings.json" "FBR Settings DocType JSON"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/ledgix/doctype/ledgix_fbr_submission_log/ledgix_fbr_submission_log.json" "FBR Submission Log DocType JSON"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/ledgix/doctype/ledgix_sale/ledgix_sale.json" "Ledgix Sale DocType JSON"
-  require_file "$REPO_ROOT/p_apps/ledgix_saas/ledgix/doctype/ledgix_sales_return/ledgix_sales_return.json" "Ledgix Sales Return DocType JSON"
+  require_dir "$REPO_ROOT/apps/ledgix_saas" "Ledgix source app"
+  require_file "$REPO_ROOT/apps/ledgix_saas/hooks.py" "Ledgix hooks.py"
+  require_file "$REPO_ROOT/apps/ledgix_saas/pyproject.toml" "Ledgix pyproject.toml"
+  require_file "$REPO_ROOT/apps/ledgix_saas/modules.txt" "Ledgix modules.txt"
+  require_file "$REPO_ROOT/apps/ledgix_saas/public/css/ledgix_brand.css" "brand CSS asset"
+  require_file "$REPO_ROOT/apps/ledgix_saas/public/js/ledgix_brand.js" "brand JS asset"
+  require_file "$REPO_ROOT/apps/ledgix_saas/ledgix/doctype/ledgix_fbr_settings/ledgix_fbr_settings.json" "FBR Settings DocType JSON"
+  require_file "$REPO_ROOT/apps/ledgix_saas/ledgix/doctype/ledgix_fbr_submission_log/ledgix_fbr_submission_log.json" "FBR Submission Log DocType JSON"
+  require_file "$REPO_ROOT/apps/ledgix_saas/ledgix/doctype/ledgix_sale/ledgix_sale.json" "Ledgix Sale DocType JSON"
+  require_file "$REPO_ROOT/apps/ledgix_saas/ledgix/doctype/ledgix_sales_return/ledgix_sales_return.json" "Ledgix Sales Return DocType JSON"
 
   if [[ -d "$BENCH_DIR/apps/ledgix_saas" ]] &&
     { [[ ! -f "$BENCH_DIR/apps/ledgix_saas/api/fbr_health.py" ]] || [[ ! -f "$BENCH_DIR/apps/ledgix_saas/validation.py" ]]; }; then
-    warn "bench app copy is missing new health/validation source files; sync p_apps before bench execute checks"
+    warn "bench app copy is missing new health/validation source files; sync apps before bench execute checks"
   fi
 
   local py
   py="$(bench_python 2>/dev/null || true)"
   if [[ -n "$py" ]]; then
-    if PYTHONPATH="$REPO_ROOT/p_apps${PYTHONPATH:+:$PYTHONPATH}" "$py" - <<'PY'
+    if PYTHONPATH="$REPO_ROOT/apps${PYTHONPATH:+:$PYTHONPATH}" "$py" - <<'PY'
 import importlib
 for name in (
     "ledgix_saas",

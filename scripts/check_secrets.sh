@@ -25,7 +25,7 @@ skip_dirs = {
     ".codex",
     "frappe-bench",
     "logs",
-    "install_logs",
+    "logs/install",
     "backups",
     "offline_bundle",
     "node_modules",
@@ -35,7 +35,7 @@ skip_dirs = {
     ".pytest_cache",
     ".mypy_cache",
     ".ruff_cache",
-    "clean_erp",
+    "tools/cleanup/clean_erp",
 }
 skip_files = {
     "secrets.md",

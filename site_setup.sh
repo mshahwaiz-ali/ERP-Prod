@@ -3,10 +3,10 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BENCH_DIR="$SCRIPT_DIR/frappe-bench"
-APPS_SRC="$SCRIPT_DIR/p_apps"
-LOG_DIR="$SCRIPT_DIR/install_logs"
+APPS_SRC="$SCRIPT_DIR/apps"
+LOG_DIR="$SCRIPT_DIR/logs/site_setup"
 RUN_LOG="$LOG_DIR/site-setup-$(date +%Y%m%d-%H%M%S).log"
-BENCH_LOG_DIR="$SCRIPT_DIR/logs"
+BENCH_LOG_DIR="$SCRIPT_DIR/logs/bench"
 BENCH_LOG="$BENCH_LOG_DIR/bench-start.log"
 NODE_MAJOR="${NODE_MAJOR:-}"
 FRAPPE_BRANCH="${FRAPPE_BRANCH:-version-15}"
@@ -513,7 +513,7 @@ copy_custom_apps() {
     return 0
   fi
 
-  section "Sync p_apps"
+  section "Sync apps"
   local app src dest
   while IFS= read -r app; do
     [[ -n "$app" ]] || continue
@@ -583,7 +583,7 @@ sync_custom_apps() {
   copy_custom_apps
   prepare_app_imports
   ensure_custom_app_assets
-  ok "p_apps sync complete"
+  ok "apps sync complete"
 }
 
 random_hex() {
@@ -1370,7 +1370,7 @@ site_menu() {
     printf '1) New Site\n'
     printf '2) Delete Site\n'
     printf '3) List Sites and Apps\n'
-    printf '4) Sync p_apps\n'
+    printf '4) Sync apps\n'
     printf '5) Rename Site to Lowercase\n'
     printf '6) Repair Secrets\n'
     printf '7) Exit\n'

@@ -65,7 +65,7 @@ Use this guide for:
 │ ERP-Prod/frappe-bench/      │ Generated Frappe bench             │
 │ frappe-bench/apps/          │ Installed bench apps               │
 │ frappe-bench/sites/         │ Sites folder                       │
-│ p_apps/ledgix_saas/         │ Source Ledgix SaaS app             │
+│ apps/ledgix_saas/         │ Source Ledgix SaaS app             │
 │ deploy/                     │ Production helper scripts          │
 │ env/                        │ Environment examples               │
 └─────────────────────────────┴────────────────────────────────────┘
