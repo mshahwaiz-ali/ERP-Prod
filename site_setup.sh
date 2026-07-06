@@ -817,7 +817,7 @@ read_site_name() {
   local -n _site="$1"
   local raw lowered
   while true; do
-    read -r -p "Site name (example ledgix.local): " raw
+    read -r -p "Site name (example site1.local): " raw
     if [[ -z "$raw" ]]; then
       warn "site name is required"
       continue
@@ -831,7 +831,7 @@ read_site_name() {
       warn "Site names must be lowercase. Using $lowered"
     fi
     if [[ "$lowered" != *.* ]]; then
-      warn "site name usually includes a suffix, example ledgix.local"
+      warn "site name usually includes a suffix, example site1.local"
     fi
     if [[ -d "$BENCH_DIR/sites/$lowered" ]]; then
       warn "site already exists: $lowered"
@@ -1153,7 +1153,10 @@ new_site_flow() {
     read -r -p "Create another site? y/N: " again
     case "${again:-}" in
       y|Y|yes|YES) continue ;;
-      *) break ;;
+      *)
+        info "bye"
+        exit 0
+        ;;
     esac
   done
 }
