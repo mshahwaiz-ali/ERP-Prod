@@ -1270,7 +1270,7 @@ read_domain_and_site() {
   local -n _site="$2"
   local default_domain="${PRODUCTION_DOMAIN:-}"
   local default_site
-  prompt_value _domain "Production domain, example erp.example.com" "$default_domain" 1
+  prompt_value _domain "Production domain, example site.local" "$default_domain" 1
   _domain="$(lowercase "$_domain")"
   _domain="${_domain#http://}"
   _domain="${_domain#https://}"
